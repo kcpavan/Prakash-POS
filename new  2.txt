@@ -1,0 +1,157 @@
+set sql_safe_updates=0;
+
+drop database  if exists storedb;
+create database storedb;
+
+drop table if exists storedb.user_group;
+create table storedb.user_group
+(id_pk integer primary key not null auto_increment,
+group_name varchar(20) not null);
+
+INSERT INTO storedb.user_group
+(id_pk,group_name)
+values(1,'admin');
+
+drop table if exists storedb.users;
+create table storedb.users
+(id_pk integer primary key not null auto_increment,
+ first_name varchar(50) not null,
+ last_name varchar(50) not null,
+username varchar(20) not null,
+password varchar(20) not null,
+user_state int not null,
+group_id_fk int not null,
+CONSTRAINT fk_group_id
+FOREIGN KEY(`group_id_fk`) 
+REFERENCES `user_group`(`id_pk`));
+
+
+
+
+drop table if exists storedb.item_category;
+create table storedb.item_category
+(id_pk integer primary key not null auto_increment,
+category_name varchar(250) not null);
+
+
+drop table if exists storedb.items;
+create table storedb.items 
+(id_pk integer primary key not null auto_increment,
+item_name varchar(250) not null,
+barcode varchar(250) not null,
+category_id_fk int null,
+mrp double not null,
+weight double not null,
+weight_unit varchar(50) not null,
+actual_price double not null,
+selling_price double not null,
+hasfree boolean not null,
+modified_by int not null,
+modified_date timestamp,
+CONSTRAINT fk_category_id
+	FOREIGN KEY(`category_id_fk`) 
+	REFERENCES `item_category`(`id_pk`),
+CONSTRAINT fk_modified_by
+	FOREIGN KEY(`modified_by`) 
+	REFERENCES `users`(`id_pk`)
+);
+
+
+
+drop table if exists storedb.stocks;
+create table storedb.stocks
+(id_pk integer primary key not null auto_increment,
+item_id_fk integer not null,
+quantity bigint not null,
+quantity_unit varchar(50) not null,
+modified_by integer not null,
+modified_date timestamp,
+CONSTRAINT fk_stocks_item_id
+	FOREIGN KEY(`item_id_fk`) 
+	REFERENCES `items`(`id_pk`),
+CONSTRAINT fk_modified_user
+	FOREIGN KEY(`modified_by`) 
+	REFERENCES `users`(`id_pk`)
+);
+
+drop table if exists storedb.distributor;
+create table storedb.distributor
+(id_pk integer primary key not null auto_increment,
+name integer not null,
+address varchar(100) not null,
+phone_number integer(12) not null,
+modified_by int not null,
+modified_date timestamp,
+CONSTRAINT fk_distributor_modified_user
+	FOREIGN KEY(`modified_by`) 
+	REFERENCES `users`(`id_pk`)
+);
+
+
+drop table if exists storedb.purchase;
+create table storedb.purchase
+(id_pk integer primary key not null auto_increment,
+purchase_number integer not null,
+distibutor_id_fk integer not null,
+received_date timestamp not null,
+modified_by int not null,
+modified_date timestamp,
+CONSTRAINT fk_purchase_modified_user
+	FOREIGN KEY(`modified_by`) 
+	REFERENCES `users`(`id_pk`),
+CONSTRAINT fk_purchase_distributor_id
+	FOREIGN KEY(`distibutor_id_fk`) 
+	REFERENCES `distributor`(`id_pk`)
+);
+
+
+
+drop table if exists storedb.purchase_details;
+create table storedb.purchase_details
+(id_pk integer primary key not null auto_increment,
+item_id_fk integer not null,
+item_quantity integer not null,
+free_item integer null,
+purchase_id_fk integer not null,
+CONSTRAINT fk_purchase_det_item_id
+	FOREIGN KEY(`item_id_fk`) 
+	REFERENCES `items`(`id_pk`),
+CONSTRAINT fk_purchase_id
+	FOREIGN KEY(`purchase_id_fk`) 
+	REFERENCES `purchase`(`id_pk`)
+);
+
+
+drop table if exists storedb.invoice;
+create table storedb.invoice
+(id_pk integer primary key not null auto_increment,
+total_items integer not null,
+total_amount double not null,
+modified_by int not null,
+modified_date timestamp,
+CONSTRAINT fk_invoice_modified_user
+	FOREIGN KEY(`modified_by`) 
+	REFERENCES `users`(`id_pk`)
+
+);
+
+drop table if exists storedb.invoice_details;
+create table storedb.invoice_details
+(id_pk integer primary key not null auto_increment,
+invoice_id_fk integer not null,
+item_id_fk integer not null,
+quantity double not null,
+total double not null,
+CONSTRAINT fk_invoicedet_invoice_id
+	FOREIGN KEY(`invoice_id_fk`) 
+	REFERENCES `invoice`(`id_pk`),
+CONSTRAINT fk_invoice_item_id
+	FOREIGN KEY(`item_id_fk`) 
+	REFERENCES `items`(`id_pk`)
+);
+
+
+INSERT INTO storedb.users
+(first_name,last_name,username,password,group_id_fk,user_state)
+
+values('prakash','b','kt','kt',1,1);
