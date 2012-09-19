@@ -14,6 +14,6 @@ import java.util.List;
 public interface ItemDao {
     
     public void persist(Items transientInstance); 
-     public List<Items> findByAll() ;
+    public List<Items> findByAll() ;
     
 }

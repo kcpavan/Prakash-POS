@@ -9,22 +9,27 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "invoice_details", catalog = "storedb")
+@NamedQueries({
+    @NamedQuery(name = "InvoiceDetails.findAllById", query="SELECT c FROM invoice_details c WHERE c.invoice = :id")
+})
 public class InvoiceDetails implements java.io.Serializable {
 
 	private Integer idPk;
 	private Invoice invoice;
 	private Items items;
-	private double quantity;
+	private Integer quantity;
 	private double total;
 
 	public InvoiceDetails() {
 	}
 
-	public InvoiceDetails(Invoice invoice, Items items, double quantity,
+	public InvoiceDetails(Invoice invoice, Items items, Integer quantity,
 			double total) {
 		this.invoice = invoice;
 		this.items = items;
@@ -64,11 +69,11 @@ public class InvoiceDetails implements java.io.Serializable {
 	}
 
 	@Column(name = "quantity", nullable = false, precision = 22, scale = 0)
-	public double getQuantity() {
+	public Integer getQuantity() {
 		return this.quantity;
 	}
 
-	public void setQuantity(double quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 
