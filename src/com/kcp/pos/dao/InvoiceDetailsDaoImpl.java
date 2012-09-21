@@ -4,13 +4,10 @@
  */
 package com.kcp.pos.dao;
 
-import com.kcp.pos.modal.Invoice;
 import com.kcp.pos.modal.InvoiceDetails;
 import com.kcp.pos.modal.Items;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
@@ -21,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Prakash
  */
-@Repository("invoiceDaoImpl")
+@Repository("invoiceDetailsDaoImpl")
 @Service
-public class InvoiceDaoImpl implements InvoiceDao{
+public class InvoiceDetailsDaoImpl implements InvoiceDetailsDao {
     
     private static final Log log = LogFactory.getLog(ItemsDaoImpl.class);
 
@@ -34,35 +31,12 @@ public class InvoiceDaoImpl implements InvoiceDao{
         this.entityManager = entityManager;
     }
     
-    public InvoiceDetails findById(Integer id) {
-		log.debug("getting Items instance with id: " + id);
-		try {
-			InvoiceDetails instance = entityManager.find(InvoiceDetails.class, id);
-			log.debug("get successful");
-			return instance;
-		} catch (RuntimeException re) {
-			log.error("get failed", re);
-			throw re;
-		}
-	}
-    
-     public List<InvoiceDetails> findListById(Integer id) {
-		log.debug("getting Items instance with id: " + id);
-		try {
-			Query instance = entityManager.createNamedQuery("InvoiceDetails.findAllById")
-                                .setParameter("id", id);
-                                
-			log.debug("get successful");
-			return instance.getResultList();
-		} catch (RuntimeException re) {
-			log.error("get failed", re);
-			throw re;
-		}
-	}
-    
-     @Transactional
-	public void persist(Invoice transientInstance) {
-		log.debug("persisting Invoice instance");
+    @Transactional
+    public void persist(InvoiceDetails transientInstance)
+    {
+         
+	
+		log.debug("persisting Items instance");
 		try {
                         
 			entityManager.persist(transientInstance);
@@ -72,6 +46,10 @@ public class InvoiceDaoImpl implements InvoiceDao{
 			log.error("persist failed", re);
 			throw re;
 		}
-	}
+	
+    }
+    
+    /*public List<InvoiceDetails> findByAll() ;
+    public InvoiceDetails findByName(String itemName) ;*/
     
 }

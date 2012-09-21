@@ -42,4 +42,16 @@ public class ItemService {
     return itemDos;
     }
     
+    public Items getItemByName(String name)
+    {
+        return(itemDao.findByName(name));
+    }
+    
+     public Items getItemById(Integer Id)
+    {
+        return(itemDao.findById(Id));
+    }
+    
+    
+    
 }

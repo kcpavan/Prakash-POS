@@ -4,15 +4,13 @@
  */
 package com.kcp.pos;
 
-import com.kcp.pos.dao.invoice.InvoiceDao;
-import com.kcp.pos.dao.invoice.InvoiceDaoImpl;
-import com.kcp.pos.dao.item.ItemDao;
-import com.kcp.pos.dao.item.ItemDaoImpl;
-import com.kcp.pos.dao.purchase.PurchaseDao;
-import com.kcp.pos.dao.purchase.PurchaseDaoImpl;
-import com.kcp.pos.modal.invoice.InvoiceDetails;
-import com.kcp.pos.modal.item.Item;
-import com.kcp.pos.modal.purchase.PurchaseDetails;
+
+import com.kcp.pos.data.ItemDo;
+import com.kcp.pos.data.PurchaseDetailsDo;
+import com.kcp.pos.modal.Items;
+import com.kcp.pos.service.InvoiceService;
+import com.kcp.pos.service.ItemService;
+import com.kcp.pos.service.PurchaseService;
 import com.kcp.pos.utils.KCPUtils;
 import java.net.URL;
 import java.util.ArrayList;
@@ -80,63 +78,64 @@ public class PurchaseController implements Initializable {
     @FXML
     private TextField netAmount;
     @FXML
-    public TableView<PurchaseDetails> dataTable;
-    private final ObservableList<PurchaseDetails> dataTableData = FXCollections.observableArrayList();
+    public TableView<PurchaseDetailsDo> dataTable;
+    private final ObservableList<PurchaseDetailsDo> dataTableData = FXCollections.observableArrayList();
     @FXML
-    private TableColumn<Item, String> itemNameCol;
+    private TableColumn<Items, String> itemNameCol;
     @FXML
-    private TableColumn<Item, String> itemBarcodeCol;
+    private TableColumn<Items, String> itemBarcodeCol;
     @FXML
-    private TableColumn<Item, Double> itemMRPCol;
+    private TableColumn<Items, Double> itemMRPCol;
     @FXML
-    private TableColumn<Item, Double> caseQuantityCol;
+    private TableColumn<Items, Double> caseQuantityCol;
     @FXML
-    private TableColumn<Item, Double> unitsQuantityCol;
+    private TableColumn<Items, Double> unitsQuantityCol;
     @FXML
-    private TableColumn<Item, Double> freeUnitsCol;
+    private TableColumn<Items, Double> freeUnitsCol;
     @FXML
-    private TableColumn<Item, Double> basicRateCol;
+    private TableColumn<Items, Double> basicRateCol;
     @FXML
-    private TableColumn<Item, Double> grossAmountCol;
+    private TableColumn<Items, Double> grossAmountCol;
     @FXML
-    private TableColumn<Item, Double> schemeCol;
+    private TableColumn<Items, Double> schemeCol;
     @FXML
-    private TableColumn<Item, Double> cDCol;
+    private TableColumn<Items, Double> cDCol;
     @FXML
-    private TableColumn<Item, Double> taxPercentageCol;
+    private TableColumn<Items, Double> taxPercentageCol;
     @FXML
-    private TableColumn<Item, Double> taxCol;
+    private TableColumn<Items, Double> taxCol;
     @FXML
-    private TableColumn<Item, Double> netAmountCol;
-    private List<PurchaseDetails> purchaseDetails = new ArrayList<PurchaseDetails>();
-    private List<Item> itemList = new ArrayList<Item>();
-    private Map<String, Item> itemMap = new HashMap<String, Item>();
-    ItemDao itemDao = new ItemDaoImpl();
+    private TableColumn<Items, Double> netAmountCol;
+    private List<PurchaseDetailsDo> purchaseDetails = new ArrayList<PurchaseDetailsDo>();
+    private List<ItemDo> itemList = new ArrayList<ItemDo>();
+    private Map<String, Items> itemMap = new HashMap<String, Items>();
+    ItemService itemService = new ItemService();
 
-    public List<Item> getItemList() {
-        List<Item> list = itemDao.getAllItems();
+    public List<ItemDo> getItemList() {
+        List<ItemDo> list = itemService.getAllItems();
         setItemList(list);
         return list;
     }
 
-    public void setItemList(List<Item> itemList) {
+    public void setItemList(List<ItemDo> itemList) {
         this.itemList = itemList;
     }
-    InvoiceDao invoiceDao = new InvoiceDaoImpl();
+    
+    InvoiceService invoiceService = new InvoiceService();
 
-    public List<PurchaseDetails> getPurchaseDetails() {
+    public List<PurchaseDetailsDo> getPurchaseDetails() {
         return purchaseDetails;
     }
 
-    public void setPurchaseDetails(List<PurchaseDetails> purchaseDetails) {
+    public void setPurchaseDetails(List<PurchaseDetailsDo> purchaseDetails) {
         this.purchaseDetails = purchaseDetails;
     }
 
-     PurchaseDao purchaseDao = new PurchaseDaoImpl();
+     PurchaseService purchaseService = new PurchaseService();
     @FXML
     private void handleButtonAction(ActionEvent event) {
 
-        PurchaseDetails purchaseDetails = new PurchaseDetails();
+        PurchaseDetailsDo purchaseDetails = new PurchaseDetailsDo();
        
 
         Object selectedItem = itemName.getSelectionModel().getSelectedItem();
@@ -152,15 +151,15 @@ public class PurchaseController implements Initializable {
 
         String purchaseId = purchaseNumber.getText();
         System.out.println("UI purchase Id:"+purchaseId);
-
+/*
         if (purchaseId == null || KCPUtils.isNullString(purchaseId)|| Integer.parseInt(purchaseId)==0)
         {
-            purchaseId = new Integer(purchaseDao.getPurchaseId()).toString();
+            purchaseId = new Integer(purchaseService.getPurchaseId()).toString();
             purchaseNumber.setText(purchaseId);
             System.out.println("new purchase number:" + purchaseId);
         }
 
-        Item item=itemDao.getItemByName(selectedItem.toString());
+        Items item=itemDao.getItemByName(selectedItem.toString());
         
         
         purchaseDetails.setPurchaseId(Integer.parseInt(purchaseId));
@@ -203,13 +202,13 @@ public class PurchaseController implements Initializable {
         System.out.println("itemQuantity:" + itemQty);
 
       
-        purchaseDao.addPurcaseItem(purchaseDetails);
+        purchaseService.addPurcaseItem(purchaseDetails);
         
       
+*/
 
 
-
-        label.setText("Item Saved");
+        label.setText("Items Saved");
         animateMessage();
         fillDataTable();
         clearForm();
@@ -219,10 +218,10 @@ public class PurchaseController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("initialize() start");
-        itemName.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
-        List<Item> itemList = itemDao.getAllItems();
+        itemName.getItems().removeAll("Items 1", "Items 2", "Items 3", " ");
+       /* List<Items> itemList = itemDao.getAllItems();
 
-        for (Item item : itemList) {
+        for (Items item : itemList) {
             itemMap.put(item.getName(), item);
             itemName.getItems().add(item.getItemName());
             System.out.println("name:"+item.getItemName());
@@ -232,7 +231,7 @@ public class PurchaseController implements Initializable {
         itemName.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> selected, String oldItem, String newItem) {
-                Item item = itemMap.get(newItem);
+                Items item = itemMap.get(newItem);
                 
 
 
@@ -249,33 +248,33 @@ public class PurchaseController implements Initializable {
   
  
         itemNameCol.setCellValueFactory(
-                new PropertyValueFactory<Item, String>("itemName"));
+                new PropertyValueFactory<Items, String>("itemName"));
          itemBarcodeCol.setCellValueFactory(
-                new PropertyValueFactory<Item, String>("itemBarcode"));
+                new PropertyValueFactory<Items, String>("itemBarcode"));
         itemMRPCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemMrp"));
+                new PropertyValueFactory<Items, Double>("itemMrp"));
         caseQuantityCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemCaseQuantity"));
+                new PropertyValueFactory<Items, Double>("itemCaseQuantity"));
         unitsQuantityCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemUnitsQuantity"));
+                new PropertyValueFactory<Items, Double>("itemUnitsQuantity"));
         freeUnitsCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemFreeUnits"));
+                new PropertyValueFactory<Items, Double>("itemFreeUnits"));
         basicRateCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemBasicPrice"));
+                new PropertyValueFactory<Items, Double>("itemBasicPrice"));
         grossAmountCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemGrossAmount"));
+                new PropertyValueFactory<Items, Double>("itemGrossAmount"));
         schemeCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("purchaseScheme"));
+                new PropertyValueFactory<Items, Double>("purchaseScheme"));
         cDCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("purchaseCd"));
+                new PropertyValueFactory<Items, Double>("purchaseCd"));
         taxPercentageCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("purchaseTaxPercentage"));
+                new PropertyValueFactory<Items, Double>("purchaseTaxPercentage"));
         taxCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("purchaseTax"));
+                new PropertyValueFactory<Items, Double>("purchaseTax"));
         netAmountCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("purchaseNetAmount"));
+                new PropertyValueFactory<Items, Double>("purchaseNetAmount"));
        
-
+*/
 
         fillDataTable();
     }
@@ -306,30 +305,19 @@ public class PurchaseController implements Initializable {
     }
 
     private void fillDataTable() {
-        ItemDao itemDao = new ItemDaoImpl();
+        /*ItemDao itemDao = new ItemDaoImpl();
         purchaseNumber.getText();
         if(!KCPUtils.isNullString(purchaseNumber.getText()))
                 {
                     
                
-        List<PurchaseDetails> purchaseDetailsList = purchaseDao.getPurchaseItems(purchaseNumber.getText());
+        List<PurchaseDetailsDo> purchaseDetailsList = purchaseService.getPurchaseItems(purchaseNumber.getText());
         
         
         dataTableData.setAll(purchaseDetailsList);
                 }
-    }
+*/    }
 
-    public void getInvoiceTotalAmount(List<InvoiceDetails> invoiceDetailsList) {
-        Double amount = 0.0;
-
-        for (InvoiceDetails data : invoiceDetailsList) {
-            amount = amount + data.getItemTotalAmount();
-        }
-
-        TotalAmount.setText(amount.toString());
-
-
-    }
-
+    
    
 }

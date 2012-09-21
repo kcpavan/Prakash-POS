@@ -4,15 +4,7 @@
  */
 package com.kcp.pos;
 
-import com.kcp.pos.dao.invoice.InvoiceDao;
-import com.kcp.pos.dao.invoice.InvoiceDaoImpl;
-import com.kcp.pos.dao.item.ItemDao;
-import com.kcp.pos.dao.item.ItemDaoImpl;
-import com.kcp.pos.dao.stocks.StocksDao;
-import com.kcp.pos.dao.stocks.StocksDaoImpl;
-import com.kcp.pos.modal.item.Item;
-import com.kcp.pos.modal.purchase.PurchaseDetails;
-import com.kcp.pos.modal.stocks.Stocks;
+
 import com.kcp.pos.utils.KCPUtils;
 import java.net.URL;
 import java.util.ArrayList;
@@ -61,7 +53,7 @@ public class StocksController implements Initializable{
     @FXML
     private TextField freeUnits;
     
-    @FXML
+  /*  @FXML
     public TableView<Stocks> dataTable;
     
     private final ObservableList<Stocks> dataTableData = FXCollections.observableArrayList();
@@ -102,7 +94,7 @@ public class StocksController implements Initializable{
         this.stocksList = stocksList;
     }
 
-     StocksDao stocksDao = new StocksDaoImpl();
+     StocksDao stocksDao = new StocksDaoImpl();*/
      
     @FXML
     private void handleButtonAction(ActionEvent event) {
@@ -193,13 +185,13 @@ public class StocksController implements Initializable{
 
 
         
-        dataTable.setItems(dataTableData);
+       // dataTable.setItems(dataTableData);
    
     
   
   
  
-        itemNameCol.setCellValueFactory(
+        /*itemNameCol.setCellValueFactory(
                 new PropertyValueFactory<Item, String>("itemName"));
         itemBarcodeCol.setCellValueFactory(
                 new PropertyValueFactory<Item, String>("itemBarcode"));
@@ -213,7 +205,7 @@ public class StocksController implements Initializable{
                 new PropertyValueFactory<Item, Double>("itemFreeUnits"));
   
 
-        fillDataTable();
+        fillDataTable();*/
     }
 
     private void clearForm() {
@@ -241,10 +233,10 @@ public class StocksController implements Initializable{
        
                     
                
-        List<Stocks> stocksList = stocksDao.getStocksList();
+      /*  List<Stocks> stocksList = stocksDao.getStocksList();
         
         
-        dataTableData.setAll(stocksList);
+        dataTableData.setAll(stocksList);*/
                 
     }
 

@@ -15,5 +15,8 @@ public interface ItemDao {
     
     public void persist(Items transientInstance); 
     public List<Items> findByAll() ;
+    public Items findByName(String itemName) ;
+    public Items findById(Integer id) ;
+		
     
 }

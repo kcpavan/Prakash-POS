@@ -4,16 +4,9 @@
  */
 package com.kcp.pos.data;
 
-import com.kcp.pos.modal.InvoiceDetails;
-import com.kcp.pos.modal.ItemCategory;
 import com.kcp.pos.modal.Items;
-import com.kcp.pos.modal.PurchaseDetails;
-import com.kcp.pos.modal.Stocks;
-import com.kcp.pos.modal.Users;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -21,6 +14,8 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Prakash
  */
 public class ItemDo {
+        
+        private SimpleIntegerProperty idPk=new SimpleIntegerProperty();
 	private SimpleStringProperty itemName=new SimpleStringProperty();
 	private SimpleStringProperty barcode=new SimpleStringProperty();
 	private SimpleDoubleProperty mrp=new SimpleDoubleProperty();
@@ -30,6 +25,7 @@ public class ItemDo {
 	private SimpleDoubleProperty sellingPrice=new SimpleDoubleProperty();
 
     public ItemDo(Items items) {
+        this.idPk.set(items.getIdPk());
         this.itemName.set(items.getItemName());
         this.barcode.set(items.getBarcode());
         this.mrp.set(items.getMrp());
@@ -41,6 +37,10 @@ public class ItemDo {
                 
     }
 
+    public ItemDo()
+    {
+        
+    }
         
         
         
@@ -101,7 +101,18 @@ public class ItemDo {
 
         
         
-        
+            public Integer getIdPk() {
+        return idPk.get();
+    }
+
+    public void setIdPk(SimpleIntegerProperty idPk) {
+        this.idPk = idPk;
+    }
+
+
+    public void setItemName(SimpleStringProperty itemName) {
+        this.itemName = itemName;
+    }
         
         
         

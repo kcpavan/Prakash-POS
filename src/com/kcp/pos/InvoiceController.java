@@ -4,11 +4,17 @@
  */
 package com.kcp.pos;
 
-
 import com.kcp.pos.dao.UserDao;
+import com.kcp.pos.data.BillingPriceDo;
+import com.kcp.pos.data.InvoiceDetailsDo;
 import com.kcp.pos.data.InvoiceDo;
+import com.kcp.pos.data.ItemDo;
+import com.kcp.pos.modal.BillingPrice;
+import com.kcp.pos.modal.Invoice;
 import com.kcp.pos.modal.InvoiceDetails;
 import com.kcp.pos.modal.Items;
+import com.kcp.pos.service.BillingService;
+import com.kcp.pos.service.InvoiceService;
 import com.kcp.pos.service.ItemService;
 import com.kcp.pos.utils.KCPUtils;
 import java.net.URL;
@@ -34,6 +40,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -63,41 +70,52 @@ public class InvoiceController implements Initializable {
     private CheckBox hasGift = new CheckBox();
     @FXML
     private ChoiceBox weightUnit = new ChoiceBox();
-   
     @FXML
-    public TableView<InvoiceDo> dataTable;
-    private final ObservableList<InvoiceDo> dataTableData = FXCollections.observableArrayList();
+    public TableView<InvoiceDetailsDo> dataTable;
+    private final ObservableList<InvoiceDetailsDo> dataTableData = FXCollections.observableArrayList();
     @FXML
-    private TableColumn<InvoiceDo, String> itemNameCol;
+    private TableColumn<InvoiceDetailsDo, String> itemNameCol;
     @FXML
-    private TableColumn<InvoiceDo, String> itemBarcodeCol;
+    private TableColumn<InvoiceDetailsDo, String> itemBarcodeCol;
     @FXML
-    private TableColumn<InvoiceDo, Double> itemMRPCol;
+    private TableColumn<InvoiceDetailsDo, Double> itemMRPCol;
     @FXML
-    private TableColumn<InvoiceDo, Double> itemBillingPriceCol;
+    private TableColumn<InvoiceDetailsDo, Double> itemBillingPriceCol;
     @FXML
-    private TableColumn<InvoiceDo, Double> itemQuantityCol;
+    private TableColumn<InvoiceDetailsDo, Double> itemQuantityCol;
     @FXML
-    private TableColumn<InvoiceDo, Double> itemTotalAmountCol;
-    private List<InvoiceDetails> invoiceDetailsList = new ArrayList<InvoiceDetails>();
+    private TableColumn<InvoiceDetailsDo, Double> itemTotalAmountCol;
+    @Autowired
+    private InvoiceService invoiceService;
+    @Autowired
+    private ItemService itemService;
+    @Autowired
+    private BillingService billingService;
+    private List<InvoiceDetailsDo> invoiceDetailsDoList = new ArrayList<InvoiceDetailsDo>();
     private List<Items> itemList = new ArrayList<Items>();
-    private Map<String, Items> itemMap = new HashMap<String, Items>();
-    
+    private Map<String, ItemDo> itemMap = new HashMap<String, ItemDo>();
+    private Invoice invoice;
 
-    
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+    }
 
     public void setItemList(List<Items> itemList) {
         this.itemList = itemList;
     }
 
-    public List<InvoiceDetails> getInvoiceDetailsList() {
-        return invoiceDetailsList;
+    public List<InvoiceDetailsDo> getInvoiceDetailsDoList() {
+        return invoiceDetailsDoList;
     }
 
-    public void setInvoiceDetailsList(List<InvoiceDetails> invoiceDetailsList) {
-        this.invoiceDetailsList = invoiceDetailsList;
+    public void setInvoiceDetailsDoList(List<InvoiceDetailsDo> invoiceDetailsDoList) {
+        this.invoiceDetailsDoList = invoiceDetailsDoList;
     }
-    
+
     public Label getInvoiceNumber() {
         return invoiceNumber;
     }
@@ -108,27 +126,10 @@ public class InvoiceController implements Initializable {
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
-        /*
-         * Items item = new Items();
-        item.setItemName(itemName.getText());
-        item.setBarcode(itemBarcode.getText());
-        item.setMrp(Double.valueOf(itemMrp.getText()));
-        item.setWeight(Double.valueOf(itemWeight.getText()));
-        item.setActualPrice(Double.valueOf(actualPrice.getText()));
-        System.out.println("hasGift.getText()"+hasGift);
-        item.setWeightUnit((String)weightUnit.getSelectionModel().getSelectedItem());
-        item.setModifiedDate(new Date());
-        itemService = (ItemService) ApplicationMain.applicationContext.getBean("itemService");
-        UserDao userDao = (UserDao) ApplicationMain.applicationContext.getBean("userDaoImpl");
-        item.setUsers(userDao.findById(1));
-        itemService.itemSave(item);
-        label.setText("Item Saved");
-        animateMessage();
-        fillDataTable();
-        clearForm();
-        System.out.println("saved");
-         */
+
+        invoiceService = (InvoiceService) ApplicationMain.applicationContext.getBean("invoiceService");
         InvoiceDetails invoiceDetails = new InvoiceDetails();
+
         Object selectedItem = itemName.getSelectionModel().getSelectedItem();
 
         if (selectedItem == null) {
@@ -141,21 +142,28 @@ public class InvoiceController implements Initializable {
 
         String invoiceNum = invoiceNumber.getText();
 
+
         if (invoiceNum == null || invoiceNum.equalsIgnoreCase("")) {
-            invoiceNum = new Integer(invoiceDao.getInvoiceId()).toString();
-            invoiceNumber.setText(invoiceNum);
-            System.out.println("new invoice number:" + invoiceNum);
+            invoice = new Invoice();
+            invoice.setModifiedDate(new Date());
+
+            UserDao userDao = (UserDao) ApplicationMain.applicationContext.getBean("userDaoImpl");
+            invoice.setUsers(userDao.findById(1));
+            invoiceService.invoiceSave(invoice);
+            System.out.println("invoice id pk:" + invoice.getIdPk());
+            //invoiceNum = new Integer(invoiceDao.getInvoiceId()).toString();
+
+            invoiceNumber.setText(new Integer(invoice.getIdPk()).toString());
+           
         }
-        invoiceDetails.setInvoiceIdFk(Integer.parseInt(invoiceNum));
 
+        //invoiceDetails.setInvoice(Integer.parseInt(invoiceNum));
+        invoiceDetails.setInvoice(invoice);
 
+        //invoiceService.getInvoiceDetailsDoById(invoice.getIdPk());
 
-        //int id=itemDao.getIdByName(selectedItem.toString());
-        Item item = itemDao.getItemByName(selectedItem.toString());
-
-
+        itemService = (ItemService) ApplicationMain.applicationContext.getBean("itemService");
         String itemQty = itemQuantity.getText();
-
 
         if (KCPUtils.isNullString(itemQty)) {
             label.setText("Please select item quantity");
@@ -165,19 +173,74 @@ public class InvoiceController implements Initializable {
             System.out.println("reenter item");
             return;
         }
-        System.out.println("itemQuantity:" + itemQty);
 
-        invoiceDetails.setInvoiceItemQuantity(Integer.parseInt(itemQty));
+        billingService = (BillingService) ApplicationMain.applicationContext.getBean("billingService");
+        BillingPrice billingPrice = null;
+       
+        Items item = itemService.getItemByName(selectedItem.toString());
+         invoiceDetails.setItems(item);
+        String itemName = item.getItemName();
+
+        System.out.println("invoiceIdPk:"+invoice.getIdPk());
+        System.out.println("itemIdPk:"+item.getIdPk());
+      
+       
+        List<InvoiceDetails> invoiceDetailslist= invoiceService.getInvoiceDetailsById(invoice.getIdPk());
+        if(invoiceDetailslist!=null)
+             System.out.println("invoice details size:"+invoiceService.getInvoiceDetailsById(invoice.getIdPk()).size());
+        else 
+             System.out.println("Invoice detail is null");
+        
+        if(invoiceService.getInvoiceDetailsById(invoice.getIdPk())==null
+                || invoiceService.getInvoiceDetailsById(invoice.getIdPk()).size()==0 )
+        {
+            System.out.println("Invoice detail is null");
+            invoiceDetails.setQuantity(Integer.parseInt(itemQty));
+                billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
+                invoiceDetails.setBillingPrice(billingPrice);
+                Double price = billingPrice.getBillingPrice();
+                double itemTotalPrice = price * Integer.parseInt(itemQty);
+                invoiceDetails.setTotal(itemTotalPrice);
+
+                invoiceDetails.setInvoice(invoice);
+        }
+        
+        for (InvoiceDetails invoiceDet : invoiceService.getInvoiceDetailsById(invoice.getIdPk())) {
+            if (itemName.equalsIgnoreCase(invoiceDet.getItems().getItemName())) {
+                System.out.println("Invoice item already exists");
+                invoiceDetails.setQuantity(invoiceDet.getQuantity() + Integer.parseInt(itemQty));
+                
+                billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
+                invoiceDetails.setBillingPrice(billingPrice);
+                Double price = billingPrice.getBillingPrice();
+                double itemTotalPrice = price * invoiceDetails.getQuantity();
+                invoiceDetails.setTotal(itemTotalPrice);
+
+                invoiceDetails.setInvoice(invoice);
+                
+            } else {
+                System.out.println("1st item");
+                invoiceDetails.setQuantity(Integer.parseInt(itemQty));
+                billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
+                invoiceDetails.setBillingPrice(billingPrice);
+                Double price = billingPrice.getBillingPrice();
+                double itemTotalPrice = price * Integer.parseInt(itemQty);
+                invoiceDetails.setTotal(itemTotalPrice);
+
+                invoiceDetails.setInvoice(invoice);
+                
+            }
+            break;
+
+        }
 
 
 
-        System.out.println("selling price:" + item.getBillingPrice());
-        double itemTotalPrice = item.getBillingPrice() * Integer.parseInt(itemQty);
 
-        invoiceDetails.setInvoiceItemTotalPrice(itemTotalPrice);
 
-        InvoiceDao invoiceDao = new InvoiceDaoImpl();
-        invoiceDao.addInvoiceItem(invoiceDetails, item);
+        
+        invoiceService.invoiceDetailsSave(invoiceDetails);
+
 
 
 
@@ -191,10 +254,11 @@ public class InvoiceController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         itemName.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
-        List<Item> itemList = itemDao.getAllItems();
+        itemService = (ItemService) ApplicationMain.applicationContext.getBean("itemService");
+        List<ItemDo> itemList = itemService.getAllItems();
 
-        for (Item item : itemList) {
-            itemMap.put(item.getName(), item);
+        for (ItemDo item : itemList) {
+            itemMap.put(item.getItemName(), item);
             itemName.getItems().add(item.getItemName());
         }
         System.out.println("item list size:" + itemList.size());
@@ -202,7 +266,7 @@ public class InvoiceController implements Initializable {
         itemName.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> selected, String oldItem, String newItem) {
-                Item item = itemMap.get(newItem);
+                ItemDo item = itemMap.get(newItem);
 
 
                 itemBarcode.setText(item.getBarcode());
@@ -210,7 +274,7 @@ public class InvoiceController implements Initializable {
                 itemMrp.setText(new Double(item.getMrp()).toString());
                 itemWeight.setText(new Double(item.getWeight()).toString());
                 //weightUnit.setSelectionModel(item.getWeightUnit());
-                billingPrice.setText(new Double(item.getBillingPrice()).toString());
+                billingPrice.setText(new Double(item.getSellingPrice()).toString());
 
 
 
@@ -220,34 +284,22 @@ public class InvoiceController implements Initializable {
 
         dataTable.setItems(dataTableData);
         itemBarcodeCol.setCellValueFactory(
-                new PropertyValueFactory<Item, String>("itemBarcode"));
+                new PropertyValueFactory<InvoiceDetailsDo, String>("barcode"));
+
         itemNameCol.setCellValueFactory(
-                new PropertyValueFactory<Item, String>("itemName"));
+                new PropertyValueFactory<InvoiceDetailsDo, String>("itemName"));
         itemMRPCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemMrp"));
-        /*
-         * public SimpleDoubleProperty itemWeight = new SimpleDoubleProperty();
-    
-         public SimpleStringProperty itemWeightUnit = new SimpleStringProperty();
-    
-         public SimpleDoubleProperty itemBillingPrice = new SimpleDoubleProperty();
-    
-         public SimpleDoubleProperty itemActualPrice = new SimpleDoubleProperty();
-    
-         public SimpleBooleanProperty itemHasFree = new SimpleBooleanProperty();
-         */
-
-
+                new PropertyValueFactory<InvoiceDetailsDo, Double>("mrp"));
 
 
         itemBillingPriceCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemBillingPrice"));
+                new PropertyValueFactory<InvoiceDetailsDo, Double>("billingPrice"));
 
         itemQuantityCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemQuantity"));
+                new PropertyValueFactory<InvoiceDetailsDo, Double>("quantity"));
 
         itemTotalAmountCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemTotalAmount"));
+                new PropertyValueFactory<InvoiceDetailsDo, Double>("total"));
 
 
 
@@ -275,81 +327,89 @@ public class InvoiceController implements Initializable {
     }
 
     private void fillInvoiceDataTable() {
-        ItemDao itemDao = new ItemDaoImpl();
+        System.out.println("fillInvoiceDataTable() start");
         invoiceNumber.getText();
-        invoiceDetailsList = invoiceDao.getInvoiceItems(invoiceNumber.getText());
-        //List<Item> items=itemDao.getItemListByInvoiceId(invoiceDetailsList);
-        System.out.println("invoice items list:" + invoiceDetailsList.size());
-        getInvoiceTotalAmount(invoiceDetailsList);
-        dataTableData.setAll(invoiceDetailsList);
+
+        if (invoiceNumber.getText() == null || invoiceNumber.getText().equalsIgnoreCase("")) {
+            invoiceDetailsDoList = new ArrayList<InvoiceDetailsDo>();
+        } else {
+            invoiceDetailsDoList = invoiceService.getInvoiceDetailsDoById(Integer.parseInt(invoiceNumber.getText()));
+        }
+        //List<Item> items=itemDao.getItemListByInvoiceId(invoiceDetailsDoList);
+
+
+        System.out.println("invoice number:" + invoiceNumber.getText());
+        System.out.println("invoice items list:" + invoiceDetailsDoList.size());
+        for (InvoiceDetailsDo data : invoiceDetailsDoList) {
+
+            System.out.println("billing price:" + data.getBillingPrice());
+        }
+        getInvoiceTotalAmount(invoiceDetailsDoList);
+        dataTableData.setAll(invoiceDetailsDoList);
     }
 
-    public void getInvoiceTotalAmount(List<InvoiceDetails> invoiceDetailsList) {
+    public void getInvoiceTotalAmount(List<InvoiceDetailsDo> invoiceDetailsList) {
         Double amount = 0.0;
 
-        for (InvoiceDetails data : invoiceDetailsList) {
-            amount = amount + data.getItemTotalAmount();
+        for (InvoiceDetailsDo data : invoiceDetailsList) {
+            amount = amount + data.getTotal();
         }
 
-        TotalAmount.setText(amount.toString());
+        if (amount != null) {
+            TotalAmount.setText(amount.toString());
+        }
 
 
     }
 
     public void saveAllInvoiceItems() {
-        InvoiceDetails invoiceDetails = new InvoiceDetails();
+        /*  InvoiceDetails invoiceDetails = new InvoiceDetails();
 
-        invoiceDao.saveInvoice(getInvoiceDetailsList());
+         invoiceService.invoiceDetailsSave(getInvoiceDetailsList());
 
-        String invoiceNum = invoiceNumber.getText();
+         String invoiceNum = invoiceNumber.getText();
 
-        if (invoiceNum == null) {
-            /*Tring to save empty invoice*/
-            invoiceNum = new Integer(invoiceDao.getInvoiceId()).toString();
-        }
+         if (invoiceNum == null) {
+            
+         invoiceNum = new Integer(invoiceDao.getInvoiceId()).toString();
+         }
 
-        invoiceDao.getInvoiceById();
-        invoiceDetails.setInvoiceIdFk(Integer.parseInt(invoiceNum));
-
-
-        ItemDao itemDao = new ItemDaoImpl();
-        // itemDao.getIdByName(selectedItem.toString());
-
-        String itemQty = itemQuantity.getText();
-        invoiceDetails.setInvoiceItemQuantity(Integer.parseInt(itemQty));
-        Object selectedItem = itemName.getSelectionModel().getSelectedItem();
-        Item item = itemDao.getItemByName(selectedItem.toString());
-
-        double itemTotalPrice = item.getBillingPrice() * Integer.parseInt(itemQty);
-
-        invoiceDetails.setInvoiceItemTotalPrice(itemTotalPrice);
-
-        InvoiceDao invoiceDao = new InvoiceDaoImpl();
-        //invoiceDao.addInvoiceItem(invoiceDetails);
-
-        //invoiceDao.saveInvoice(invoiceDetails);
+         invoiceDao.getInvoiceById();
+         invoiceDetails.setInvoiceIdFk(Integer.parseInt(invoiceNum));
 
 
+         ItemDao itemDao = new ItemDaoImpl();
+         // itemDao.getIdByName(selectedItem.toString());
 
-        label.setText("Item Saved");
-        animateMessage();
-        fillInvoiceDataTable();
-        clearForm();
-        System.out.println("saved");
+         String itemQty = itemQuantity.getText();
+         invoiceDetails.setInvoiceItemQuantity(Integer.parseInt(itemQty));
+         Object selectedItem = itemName.getSelectionModel().getSelectedItem();
+         Item item = itemDao.getItemByName(selectedItem.toString());
+
+         double itemTotalPrice = item.getBillingPrice() * Integer.parseInt(itemQty);
+
+         invoiceDetails.setInvoiceItemTotalPrice(itemTotalPrice);
+
+         InvoiceDao invoiceDao = new InvoiceDaoImpl();
+         //invoiceDao.addInvoiceItem(invoiceDetails);
+
+         //invoiceDao.saveInvoice(invoiceDetails);
+
+
+
+         label.setText("Item Saved");
+         animateMessage();
+         fillInvoiceDataTable();
+         clearForm();
+         System.out.println("saved");*/
     }
-    
-    public void saveInvoice()
-    {
-        invoiceDao.saveInvoice(invoiceDetailsList);
-        
 
+    public void saveInvoice() {
+        //invoiceDao.saveInvoice(invoiceDetailsDoList);
     }
-    
-    public void deleteInvoiceItem()
-    {
-        
-    
+
+    public void deleteInvoiceItem() {
         //invoiceDao.deleteInvoiceItem(invoiceId, itemId);
-       invoiceDao.deleteInvoiceItem(1,1);
+        //invoiceDao.deleteInvoiceItem(1,1);
     }
 }

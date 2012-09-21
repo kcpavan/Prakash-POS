@@ -79,6 +79,21 @@ public class ItemsDaoImpl implements ItemDao {
 		}
 	}
         
+        
+        public Items findByName(String itemName) 
+        {
+            log.debug("getting Item instance with name: " + itemName);
+		try {
+			Query instance = entityManager.createNamedQuery("Items.findByName").setParameter("name", itemName);
+			log.debug("get successful");
+			return (Items)instance.getSingleResult();
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+        }
+        
+        
         public List<Items> findByAll() {
 		//log.debug("getting Items instance with id: " + id);
 		try {

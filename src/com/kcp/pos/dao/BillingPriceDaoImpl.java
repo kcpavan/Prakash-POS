@@ -4,8 +4,8 @@
  */
 package com.kcp.pos.dao;
 
+import com.kcp.pos.modal.BillingPrice;
 import com.kcp.pos.modal.Invoice;
-import com.kcp.pos.modal.InvoiceDetails;
 import com.kcp.pos.modal.Items;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -21,9 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Prakash
  */
-@Repository("invoiceDaoImpl")
+@Repository("billingPriceDaoImpl")
 @Service
-public class InvoiceDaoImpl implements InvoiceDao{
+public class BillingPriceDaoImpl implements BillingPriceDao{
     
     private static final Log log = LogFactory.getLog(ItemsDaoImpl.class);
 
@@ -33,25 +33,40 @@ public class InvoiceDaoImpl implements InvoiceDao{
         public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-    
-    public InvoiceDetails findById(Integer id) {
-		log.debug("getting Items instance with id: " + id);
+        
+    public BillingPrice findByIdQuantity(Integer itemId,Integer quantity) 
+        {
+            log.debug("getting Billing instance with id: " + itemId+" and quantity:"+quantity);
 		try {
-			InvoiceDetails instance = entityManager.find(InvoiceDetails.class, id);
+			Query instance = entityManager.createNamedQuery("BillingPrice.findByItemIdQuantity")
+                                .setParameter("itemId", itemId).setParameter("quantity", quantity);
 			log.debug("get successful");
-			return instance;
+			return (BillingPrice)instance.getSingleResult();
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			throw re;
 		}
-	}
+        }
     
-     public List<InvoiceDetails> findListById(Integer id) {
-		log.debug("getting Items instance with id: " + id);
+     public BillingPrice findByNameQuantity(Integer itemId,Integer quantity) 
+        {
+            log.debug("getting Billing instance with id: " + itemId+" and quantity:"+quantity);
 		try {
-			Query instance = entityManager.createNamedQuery("InvoiceDetails.findAllById")
-                                .setParameter("id", id);
-                                
+			Query instance = entityManager.createNamedQuery("BillingPrice.findByNameQuantity")
+                                .setParameter("name", itemId).setParameter("quantity", quantity);
+			log.debug("get successful");
+			return (BillingPrice)instance.getSingleResult();
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+        }
+        
+        public List<BillingPrice> findByItemId(Integer itemId) {
+		log.debug("getting Items instance with item id: " + itemId);
+		try {
+			Query instance = entityManager.createNamedQuery("BillingPrice.findByItemId")
+                                .setParameter("name", itemId);
 			log.debug("get successful");
 			return instance.getResultList();
 		} catch (RuntimeException re) {
@@ -59,9 +74,9 @@ public class InvoiceDaoImpl implements InvoiceDao{
 			throw re;
 		}
 	}
-    
-     @Transactional
-	public void persist(Invoice transientInstance) {
+        
+         @Transactional
+	public void persist(BillingPrice transientInstance) {
 		log.debug("persisting Invoice instance");
 		try {
                         
@@ -73,5 +88,6 @@ public class InvoiceDaoImpl implements InvoiceDao{
 			throw re;
 		}
 	}
+    
     
 }

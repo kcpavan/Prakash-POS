@@ -6,17 +6,17 @@ package com.kcp.pos.dao;
 
 import com.kcp.pos.modal.Invoice;
 import com.kcp.pos.modal.InvoiceDetails;
-import com.kcp.pos.modal.Items;
+import com.kcp.pos.modal.Purchase;
 import java.util.List;
 
 /**
  *
  * @author Prakash
  */
-public interface InvoiceDao {
+public interface PurchaseDao {
     
-     public void persist(Invoice transientInstance); 
-     public InvoiceDetails findById(Integer id) ;
-     public List<InvoiceDetails> findListById(Integer id) ;
+    public void persist(Purchase transientInstance); 
+    /* public InvoiceDetails findById(Integer id) ;
+     public List<InvoiceDetails> findListById(Integer id) ;*/
     
 }
