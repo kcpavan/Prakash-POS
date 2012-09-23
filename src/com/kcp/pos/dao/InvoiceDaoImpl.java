@@ -46,6 +46,8 @@ public class InvoiceDaoImpl implements InvoiceDao{
 		}
 	}
     
+   
+    
      public List<InvoiceDetails> findListById(Integer id) {
 		log.debug("getting Items instance with id: " + id);
 		try {

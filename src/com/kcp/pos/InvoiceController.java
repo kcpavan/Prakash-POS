@@ -128,7 +128,9 @@ public class InvoiceController implements Initializable {
     private void handleButtonAction(ActionEvent event) {
 
         invoiceService = (InvoiceService) ApplicationMain.applicationContext.getBean("invoiceService");
-        InvoiceDetails invoiceDetails = new InvoiceDetails();
+        UserDao userDao = (UserDao) ApplicationMain.applicationContext.getBean("userDaoImpl");
+        
+        //InvoiceDetails invoiceDetails = null;
 
         Object selectedItem = itemName.getSelectionModel().getSelectedItem();
 
@@ -147,7 +149,7 @@ public class InvoiceController implements Initializable {
             invoice = new Invoice();
             invoice.setModifiedDate(new Date());
 
-            UserDao userDao = (UserDao) ApplicationMain.applicationContext.getBean("userDaoImpl");
+            
             invoice.setUsers(userDao.findById(1));
             invoiceService.invoiceSave(invoice);
             System.out.println("invoice id pk:" + invoice.getIdPk());
@@ -158,7 +160,7 @@ public class InvoiceController implements Initializable {
         }
 
         //invoiceDetails.setInvoice(Integer.parseInt(invoiceNum));
-        invoiceDetails.setInvoice(invoice);
+        
 
         //invoiceService.getInvoiceDetailsDoById(invoice.getIdPk());
 
@@ -178,23 +180,56 @@ public class InvoiceController implements Initializable {
         BillingPrice billingPrice = null;
        
         Items item = itemService.getItemByName(selectedItem.toString());
-         invoiceDetails.setItems(item);
+        
         String itemName = item.getItemName();
 
         System.out.println("invoiceIdPk:"+invoice.getIdPk());
         System.out.println("itemIdPk:"+item.getIdPk());
       
        
-        List<InvoiceDetails> invoiceDetailslist= invoiceService.getInvoiceDetailsById(invoice.getIdPk());
+        InvoiceDetails invoiceDetails=invoiceService.getInvoiceDetailsByInvoiceItemId(invoice.getIdPk(),item.getIdPk());
+        
+        if(invoiceDetails!=null)
+        {
+                
+                invoiceDetails.setQuantity(invoiceDetails.getQuantity() + Integer.parseInt(itemQty));
+                
+                billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
+                invoiceDetails.setBillingPrice(billingPrice);
+                Double price = billingPrice.getBillingPrice();
+                double itemTotalPrice = price * invoiceDetails.getQuantity();
+                invoiceDetails.setTotal(itemTotalPrice);
+  
+        }
+        else
+        {
+            invoiceDetails=new InvoiceDetails();
+            
+            invoiceDetails.setItems(item);
+            invoiceDetails.setQuantity(Integer.parseInt(itemQty));
+            billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
+                invoiceDetails.setBillingPrice(billingPrice);
+                Double price = billingPrice.getBillingPrice();
+                double itemTotalPrice = price * Integer.parseInt(itemQty);
+                invoiceDetails.setTotal(itemTotalPrice);
+
+                invoiceDetails.setInvoice(invoice);
+        }
+        /*List<InvoiceDetails> invoiceDetailslist= invoiceService.getInvoiceDetailsById(invoice.getIdPk());
         if(invoiceDetailslist!=null)
              System.out.println("invoice details size:"+invoiceService.getInvoiceDetailsById(invoice.getIdPk()).size());
         else 
              System.out.println("Invoice detail is null");
+        */
         
-        if(invoiceService.getInvoiceDetailsById(invoice.getIdPk())==null
+        
+        
+        /*if(invoiceService.getInvoiceDetailsById(invoice.getIdPk())==null
                 || invoiceService.getInvoiceDetailsById(invoice.getIdPk()).size()==0 )
         {
             System.out.println("Invoice detail is null");
+            invoiceDetails=new InvoiceDetails();
+            invoiceDetails.setItems(item);
             invoiceDetails.setQuantity(Integer.parseInt(itemQty));
                 billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
                 invoiceDetails.setBillingPrice(billingPrice);
@@ -208,6 +243,7 @@ public class InvoiceController implements Initializable {
         for (InvoiceDetails invoiceDet : invoiceService.getInvoiceDetailsById(invoice.getIdPk())) {
             if (itemName.equalsIgnoreCase(invoiceDet.getItems().getItemName())) {
                 System.out.println("Invoice item already exists");
+                invoiceDetails=invoiceDet;
                 invoiceDetails.setQuantity(invoiceDet.getQuantity() + Integer.parseInt(itemQty));
                 
                 billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
@@ -216,10 +252,12 @@ public class InvoiceController implements Initializable {
                 double itemTotalPrice = price * invoiceDetails.getQuantity();
                 invoiceDetails.setTotal(itemTotalPrice);
 
-                invoiceDetails.setInvoice(invoice);
+                
                 
             } else {
                 System.out.println("1st item");
+                invoiceDetails=new InvoiceDetails();
+                invoiceDetails.setItems(item);
                 invoiceDetails.setQuantity(Integer.parseInt(itemQty));
                 billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
                 invoiceDetails.setBillingPrice(billingPrice);
@@ -233,7 +271,7 @@ public class InvoiceController implements Initializable {
             break;
 
         }
-
+        */
 
 
 

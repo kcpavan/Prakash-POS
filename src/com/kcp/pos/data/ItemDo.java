@@ -32,7 +32,7 @@ public class ItemDo {
         this.weight.set(items.getWeight());
         this.weightUnit.set(items.getWeightUnit());
         this.actualPrice.set(items.getActualPrice());
-        this.sellingPrice.set(items.getSellingPrice());
+       // this.sellingPrice.set(items.getSellingPrice());
         
                 
     }

@@ -40,12 +40,12 @@ create table storedb.items
 item_name varchar(250) not null,
 barcode varchar(250) not null,
 category_id_fk int null,
-mrp double not null,
-/*weight double not null,
-weight_unit varchar(50)  null,*/
-actual_price double not null,
-/*selling_price double not null,
-hasfree boolean not null,*/
+/*mrp double not null,*/
+weight double not null,
+weight_unit varchar(50)  null,
+/*actual_price double not null,
+selling_price double not null,*/
+hasfree boolean not null,
 modified_by int not null,
 modified_date timestamp,
 CONSTRAINT fk_category_id
@@ -106,22 +106,31 @@ CONSTRAINT fk_purchase_distributor_id
 
 
 
+
 drop table if exists storedb.purchase_details;
 create table storedb.purchase_details
 (id_pk integer primary key not null auto_increment,
-item_id_fk integer not null,
-item_quantity integer not null,
-free_item integer null,
 purchase_id_fk integer not null,
-CONSTRAINT fk_purchase_det_item_id
+item_id_fk integer not null,
+mrp double not null,
+quantity_case integer null,
+quantity_units integer null,
+quantity_free integer null,
+basic_rate double not null,
+gross_amount double not null,
+scheme int not null,
+cd double not null,
+tax_percentage double not null,
+tax double not null,
+net_amount double not null,
+
+CONSTRAINT fk_purchasedet_item_id
 	FOREIGN KEY(`item_id_fk`) 
 	REFERENCES `items`(`id_pk`),
 CONSTRAINT fk_purchase_id
 	FOREIGN KEY(`purchase_id_fk`) 
 	REFERENCES `purchase`(`id_pk`)
 );
-
-
 
 
 drop table if exists storedb.invoice;
@@ -137,13 +146,39 @@ CONSTRAINT fk_invoice_modified_user
 
 );
 
+drop table if exists storedb.billing_type;
+create table storedb.billing_type
+(id_pk integer primary key not null auto_increment,
+billing_type_desc varchar(250) not null);
+
+
+drop table if exists storedb.item_mrp;
+create table storedb.item_mrp
+(id_pk integer primary key not null auto_increment,
+item_id_fk integer not null,
+mrp double not null,
+actual_price double not null,
+modified_by int not null,
+modified_date timestamp,
+CONSTRAINT fk_itemmrp_modified_user
+	FOREIGN KEY(`modified_by`) 
+	REFERENCES `users`(`id_pk`),
+CONSTRAINT fk_itemmrp_item_id
+	FOREIGN KEY(`item_id_fk`) 
+	REFERENCES `items`(`id_pk`));
+
+
+
+
 drop table if exists storedb.billing_price;
 create table storedb.billing_price
 (id_pk integer primary key not null auto_increment,
 item_id_fk integer not null,
+mrp double not null,
 start_range integer not null,
 end_range integer not null,
-billingprice double not null,
+billing_price double not null,
+billing_type_id_fk int not null,
 modified_by int not null,
 modified_date timestamp,
 CONSTRAINT fk_billing_modified_user
@@ -152,16 +187,13 @@ CONSTRAINT fk_billing_modified_user
 CONSTRAINT fk_billing_item_id
 	FOREIGN KEY(`item_id_fk`) 
 	REFERENCES `items`(`id_pk`),
+CONSTRAINT fk_billing_type
+	FOREIGN KEY(`billing_type_id_fk`) 
+	REFERENCES `billing_type`(`id_pk`),
 CONSTRAINT un_start_billing_range UNIQUE (item_id_fk,start_range),
-CONSTRAINT un_end_billing_range UNIQUE (item_id_fk,end_range)
+CONSTRAINT un_end_billing_range UNIQUE (item_id_fk,end_range));
 
 
-);
-
-insert into storedb.billing_price
-(item_id_fk,start_range ,end_range ,billingprice,modified_by,modified_date )
-values(1,1,10,15.50,1,'2012-09-20 21:21:04'),
-(2,1,10,13.50,1,'2012-09-20 21:21:04');
 
 
 drop table if exists storedb.invoice_details;
@@ -217,10 +249,12 @@ CONSTRAINT fk_item_id
 
 
 
+
 insert into storedb.billing_price
-(item_id_fk,start_range ,
-end_range ,
-billingprice,
-modified_by,
-modified_date )
-values(1,1,10,15.50,1,'2012-09-20 21:21:04');
+(item_id_fk,start_range ,end_range ,billingprice,modified_by,modified_date )
+values(1,1,10,15.50,1,'2012-09-20 21:21:04'),
+(1,11,20,15.50,1,'2012-09-20 21:21:04'),
+(2,1,10,13.50,1,'2012-09-20 21:21:04');
+
+
+

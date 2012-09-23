@@ -14,6 +14,7 @@ import java.util.List;
 public interface InvoiceDetailsDao {
     
     public void persist(InvoiceDetails transientInstance); 
+    public InvoiceDetails findByInvoiceItemId(Integer invoiceId,Integer itemId) ;
     /*public List<InvoiceDetails> findByAll() ;
     public InvoiceDetails findByName(String itemName) ;*/
     

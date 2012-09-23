@@ -36,7 +36,7 @@ public class Items implements java.io.Serializable {
 	private double weight;
 	private String weightUnit;
 	private double actualPrice;
-	private double sellingPrice;
+	//private double sellingPrice;
 	private boolean hasfree;
 	private Date modifiedDate;
 	private Set<Stocks> stockses = new HashSet<Stocks>(0);
@@ -56,7 +56,7 @@ public class Items implements java.io.Serializable {
 		this.weight = weight;
 		this.weightUnit = weightUnit;
 		this.actualPrice = actualPrice;
-		this.sellingPrice = sellingPrice;
+		//this.sellingPrice = sellingPrice;
 		this.hasfree = hasfree;
 		this.modifiedDate = modifiedDate;
 	}
@@ -74,7 +74,7 @@ public class Items implements java.io.Serializable {
 		this.weight = weight;
 		this.weightUnit = weightUnit;
 		this.actualPrice = actualPrice;
-		this.sellingPrice = sellingPrice;
+		//this.sellingPrice = sellingPrice;
 		this.hasfree = hasfree;
 		this.modifiedDate = modifiedDate;
 		this.stockses = stockses;
@@ -167,14 +167,14 @@ public class Items implements java.io.Serializable {
 		this.actualPrice = actualPrice;
 	}
 
-	@Column(name = "selling_price", nullable = false, precision = 22, scale = 0)
+	/*@Column(name = "selling_price", nullable = false, precision = 22, scale = 0)
 	public double getSellingPrice() {
 		return this.sellingPrice;
 	}
 
 	public void setSellingPrice(double sellingPrice) {
 		this.sellingPrice = sellingPrice;
-	}
+	}*/
 
 	@Column(name = "hasfree", nullable = false)
 	public boolean isHasfree() {

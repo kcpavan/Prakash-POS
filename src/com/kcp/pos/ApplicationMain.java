@@ -24,8 +24,8 @@ public class ApplicationMain extends Application {
     public void start(Stage stage) throws Exception {
         applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
         
-        //Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("Invoice.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("Invoice.fxml"));
         
         Scene scene = new Scene(root);
         

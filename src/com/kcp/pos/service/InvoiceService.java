@@ -48,10 +48,10 @@ public class InvoiceService {
    List<InvoiceDetailsDo> invoiceDos = new ArrayList<InvoiceDetailsDo>();
    InvoiceDetailsDo invoiceDo=new InvoiceDetailsDo();
         for (InvoiceDetails invoiceDetails : invoiceDao.findListById(invoiceId)) {
-           //invoiceDos.add(new InvoiceDetailsDo(invoiceDetails)); 
-            InvoiceDetailsDo invoice=new InvoiceDetailsDo();
-            invoice=invoiceDo.getInvoceDo(invoiceDetails);
-            invoiceDos.add(invoice);
+           invoiceDos.add(new InvoiceDetailsDo(invoiceDetails)); 
+            //InvoiceDetailsDo invoice=new InvoiceDetailsDo();
+            //invoice=invoiceDo.getInvoceDo(invoiceDetails);
+            //invoiceDos.add(invoice);
         }
     return invoiceDos;
     }
@@ -61,5 +61,8 @@ public class InvoiceService {
         return invoiceDao.findListById(invoiceId);
     }
    
-
+     public InvoiceDetails getInvoiceDetailsByInvoiceItemId(Integer invoiceId,Integer itemId)
+     {
+         return invoiceDetailsDao.findByInvoiceItemId(invoiceId,itemId);
+     }
 }

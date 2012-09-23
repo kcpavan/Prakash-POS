@@ -57,16 +57,27 @@
             </GridPane>
             <GridPane layoutX="378.0" layoutY="59.0" prefHeight="156.0" prefWidth="297.0">
               <children>
-                <Label font="$x1" text="Selling Price" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <Label font="$x1" text="Has Gift Item" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                <TextField fx:id="sellingPrice" prefHeight="26.0" prefWidth="190.0" promptText="Selling Price" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                <CheckBox fx:id="hasGift" mnemonicParsing="false" text="Yes" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label font="$x1" text="Selling Price" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <Label font="$x1" text="Has Gift Item" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <TextField fx:id="sellingPrice" prefHeight="26.0" prefWidth="190.0" promptText="Selling Price" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <CheckBox fx:id="hasGift" mnemonicParsing="false" text="Yes" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <ChoiceBox id="weightUnit" fx:id="category" onInputMethodTextChanged="#handleButtonAction" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                  <items>
+                    <FXCollections fx:factory="observableArrayList">
+                      <String fx:value="Item 1" />
+                      <String fx:value="Item 2" />
+                      <String fx:value="Item 3" />
+                    </FXCollections>
+                  </items>
+                </ChoiceBox>
+                <Label font="$x1" text="Category" GridPane.columnIndex="0" GridPane.rowIndex="0" />
               </children>
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="107.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="191.0" minWidth="10.0" prefWidth="190.0" />
               </columnConstraints>
               <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -98,7 +109,6 @@
                             <TableColumn prefWidth="75.0" text="Actual Price" fx:id="itemActualPriceCol" />
                             <TableColumn prefWidth="75.0" text="Selling Price" fx:id="itemSellingPriceCol" />
                             <TableColumn prefWidth="75.0" text="Has Gift" fx:id="itemHasGiftCol" />
-                            <TableColumn prefWidth="75.0" text="Total" fx:id="itemTotalCostCol" />
                           </columns>
                         </TableView>
                       </children>

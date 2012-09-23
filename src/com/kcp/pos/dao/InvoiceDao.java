@@ -19,4 +19,6 @@ public interface InvoiceDao {
      public InvoiceDetails findById(Integer id) ;
      public List<InvoiceDetails> findListById(Integer id) ;
     
+     
+    
 }

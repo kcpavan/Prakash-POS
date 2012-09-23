@@ -9,16 +9,24 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "item_category", catalog = "storedb")
+@NamedQueries({
+   
+    @NamedQuery(name = "ItemCategory.findByName", query = "SELECT i FROM ItemCategory i where i.categoryName=:name"),
+    @NamedQuery(name = "ItemCategory.findAll", query = "SELECT i FROM ItemCategory i")
+   
+})
 public class ItemCategory implements java.io.Serializable {
 
 	private Integer idPk;
 	private String categoryName;
-	private Set<Items> itemses = new HashSet<Items>(0);
+	/*private Set<Items> itemses = new HashSet<Items>(0);*/
 
 	public ItemCategory() {
 	}
@@ -27,10 +35,10 @@ public class ItemCategory implements java.io.Serializable {
 		this.categoryName = categoryName;
 	}
 
-	public ItemCategory(String categoryName, Set itemses) {
+	/*public ItemCategory(String categoryName, Set itemses) {
 		this.categoryName = categoryName;
 		this.itemses = itemses;
-	}
+	}*/
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -52,13 +60,13 @@ public class ItemCategory implements java.io.Serializable {
 		this.categoryName = categoryName;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY,targetEntity = Items.class, mappedBy = "itemCategory")
+	/*@OneToMany(fetch = FetchType.,targetEntity = Items.class, mappedBy = "itemCategory")
 	public Set<Items> getItemses() {
 		return this.itemses;
 	}
 
 	public void setItemses(Set<Items> itemses) {
 		this.itemses = itemses;
-	}
+	}*/
 
 }

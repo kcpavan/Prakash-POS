@@ -20,7 +20,7 @@ import org.apache.commons.logging.LogFactory;
  */
 @Repository("purchaseDaoImpl")
 @Service
-public class PurchaseDaoImpl {
+public class PurchaseDaoImpl implements PurchaseDao{
     
     private static final Log log = LogFactory.getLog(ItemsDaoImpl.class);
 

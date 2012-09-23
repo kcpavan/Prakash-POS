@@ -4,10 +4,14 @@
  */
 package com.kcp.pos;
 
+import com.kcp.pos.dao.ItemCategoryDao;
 import com.kcp.pos.dao.ItemDao;
 import com.kcp.pos.dao.UserDao;
+import com.kcp.pos.data.ItemCategoryDo;
 import com.kcp.pos.data.ItemDo;
+import com.kcp.pos.modal.ItemCategory;
 import com.kcp.pos.modal.Items;
+import com.kcp.pos.service.ItemCategoryService;
 import com.kcp.pos.service.ItemService;
 import java.net.URL;
 import java.util.Date;
@@ -55,6 +59,8 @@ public class MainController implements Initializable {
     
     @FXML private ChoiceBox weightUnit = new ChoiceBox();
     
+    @FXML private ChoiceBox category = new ChoiceBox();
+    
     @FXML public TableView<ItemDo> dataTable;
   
     private final ObservableList<ItemDo> dataTableData = FXCollections.observableArrayList();
@@ -71,6 +77,7 @@ public class MainController implements Initializable {
     
     @Autowired
     private ItemService itemService;
+    
 
     public ItemService getItemService() {
         return itemService;
@@ -80,6 +87,17 @@ public class MainController implements Initializable {
         this.itemService = itemService;
     }
 
+  //  @Autowired
+    private ItemCategoryService itemCategoryService;
+
+    public ItemCategoryService getItemCategoryService() {
+        return itemCategoryService;
+    }
+
+    public void setItemCategoryService(ItemCategoryService itemCategoryService) {
+        this.itemCategoryService = itemCategoryService;
+    }
+    
     
     
     @FXML
@@ -93,6 +111,10 @@ public class MainController implements Initializable {
         System.out.println("hasGift.getText()"+hasGift);
         item.setWeightUnit((String)weightUnit.getSelectionModel().getSelectedItem());
         item.setModifiedDate(new Date());
+        Object selectedItem = category.getSelectionModel().getSelectedItem();
+        System.out.println("selectedItem:"+selectedItem);
+        ItemCategoryDao itemCategoryDao=(ItemCategoryDao)ApplicationMain.applicationContext.getBean("itemCategoryDaoImpl");
+        item.setItemCategory(itemCategoryDao.findByName(selectedItem.toString()));
         itemService = (ItemService) ApplicationMain.applicationContext.getBean("itemService");
         UserDao userDao = (UserDao) ApplicationMain.applicationContext.getBean("userDaoImpl");
         item.setUsers(userDao.findById(1));
@@ -108,15 +130,26 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
          weightUnit.getItems().removeAll("Item 1","Item 2","Item 3"," ");
          weightUnit.getItems().addAll("choose", "mg", "cg","dg","g","kg");
+         category.getItems().removeAll("Item 1","Item 2","Item 3"," ");
+         
+        ItemCategoryService itemCategoryService=
+                (ItemCategoryService)ApplicationMain.applicationContext.getBean("itemCategoryService");
+        List<ItemCategoryDo> itemCategoryList = itemCategoryService.getAllItems();
+
+        for (ItemCategoryDo item : itemCategoryList) {
+            
+            category.getItems().add(item.getItemName());
+        }
+        
          dataTable.setItems(dataTableData);
          itemBarcodeCol.setCellValueFactory(
-                new PropertyValueFactory<ItemDo, String>("itemBarcode"));
+                new PropertyValueFactory<ItemDo, String>("barcode"));
          itemNameCol.setCellValueFactory(
                 new PropertyValueFactory<ItemDo, String>("itemName"));
           itemMRP.setCellValueFactory(
-                new PropertyValueFactory<ItemDo, Double>("itemMrp"));
+                new PropertyValueFactory<ItemDo, Double>("mrp"));
           itemWeightCol.setCellValueFactory
-                  (new PropertyValueFactory<ItemDo, Double>("itemWeight"));
+                  (new PropertyValueFactory<ItemDo, Double>("weight"));
           itemWeightUnitCol.setCellValueFactory
                   (new PropertyValueFactory<ItemDo, String>("weightUnit"));
           itemActualPriceCol.setCellValueFactory
