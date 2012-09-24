@@ -312,7 +312,8 @@ public class InvoiceController implements Initializable {
             public void changed(ObservableValue<? extends String> selected, String oldItem, String newItem) {
                 ItemDo item = itemMap.get(newItem);
 
-
+                ItemDetails itemDetails = itemService.getItemDetailsByItemId(item.getIdPk());
+                
                 itemBarcode.setText(item.getBarcode());
                 System.out.println("MRP:" + item.getMrp());
                 itemMrp.setText(new Double(item.getMrp()).toString());

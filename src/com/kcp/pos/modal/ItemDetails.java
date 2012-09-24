@@ -4,15 +4,36 @@
  */
 package com.kcp.pos.modal;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author Prakash
  */
-public class ItemDetails {
+@Entity
+@Table(name = "items", catalog = "storedb")
+@NamedQueries({
+    @NamedQuery(name = "ItemDetails.findAll", query = "SELECT i FROM ItemDetails i"),
+    @NamedQuery(name = "ItemDetails.findById", query = "SELECT i FROM ItemDetails i where i.itemName=:name"),
+    @NamedQuery(name = "ItemDetails.findByItemId", query = "SELECT i FROM ItemDetails i "
+        + "where i.items.idPk=:id"),
+})
+    
+
+public class ItemDetails implements Serializable{
 
     private Integer idPk;
     private Users users;
@@ -21,22 +42,29 @@ public class ItemDetails {
     private double actualPrice;
     private double billingPrice;
     private double billingType;
-    
     private Date modifiedDate;
 
-    public ItemDetails(Integer idPk, Users users, Items items, double mrp, double actualPrice, Date modifiedDate) {
+    public ItemDetails(Integer idPk, Users users, Items items, double mrp, double actualPrice, double billingPrice, double billingType, Date modifiedDate) {
         this.idPk = idPk;
         this.users = users;
         this.items = items;
         this.mrp = mrp;
         this.actualPrice = actualPrice;
+        this.billingPrice = billingPrice;
+        this.billingType = billingType;
         this.modifiedDate = modifiedDate;
     }
 
+    public ItemDetails() {
+    }
+
+    
    
 
     
-    
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id_pk", unique = true, nullable = false)
     public Integer getIdPk() {
         return idPk;
     }
@@ -69,6 +97,8 @@ public class ItemDetails {
         this.actualPrice = actualPrice;
     }
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modified_date", nullable = false, length = 19)
     public Date getModifiedDate() {
         return modifiedDate;
     }
@@ -84,6 +114,24 @@ public class ItemDetails {
     public void setItems(Items items) {
         this.items = items;
     }
+
+    public double getBillingPrice() {
+        return billingPrice;
+    }
+
+    public void setBillingPrice(double billingPrice) {
+        this.billingPrice = billingPrice;
+    }
+
+    public double getBillingType() {
+        return billingType;
+    }
+
+    public void setBillingType(double billingType) {
+        this.billingType = billingType;
+    }
+    
+    
     
     
 }

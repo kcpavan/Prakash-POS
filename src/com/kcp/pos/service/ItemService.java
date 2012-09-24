@@ -5,7 +5,9 @@
 package com.kcp.pos.service;
 
 import com.kcp.pos.dao.ItemDao;
+import com.kcp.pos.dao.ItemDetailsDao;
 import com.kcp.pos.data.ItemDo;
+import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,20 @@ public class ItemService {
  
     @Autowired
     private ItemDao itemDao;
+    
+    @Autowired
+    private ItemDetailsDao itemDetailsDao;
+
+    public ItemDetailsDao getItemDeItemDao() {
+        return itemDetailsDao;
+    }
+
+    public void setItemDeItemDao(ItemDetailsDao itemDetailsDao) {
+        this.itemDetailsDao = itemDetailsDao;
+    }
+    
+    
+    
 
     public ItemDao getItemDao() {
         return itemDao;
@@ -52,6 +68,9 @@ public class ItemService {
         return(itemDao.findById(Id));
     }
     
-    
+    public ItemDetails getItemDetailsByItemId(Integer Id)
+    {
+        return(itemDetailsDao.getClass())
+    }
     
 }
