@@ -58,27 +58,30 @@ modified_date timestamp,
     private Items item;
     private Double mrp;
     private Double actualPrice;
+    private BillingType billingType;
+    private Double billingPrice;
    
     private Integer startRange;
     private Integer endRange;
-    private BillingType billingType;
-    private Double billingPrice;
+    
     private Date modifiedDate;
-    
-    
 
-    public ItemDetails(Integer idPk, Users users, Items item, Double mrp, Double actualPrice, Integer startRange, Integer endRange, BillingType billingType, Double billingPrice, Date modifiedDate) {
+    public ItemDetails(Integer idPk, Users users, Items item, Double mrp, Double actualPrice, BillingType billingType, Double billingPrice, Integer startRange, Integer endRange, Date modifiedDate) {
         this.idPk = idPk;
         this.users = users;
         this.item = item;
         this.mrp = mrp;
         this.actualPrice = actualPrice;
-        this.startRange = startRange;
-        this.endRange = endRange;
         this.billingType = billingType;
         this.billingPrice = billingPrice;
+        this.startRange = startRange;
+        this.endRange = endRange;
         this.modifiedDate = modifiedDate;
     }
+    
+    
+
+   
     
     
 

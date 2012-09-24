@@ -19,6 +19,9 @@ public class ItemDetails {
     private Items items;
     private double mrp;
     private double actualPrice;
+    private double billingPrice;
+    private double billingType;
+    
     private Date modifiedDate;
 
     public ItemDetails(Integer idPk, Users users, Items items, double mrp, double actualPrice, Date modifiedDate) {
