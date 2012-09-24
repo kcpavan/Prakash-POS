@@ -1,6 +1,5 @@
 package com.kcp.pos.modal;
 
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,203 +22,166 @@ import javax.persistence.TemporalType;
 @Table(name = "items", catalog = "storedb")
 @NamedQueries({
     @NamedQuery(name = "Items.findAll", query = "SELECT i FROM Items i"),
-    @NamedQuery(name = "Items.findByName", query = "SELECT i FROM Items i where i.itemName=:name"),
-})
+    @NamedQuery(name = "Items.findByName", query = "SELECT i FROM Items i where i.itemName=:name"),})
 public class Items implements java.io.Serializable {
 
-	private Integer idPk;
-	private ItemCategory itemCategory;
-	private Users users;
-	private String itemName;
-	private String barcode;
-	private double mrp;
-	private double weight;
-	private String weightUnit;
-	private double actualPrice;
-	//private double sellingPrice;
-	private boolean hasfree;
-	private Date modifiedDate;
-	private Set<Stocks> stockses = new HashSet<Stocks>(0);
-	private Set<PurchaseDetails> purchaseDetailses = new HashSet<PurchaseDetails>(0);
-	private Set<InvoiceDetails> invoiceDetailses = new HashSet<InvoiceDetails>(0);
+    private Integer idPk;
+    private ItemCategory itemCategory;
+    //private ItemDetails itemDetails;
+    //private BillingPrice billingPrice;
+    private Users users;
+    private String itemName;
+    private String barcode;
+    //private double mrp;
+    private double weight;
+    private String weightUnit;
+    //private double actualPrice;
+    //private double sellingPrice;
+    private boolean hasfree;
+    private Date modifiedDate;
+    private Set<Stocks> stockses = new HashSet<Stocks>(0);
+    private Set<PurchaseDetails> purchaseDetailses = new HashSet<PurchaseDetails>(0);
+    private Set<InvoiceDetails> invoiceDetailses = new HashSet<InvoiceDetails>(0);
 
-	public Items() {
-	}
+    public Items() {
+    }
 
-	public Items(Users users, String itemName, String barcode, double mrp,
-			double weight, String weightUnit, double actualPrice,
-			double sellingPrice, boolean hasfree, Date modifiedDate) {
-		this.users = users;
-		this.itemName = itemName;
-		this.barcode = barcode;
-		this.mrp = mrp;
-		this.weight = weight;
-		this.weightUnit = weightUnit;
-		this.actualPrice = actualPrice;
-		//this.sellingPrice = sellingPrice;
-		this.hasfree = hasfree;
-		this.modifiedDate = modifiedDate;
-	}
+    
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id_pk", unique = true, nullable = false)
+    public Integer getIdPk() {
+        return this.idPk;
+    }
 
-	public Items(ItemCategory itemCategory, Users users, String itemName,
-			String barcode, double mrp, double weight, String weightUnit,
-			double actualPrice, double sellingPrice, boolean hasfree,
-			Date modifiedDate, Set stockses, Set purchaseDetailses,
-			Set invoiceDetailses) {
-		this.itemCategory = itemCategory;
-		this.users = users;
-		this.itemName = itemName;
-		this.barcode = barcode;
-		this.mrp = mrp;
-		this.weight = weight;
-		this.weightUnit = weightUnit;
-		this.actualPrice = actualPrice;
-		//this.sellingPrice = sellingPrice;
-		this.hasfree = hasfree;
-		this.modifiedDate = modifiedDate;
-		this.stockses = stockses;
-		this.purchaseDetailses = purchaseDetailses;
-		this.invoiceDetailses = invoiceDetailses;
-	}
+    public void setIdPk(Integer idPk) {
+        this.idPk = idPk;
+    }
 
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "id_pk", unique = true, nullable = false)
-	public Integer getIdPk() {
-		return this.idPk;
-	}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id_fk")
+    public ItemCategory getItemCategory() {
+        return this.itemCategory;
+    }
 
-	public void setIdPk(Integer idPk) {
-		this.idPk = idPk;
-	}
+    public void setItemCategory(ItemCategory itemCategory) {
+        this.itemCategory = itemCategory;
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_id_fk")
-	public ItemCategory getItemCategory() {
-		return this.itemCategory;
-	}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "modified_by", nullable = false)
+    public Users getUsers() {
+        return this.users;
+    }
 
-	public void setItemCategory(ItemCategory itemCategory) {
-		this.itemCategory = itemCategory;
-	}
+    public void setUsers(Users users) {
+        this.users = users;
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "modified_by", nullable = false)
-	public Users getUsers() {
-		return this.users;
-	}
+    @Column(name = "item_name", nullable = false, length = 250)
+    public String getItemName() {
+        return this.itemName;
+    }
 
-	public void setUsers(Users users) {
-		this.users = users;
-	}
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
 
-	@Column(name = "item_name", nullable = false, length = 250)
-	public String getItemName() {
-		return this.itemName;
-	}
+    @Column(name = "barcode", nullable = false, length = 250)
+    public String getBarcode() {
+        return this.barcode;
+    }
 
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
-	}
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
 
-	@Column(name = "barcode", nullable = false, length = 250)
-	public String getBarcode() {
-		return this.barcode;
-	}
+    /*@Column(name = "mrp", nullable = false, precision = 22, scale = 0)
+     public double getMrp() {
+     return this.mrp;
+     }
 
-	public void setBarcode(String barcode) {
-		this.barcode = barcode;
-	}
+     public void setMrp(double mrp) {
+     this.mrp = mrp;
+     }*/
+    @Column(name = "weight", nullable = false, precision = 22, scale = 0)
+    public double getWeight() {
+        return this.weight;
+    }
 
-	@Column(name = "mrp", nullable = false, precision = 22, scale = 0)
-	public double getMrp() {
-		return this.mrp;
-	}
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
 
-	public void setMrp(double mrp) {
-		this.mrp = mrp;
-	}
+    @Column(name = "weight_unit", nullable = false, length = 50)
+    public String getWeightUnit() {
+        return this.weightUnit;
+    }
 
-	@Column(name = "weight", nullable = false, precision = 22, scale = 0)
-	public double getWeight() {
-		return this.weight;
-	}
+    public void setWeightUnit(String weightUnit) {
+        this.weightUnit = weightUnit;
+    }
 
-	public void setWeight(double weight) {
-		this.weight = weight;
-	}
+    /*@Column(name = "actual_price", nullable = false, precision = 22, scale = 0)
+     public double getActualPrice() {
+     return this.actualPrice;
+     }
 
-	@Column(name = "weight_unit", nullable = false, length = 50)
-	public String getWeightUnit() {
-		return this.weightUnit;
-	}
+     public void setActualPrice(double actualPrice) {
+     this.actualPrice = actualPrice;
+     }*/
 
-	public void setWeightUnit(String weightUnit) {
-		this.weightUnit = weightUnit;
-	}
+    /*@Column(name = "selling_price", nullable = false, precision = 22, scale = 0)
+     public double getSellingPrice() {
+     return this.sellingPrice;
+     }
 
-	@Column(name = "actual_price", nullable = false, precision = 22, scale = 0)
-	public double getActualPrice() {
-		return this.actualPrice;
-	}
+     public void setSellingPrice(double sellingPrice) {
+     this.sellingPrice = sellingPrice;
+     }*/
+    @Column(name = "hasfree", nullable = false)
+    public boolean isHasfree() {
+        return this.hasfree;
+    }
 
-	public void setActualPrice(double actualPrice) {
-		this.actualPrice = actualPrice;
-	}
+    public void setHasfree(boolean hasfree) {
+        this.hasfree = hasfree;
+    }
 
-	/*@Column(name = "selling_price", nullable = false, precision = 22, scale = 0)
-	public double getSellingPrice() {
-		return this.sellingPrice;
-	}
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modified_date", nullable = false, length = 19)
+    public Date getModifiedDate() {
+        return this.modifiedDate;
+    }
 
-	public void setSellingPrice(double sellingPrice) {
-		this.sellingPrice = sellingPrice;
-	}*/
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
 
-	@Column(name = "hasfree", nullable = false)
-	public boolean isHasfree() {
-		return this.hasfree;
-	}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "items")
+    public Set<Stocks> getStockses() {
+        return this.stockses;
+    }
 
-	public void setHasfree(boolean hasfree) {
-		this.hasfree = hasfree;
-	}
+    public void setStockses(Set<Stocks> stockses) {
+        this.stockses = stockses;
+    }
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "modified_date", nullable = false, length = 19)
-	public Date getModifiedDate() {
-		return this.modifiedDate;
-	}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "items")
+    public Set<PurchaseDetails> getPurchaseDetailses() {
+        return this.purchaseDetailses;
+    }
 
-	public void setModifiedDate(Date modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
+    public void setPurchaseDetailses(Set<PurchaseDetails> purchaseDetailses) {
+        this.purchaseDetailses = purchaseDetailses;
+    }
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "items")
-	public Set<Stocks> getStockses() {
-		return this.stockses;
-	}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "items")
+    public Set<InvoiceDetails> getInvoiceDetailses() {
+        return this.invoiceDetailses;
+    }
 
-	public void setStockses(Set<Stocks> stockses) {
-		this.stockses = stockses;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "items")
-	public Set<PurchaseDetails> getPurchaseDetailses() {
-		return this.purchaseDetailses;
-	}
-
-	public void setPurchaseDetailses(Set<PurchaseDetails> purchaseDetailses) {
-		this.purchaseDetailses = purchaseDetailses;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "items")
-	public Set<InvoiceDetails> getInvoiceDetailses() {
-		return this.invoiceDetailses;
-	}
-
-	public void setInvoiceDetailses(Set<InvoiceDetails> invoiceDetailses) {
-		this.invoiceDetailses = invoiceDetailses;
-	}
-
+    public void setInvoiceDetailses(Set<InvoiceDetails> invoiceDetailses) {
+        this.invoiceDetailses = invoiceDetailses;
+    }
 }

@@ -67,6 +67,12 @@ public class InvoiceController implements Initializable {
     @FXML
     private TextField itemQuantity;
     @FXML
+    private TextField wholesalePrice;
+    @FXML
+    private TextField retailPrice;
+    
+    
+    @FXML
     private CheckBox hasGift = new CheckBox();
     @FXML
     private ChoiceBox weightUnit = new ChoiceBox();
@@ -313,6 +319,8 @@ public class InvoiceController implements Initializable {
                 itemWeight.setText(new Double(item.getWeight()).toString());
                 //weightUnit.setSelectionModel(item.getWeightUnit());
                 billingPrice.setText(new Double(item.getSellingPrice()).toString());
+                wholesalePrice.setText(new Double(item.getSellingPrice()).toString());
+                wholesalePrice.setText(new Double(item.getSellingPrice()).toString());
 
 
 

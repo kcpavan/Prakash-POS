@@ -22,7 +22,9 @@ public class ItemDo {
 	private SimpleDoubleProperty weight=new SimpleDoubleProperty();
 	private SimpleStringProperty weightUnit=new SimpleStringProperty();
 	private SimpleDoubleProperty actualPrice=new SimpleDoubleProperty();
-	private SimpleDoubleProperty sellingPrice=new SimpleDoubleProperty();
+	//private SimpleDoubleProperty sellingPrice=new SimpleDoubleProperty();
+        private SimpleDoubleProperty wholesalePrice=new SimpleDoubleProperty();
+        private SimpleDoubleProperty retailPrice=new SimpleDoubleProperty();
 
     public ItemDo(Items items) {
         this.idPk.set(items.getIdPk());
@@ -32,6 +34,7 @@ public class ItemDo {
         this.weight.set(items.getWeight());
         this.weightUnit.set(items.getWeightUnit());
         this.actualPrice.set(items.getActualPrice());
+        this.retailPrice.set(items.geti)
        // this.sellingPrice.set(items.getSellingPrice());
         
                 
@@ -91,14 +94,6 @@ public class ItemDo {
         this.actualPrice = actualPrice;
     }
 
-    public double getSellingPrice() {
-        return sellingPrice.get();
-    }
-
-    public void setSellingPrice(SimpleDoubleProperty sellingPrice) {
-        this.sellingPrice = sellingPrice;
-    }
-
         
         
             public Integer getIdPk() {
@@ -113,8 +108,25 @@ public class ItemDo {
     public void setItemName(SimpleStringProperty itemName) {
         this.itemName = itemName;
     }
+
+    public Double getWholesalePrice() {
+        return wholesalePrice.get();
+    }
+
+    public void setWholesalePrice(SimpleDoubleProperty wholesalePrice) {
+        this.wholesalePrice = wholesalePrice;
+    }
+
+    public Double getRetailPrice() {
+        return retailPrice.get();
+    }
+
+    public void setRetailPrice(SimpleDoubleProperty retailPrice) {
+        this.retailPrice = retailPrice;
+    }
         
         
+    
         
  
 }

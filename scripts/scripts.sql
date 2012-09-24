@@ -25,9 +25,6 @@ CONSTRAINT fk_group_id
 FOREIGN KEY(`group_id_fk`) 
 REFERENCES `user_group`(`id_pk`));
 
-
-
-
 drop table if exists storedb.item_category;
 create table storedb.item_category
 (id_pk integer primary key not null auto_increment,
@@ -56,7 +53,34 @@ CONSTRAINT fk_modified_by
 	REFERENCES `users`(`id_pk`)
 );
 
+drop table if exists storedb.billing_type;
+create table storedb.billing_type
+(id_pk integer primary key not null auto_increment,
+type_desc varchar(250) not null);
 
+drop table if exists storedb.item_details;
+create table storedb.item_details
+(id_pk integer primary key not null auto_increment,
+item_id_fk integer not null,
+mrp double not null,
+actual_price double not null,
+start_range integer  null,
+end_range integer  null,
+billing_price double not null,
+billing_type_id_fk int not null
+modified_by int not null,
+modified_date timestamp,
+CONSTRAINT fk_billing_modified_user
+	FOREIGN KEY(`modified_by`) 
+	REFERENCES `users`(`id_pk`),
+CONSTRAINT fk_billing_item_id
+	FOREIGN KEY(`item_id_fk`) 
+	REFERENCES `items`(`id_pk`),
+CONSTRAINT fk_billing_type
+	FOREIGN KEY(`billing_type_id_fk`) 
+	REFERENCES `billing_type`(`id_pk`),
+CONSTRAINT un_start_billing_range UNIQUE (item_id_fk,start_range),
+CONSTRAINT un_end_billing_range UNIQUE (item_id_fk,end_range));
 
 drop table if exists storedb.stocks;
 create table storedb.stocks
@@ -146,13 +170,10 @@ CONSTRAINT fk_invoice_modified_user
 
 );
 
-drop table if exists storedb.billing_type;
-create table storedb.billing_type
-(id_pk integer primary key not null auto_increment,
-billing_type_desc varchar(250) not null);
 
 
-drop table if exists storedb.item_mrp;
+
+/*drop table if exists storedb.item_mrp;
 create table storedb.item_mrp
 (id_pk integer primary key not null auto_increment,
 item_id_fk integer not null,
@@ -168,7 +189,7 @@ CONSTRAINT fk_itemmrp_item_id
 	REFERENCES `items`(`id_pk`));
 
 
-
+*/
 
 /*drop table if exists storedb.billing_price;
 create table storedb.billing_price
