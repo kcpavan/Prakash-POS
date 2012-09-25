@@ -4,7 +4,8 @@
  */
 package com.kcp.pos.dao;
 
-import com.kcp.pos.ItemDetails;
+
+import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
 import java.util.List;
 
@@ -15,6 +16,10 @@ import java.util.List;
 public interface ItemDetailsDao {
 
     public void persist(ItemDetails transientInstance); 
-    public com.kcp.pos.modal.ItemDetails findByItemId(Integer id) ;
+    public com.kcp.pos.modal.ItemDetails findByItemIdBillingType(Integer id,Integer type) ;
+    public Double findBillingPriceByItemId(Integer id) ;
+    //public Double findByItemId(Integer id) ;
+    
+    
 
 }

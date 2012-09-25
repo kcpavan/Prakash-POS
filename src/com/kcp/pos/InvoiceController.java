@@ -5,15 +5,17 @@
 package com.kcp.pos;
 
 import com.kcp.pos.dao.UserDao;
-import com.kcp.pos.data.BillingPriceDo;
+
 import com.kcp.pos.data.InvoiceDetailsDo;
 import com.kcp.pos.data.InvoiceDo;
+import com.kcp.pos.data.ItemDetailsDo;
 import com.kcp.pos.data.ItemDo;
-import com.kcp.pos.modal.BillingPrice;
+
 import com.kcp.pos.modal.Invoice;
 import com.kcp.pos.modal.InvoiceDetails;
+import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
-import com.kcp.pos.service.BillingService;
+
 import com.kcp.pos.service.InvoiceService;
 import com.kcp.pos.service.ItemService;
 import com.kcp.pos.utils.KCPUtils;
@@ -95,8 +97,7 @@ public class InvoiceController implements Initializable {
     private InvoiceService invoiceService;
     @Autowired
     private ItemService itemService;
-    @Autowired
-    private BillingService billingService;
+   
     private List<InvoiceDetailsDo> invoiceDetailsDoList = new ArrayList<InvoiceDetailsDo>();
     private List<Items> itemList = new ArrayList<Items>();
     private Map<String, ItemDo> itemMap = new HashMap<String, ItemDo>();
@@ -182,10 +183,11 @@ public class InvoiceController implements Initializable {
             return;
         }
 
-        billingService = (BillingService) ApplicationMain.applicationContext.getBean("billingService");
-        BillingPrice billingPrice = null;
+//        billingService = (BillingService) ApplicationMain.applicationContext.getBean("billingService");
+  //      BillingPrice billingPrice = null;
        
         Items item = itemService.getItemByName(selectedItem.toString());
+        ItemDetails itemDetails= itemService.getItemDetailsByItemId(item.getIdPk());
         
         String itemName = item.getItemName();
 
@@ -200,23 +202,27 @@ public class InvoiceController implements Initializable {
                 
                 invoiceDetails.setQuantity(invoiceDetails.getQuantity() + Integer.parseInt(itemQty));
                 
-                billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
-                invoiceDetails.setBillingPrice(billingPrice);
-                Double price = billingPrice.getBillingPrice();
-                double itemTotalPrice = price * invoiceDetails.getQuantity();
+                //billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
+                //Double billingPrice=itemService.getBillingPriceByItemId(item.getIdPk());
+                //invoiceDetails.set(billingPrice);
+                //Double price = billingPrice.getBillingPrice();
+                //double itemTotalPrice = price * invoiceDetails.getQuantity();
+                double itemTotalPrice = itemDetails.getBillingPrice() * invoiceDetails.getQuantity();
                 invoiceDetails.setTotal(itemTotalPrice);
+                invoiceDetails.setItemDetails(itemDetails);
   
         }
         else
         {
             invoiceDetails=new InvoiceDetails();
             
-            invoiceDetails.setItems(item);
+            //invoiceDetails.setItems(item);
+            invoiceDetails.setItemDetails(itemDetails);
             invoiceDetails.setQuantity(Integer.parseInt(itemQty));
-            billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
-                invoiceDetails.setBillingPrice(billingPrice);
-                Double price = billingPrice.getBillingPrice();
-                double itemTotalPrice = price * Integer.parseInt(itemQty);
+            //billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
+            //invoiceDetails.setBillingPrice(billingPrice);
+                //Double price = billingPrice.getBillingPrice();
+                double itemTotalPrice = itemDetails.getBillingPrice() * Integer.parseInt(itemQty);
                 invoiceDetails.setTotal(itemTotalPrice);
 
                 invoiceDetails.setInvoice(invoice);
@@ -312,17 +318,15 @@ public class InvoiceController implements Initializable {
             public void changed(ObservableValue<? extends String> selected, String oldItem, String newItem) {
                 ItemDo item = itemMap.get(newItem);
 
-                ItemDetails itemDetails = itemService.getItemDetailsByItemId(item.getIdPk());
+                ItemDetailsDo itemDetailsDo = itemService.getItemDetailsDoByItemId(item.getIdPk());
                 
                 itemBarcode.setText(item.getBarcode());
                 System.out.println("MRP:" + item.getMrp());
                 itemMrp.setText(new Double(item.getMrp()).toString());
                 itemWeight.setText(new Double(item.getWeight()).toString());
                 //weightUnit.setSelectionModel(item.getWeightUnit());
-                billingPrice.setText(new Double(item.getSellingPrice()).toString());
-                wholesalePrice.setText(new Double(item.getSellingPrice()).toString());
-                wholesalePrice.setText(new Double(item.getSellingPrice()).toString());
-
+                billingPrice.setText(new Double(itemDetailsDo.getBillingPrice()).toString());
+                
 
 
             }

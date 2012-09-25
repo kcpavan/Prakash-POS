@@ -10,12 +10,15 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -24,12 +27,13 @@ import javax.persistence.TemporalType;
  * @author Prakash
  */
 @Entity
-@Table(name = "items", catalog = "storedb")
+@Table(name = "item_details", catalog = "storedb")
 @NamedQueries({
     @NamedQuery(name = "ItemDetails.findAll", query = "SELECT i FROM ItemDetails i"),
-    @NamedQuery(name = "ItemDetails.findById", query = "SELECT i FROM ItemDetails i where i.itemName=:name"),
-    @NamedQuery(name = "ItemDetails.findByItemId", query = "SELECT i FROM ItemDetails i "
-        + "where i.items.idPk=:id"),
+    @NamedQuery(name = "ItemDetails.findById", query = "SELECT i FROM ItemDetails i where i.idPk=:id"),
+    
+    @NamedQuery(name = "ItemDetails.findByItemIdBillingType", query = "SELECT i FROM ItemDetails i "
+        + "where i.item.idPk=:id and i.billingType.idPk=:billingType")
 })
     
 
@@ -37,17 +41,17 @@ public class ItemDetails implements Serializable{
 
     private Integer idPk;
     private Users users;
-    private Items items;
+    private Items item;
     private double mrp;
     private double actualPrice;
     private double billingPrice;
-    private double billingType;
+    private BillingType billingType;
     private Date modifiedDate;
 
-    public ItemDetails(Integer idPk, Users users, Items items, double mrp, double actualPrice, double billingPrice, double billingType, Date modifiedDate) {
+    public ItemDetails(Integer idPk, Users users, Items items, double mrp, double actualPrice, double billingPrice, BillingType billingType, Date modifiedDate) {
         this.idPk = idPk;
         this.users = users;
-        this.items = items;
+        this.item = items;
         this.mrp = mrp;
         this.actualPrice = actualPrice;
         this.billingPrice = billingPrice;
@@ -73,6 +77,8 @@ public class ItemDetails implements Serializable{
         this.idPk = idPk;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "modified_by", nullable = false)
     public Users getUsers() {
         return users;
     }
@@ -89,6 +95,7 @@ public class ItemDetails implements Serializable{
         this.mrp = mrp;
     }
 
+    @Column(name = "actual_price", nullable = false, length = 19)
     public double getActualPrice() {
         return actualPrice;
     }
@@ -107,14 +114,18 @@ public class ItemDetails implements Serializable{
         this.modifiedDate = modifiedDate;
     }
 
-    public Items getItems() {
-        return items;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id_fk", nullable = false)
+
+    public Items getItem() {
+        return item;
     }
 
-    public void setItems(Items items) {
-        this.items = items;
+    public void setItem(Items items) {
+        this.item = items;
     }
 
+    @Column(name = "billing_price", nullable = false, length = 19)
     public double getBillingPrice() {
         return billingPrice;
     }
@@ -123,11 +134,13 @@ public class ItemDetails implements Serializable{
         this.billingPrice = billingPrice;
     }
 
-    public double getBillingType() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "billing_type_id_fk", nullable = false)
+    public BillingType getBillingType() {
         return billingType;
     }
 
-    public void setBillingType(double billingType) {
+    public void setBillingType(BillingType billingType) {
         this.billingType = billingType;
     }
     

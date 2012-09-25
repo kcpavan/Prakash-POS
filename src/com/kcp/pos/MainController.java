@@ -10,6 +10,7 @@ import com.kcp.pos.dao.UserDao;
 import com.kcp.pos.data.ItemCategoryDo;
 import com.kcp.pos.data.ItemDo;
 import com.kcp.pos.modal.ItemCategory;
+import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.service.ItemCategoryService;
 import com.kcp.pos.service.ItemService;
@@ -105,11 +106,14 @@ public class MainController implements Initializable {
         Items item = new Items();
         item.setItemName(itemName.getText());
         item.setBarcode(itemBarcode.getText());
-        item.setMrp(Double.valueOf(itemMrp.getText()));
+        
+        ItemDetails itemDetails = new ItemDetails();
+        
+        itemDetails.setMrp(Double.valueOf(itemMrp.getText()));
         item.setWeight(Double.valueOf(itemWeight.getText()));
-        item.setActualPrice(Double.valueOf(actualPrice.getText()));
+        itemDetails.setActualPrice(Double.valueOf(actualPrice.getText()));
         System.out.println("hasGift.getText()"+hasGift);
-        item.setWeightUnit((String)weightUnit.getSelectionModel().getSelectedItem());
+        item.setUom((String)weightUnit.getSelectionModel().getSelectedItem());
         item.setModifiedDate(new Date());
         Object selectedItem = category.getSelectionModel().getSelectedItem();
         System.out.println("selectedItem:"+selectedItem);
@@ -118,7 +122,10 @@ public class MainController implements Initializable {
         itemService = (ItemService) ApplicationMain.applicationContext.getBean("itemService");
         UserDao userDao = (UserDao) ApplicationMain.applicationContext.getBean("userDaoImpl");
         item.setUsers(userDao.findById(1));
+        
         itemService.itemSave(item);
+        itemDetails.setItem(item);
+        itemService.itemDetailsSave(itemDetails);
         label.setText("Item Saved");
         animateMessage();
         fillDataTable();

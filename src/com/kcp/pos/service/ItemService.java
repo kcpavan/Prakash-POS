@@ -6,6 +6,7 @@ package com.kcp.pos.service;
 
 import com.kcp.pos.dao.ItemDao;
 import com.kcp.pos.dao.ItemDetailsDao;
+import com.kcp.pos.data.ItemDetailsDo;
 import com.kcp.pos.data.ItemDo;
 import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
@@ -50,6 +51,12 @@ public class ItemService {
         itemDao.persist(item);
     }
     
+    public void itemDetailsSave(ItemDetails itemDetails){
+        itemDetailsDao.persist(itemDetails);
+    }
+    
+    
+    
     public List<ItemDo> getAllItems(){
    List<ItemDo> itemDos = new ArrayList<ItemDo>();
         for (Items items : itemDao.findByAll()) {
@@ -68,9 +75,22 @@ public class ItemService {
         return(itemDao.findById(Id));
     }
     
-    public ItemDetails getItemDetailsByItemId(Integer Id)
+    public ItemDetailsDo getItemDetailsDoByItemId(Integer Id)
     {
-        return(itemDetailsDao.getClass())
+        
+        return(new ItemDetailsDo(itemDetailsDao.findByItemIdBillingType(Id,1)));
     }
     
+     public ItemDetails getItemDetailsByItemId(Integer Id)
+    {
+        
+        return itemDetailsDao.findByItemIdBillingType(Id,1);
+    }
+    
+    public Double getBillingPriceByItemId(Integer id)
+    {
+        return itemDetailsDao.findBillingPriceByItemId(id);
+    }
+    
+   
 }

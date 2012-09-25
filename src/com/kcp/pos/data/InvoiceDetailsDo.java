@@ -27,10 +27,11 @@ public class InvoiceDetailsDo {
     private SimpleDoubleProperty total = new SimpleDoubleProperty();
     
      public InvoiceDetailsDo(InvoiceDetails invoiceDetails) {
-       this.itemName.set(invoiceDetails.getItems().getItemName());
-       this.barcode.set(invoiceDetails.getItems().getBarcode());
+       //this.itemName.set(invoiceDetails.getItems().getItemName());
+         this.itemName.set(invoiceDetails.getItemDetails().getItem().getItemName());
+       this.barcode.set(invoiceDetails.getItemDetails().getItem().getBarcode());
        //this.mrp.set(invoiceDetails.getItems().getMrp());
-       this.billingPrice.set(invoiceDetails.getBillingPrice().getBillingPrice());
+       this.billingPrice.set(invoiceDetails.getItemDetails().getBillingPrice());
        this.quantity.set(invoiceDetails.getQuantity());
        this.total.set(invoiceDetails.getTotal());
        
@@ -38,10 +39,10 @@ public class InvoiceDetailsDo {
      
     public InvoiceDetailsDo getInvoceDo(InvoiceDetails invoiceDetails)
      {
-       this.itemName.set(invoiceDetails.getItems().getItemName());
-       this.barcode.set(invoiceDetails.getItems().getBarcode());
+       this.itemName.set(invoiceDetails.getItemDetails().getItem().getItemName());
+       this.barcode.set(invoiceDetails.getItemDetails().getItem().getBarcode());
 //       this.mrp.set(invoiceDetails.getItems().getMrp());
-       this.billingPrice.set(invoiceDetails.getBillingPrice().getBillingPrice());
+       this.billingPrice.set(invoiceDetails.getItemDetails().getBillingPrice());
        this.quantity.set(invoiceDetails.getQuantity());
        this.total.set(invoiceDetails.getTotal());
        return this;

@@ -17,15 +17,16 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "InvoiceDetails.findAllById", query = "SELECT c FROM InvoiceDetails c WHERE c.invoice.idPk = :id"),
     @NamedQuery(name = "InvoiceDetails.findByInvoiceItemId", query = "SELECT c FROM InvoiceDetails c "
-        + "WHERE c.items.idPk = :itemId and c.invoice.idPk=:invoiceId"),
+        + "WHERE c.itemDetails.idPk = :itemId and c.invoice.idPk=:type"),
     
 })
 public class InvoiceDetails implements java.io.Serializable {
 
     private Integer idPk;
     private Invoice invoice;
-    private Items items;
-    private BillingPrice billingPrice;
+   // private Items items;
+    private ItemDetails itemDetails;
+    //private BillingPrice billingPrice;
     private Integer quantity;
     private double total;
 
@@ -35,7 +36,7 @@ public class InvoiceDetails implements java.io.Serializable {
     public InvoiceDetails(Invoice invoice, Items items, Integer quantity,
             double total) {
         this.invoice = invoice;
-        this.items = items;
+        //this.items = items;
         this.quantity = quantity;
         this.total = total;
     }
@@ -61,7 +62,7 @@ public class InvoiceDetails implements java.io.Serializable {
         this.invoice = invoice;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+   /*@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "item_id_fk", nullable = false)
     public Items getItems() {
         return this.items;
@@ -69,17 +70,30 @@ public class InvoiceDetails implements java.io.Serializable {
 
     public void setItems(Items items) {
         this.items = items;
+    }*/
+
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "itemdetails_id_fk", nullable = false)
+    public ItemDetails getItemDetails() {
+        return itemDetails;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "billingprice_id_fk", nullable = false)
-    public BillingPrice getBillingPrice() {
+    public void setItemDetails(ItemDetails itemDetails) {
+        this.itemDetails = itemDetails;
+    }
+
+    
+    
+    
+    
+    /*public Item getBillingPrice() {
         return billingPrice;
     }
 
     public void setBillingPrice(BillingPrice billingPrice) {
         this.billingPrice = billingPrice;
-    }
+    }*/
 
     @Column(name = "quantity", nullable = false, precision = 22, scale = 0)
     public Integer getQuantity() {

@@ -37,10 +37,12 @@ create table storedb.items
 item_name varchar(250) not null,
 barcode varchar(250) not null,
 category_id_fk int null,
+uom varchar(32) null,
 /*mrp double not null,*/
 weight double not null,
-weight_unit varchar(50)  null,
-/*actual_price double not null,
+
+/*weight_unit varchar(50)  null,
+actual_price double not null,
 selling_price double not null,*/
 hasfree boolean not null,
 modified_by int not null,
@@ -67,7 +69,8 @@ actual_price double not null,
 start_range integer  null,
 end_range integer  null,
 billing_price double not null,
-billing_type_id_fk int not null
+billing_type_id_fk int not null,
+enabled boolean not null,
 modified_by int not null,
 modified_date timestamp,
 CONSTRAINT fk_billing_modified_user
@@ -86,6 +89,7 @@ drop table if exists storedb.stocks;
 create table storedb.stocks
 (id_pk integer primary key not null auto_increment,
 item_id_fk integer not null,
+itemdetails_id_fk integer not null,
 quantity bigint not null,
 quantity_unit varchar(50) not null,
 modified_by integer not null,
@@ -137,9 +141,9 @@ create table storedb.purchase_details
 purchase_id_fk integer not null,
 item_id_fk integer not null,
 mrp double not null,
-quantity_case integer null,
-quantity_units integer null,
-quantity_free integer null,
+case_quantity integer null,
+units_quantity integer null,
+free_quantity integer null,
 basic_rate double not null,
 gross_amount double not null,
 scheme int not null,
@@ -221,20 +225,26 @@ drop table if exists storedb.invoice_details;
 create table storedb.invoice_details
 (id_pk integer primary key not null auto_increment,
 invoice_id_fk integer not null,
-item_id_fk integer not null,
-billingprice_id_fk integer not null,
+/*item_id_fk integer not null,*/
+itemdetails_id_fk integer not null,
 quantity integer not null,
 total double not null,
 CONSTRAINT fk_invoicedet_invoice_id
 	FOREIGN KEY(`invoice_id_fk`) 
 	REFERENCES `invoice`(`id_pk`),
-CONSTRAINT fk_invoice_item_id
+/*CONSTRAINT fk_invoice_item_id
 	FOREIGN KEY(`item_id_fk`) 
-	REFERENCES `items`(`id_pk`),
+	REFERENCES `items`(`id_pk`),*/
+CONSTRAINT fk_invoicedet_itemdetails_id
+	FOREIGN KEY(`itemdetails_id_fk`) 
+	REFERENCES `item_details`(`id_pk`)
+
+
+/*,
 CONSTRAINT fk_billing_price_id
 	FOREIGN KEY(`billingprice_id_fk`) 
 	REFERENCES `billing_price`(`id_pk`)
-
+*/
 );
 
 
@@ -271,11 +281,11 @@ CONSTRAINT fk_item_id
 
 
 
-insert into storedb.billing_price
+/*insert into storedb.billing_price
 (item_id_fk,start_range ,end_range ,billingprice,modified_by,modified_date )
 values(1,1,10,15.50,1,'2012-09-20 21:21:04'),
 (1,11,20,15.50,1,'2012-09-20 21:21:04'),
 (2,1,10,13.50,1,'2012-09-20 21:21:04');
-
+*/
 
 

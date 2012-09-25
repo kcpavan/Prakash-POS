@@ -34,14 +34,14 @@ public class Items implements java.io.Serializable {
     private String barcode;
     //private double mrp;
     private double weight;
-    private String weightUnit;
+    private String uom;
     //private double actualPrice;
     //private double sellingPrice;
     private boolean hasfree;
     private Date modifiedDate;
-    private Set<Stocks> stockses = new HashSet<Stocks>(0);
-    private Set<PurchaseDetails> purchaseDetailses = new HashSet<PurchaseDetails>(0);
-    private Set<InvoiceDetails> invoiceDetailses = new HashSet<InvoiceDetails>(0);
+    //private Set<Stocks> stockses = new HashSet<Stocks>(0);
+    //private Set<PurchaseDetails> purchaseDetailses = new HashSet<PurchaseDetails>(0);
+    //private Set<InvoiceDetails> invoiceDetailses = new HashSet<InvoiceDetails>(0);
 
     public Items() {
     }
@@ -113,13 +113,13 @@ public class Items implements java.io.Serializable {
         this.weight = weight;
     }
 
-    @Column(name = "weight_unit", nullable = false, length = 50)
-    public String getWeightUnit() {
-        return this.weightUnit;
+    @Column(name = "uom", nullable = false, length = 50)
+    public String getUom() {
+        return this.uom;
     }
 
-    public void setWeightUnit(String weightUnit) {
-        this.weightUnit = weightUnit;
+    public void setUom(String uom) {
+        this.uom = uom;
     }
 
     /*@Column(name = "actual_price", nullable = false, precision = 22, scale = 0)
@@ -158,30 +158,29 @@ public class Items implements java.io.Serializable {
         this.modifiedDate = modifiedDate;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "items")
+   /* @OneToMany(fetch = FetchType.LAZY, mappedBy = "items")
     public Set<Stocks> getStockses() {
         return this.stockses;
     }
 
     public void setStockses(Set<Stocks> stockses) {
         this.stockses = stockses;
-    }
+    }*/
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "items")
+  /* @OneToMany(fetch = FetchType.LAZY, mappedBy = "items")
     public Set<PurchaseDetails> getPurchaseDetailses() {
         return this.purchaseDetailses;
     }
 
     public void setPurchaseDetailses(Set<PurchaseDetails> purchaseDetailses) {
         this.purchaseDetailses = purchaseDetailses;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "items")
+    }*/
+    /*@OneToMany(fetch = FetchType.LAZY, mappedBy = "items")
     public Set<InvoiceDetails> getInvoiceDetailses() {
         return this.invoiceDetailses;
     }
 
     public void setInvoiceDetailses(Set<InvoiceDetails> invoiceDetailses) {
         this.invoiceDetailses = invoiceDetailses;
-    }
+    }*/
 }

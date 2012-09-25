@@ -4,9 +4,10 @@
  */
 package com.kcp.pos.data;
 
-import com.kcp.pos.BillingType;
-import com.kcp.pos.ItemDetails;
-import com.kcp.pos.modal.BillingPrice;
+import com.kcp.pos.modal.BillingType;
+
+
+import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.modal.Users;
 import java.util.Date;
@@ -36,8 +37,8 @@ public class ItemDetailsDo {
     
     public ItemDetailsDo(ItemDetails itemDetails) {
         this.itemId.set(itemDetails.getItem().getIdPk());
-        this.startRange.set(itemDetails.getStartRange());
-        this.endRange.set(itemDetails.getEndRange());
+        /*this.startRange.set(itemDetails.getStartRange());
+        this.endRange.set(itemDetails.getEndRange());*/
         this.billingPrice.set(itemDetails.getBillingPrice());
         this.mrp.set(itemDetails.getMrp());
         this.actualPrice.set(itemDetails.getActualPrice());

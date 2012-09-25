@@ -4,7 +4,6 @@
  */
 package com.kcp.pos.service;
 
-import com.kcp.pos.dao.BillingPriceDao;
 import com.kcp.pos.dao.PurchaseDao;
 import com.kcp.pos.dao.PurchaseDetailsDao;
 import com.kcp.pos.data.InvoiceDetailsDo;

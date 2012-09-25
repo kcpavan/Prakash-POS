@@ -100,6 +100,7 @@ public class PurchaseDetails implements java.io.Serializable {
         this.mrp = mrp;
     }
 
+    @Column(name = "case_quantity", nullable = false, length = 19)
     public Integer getCaseQuantity() {
         return caseQuantity;
     }
@@ -108,6 +109,7 @@ public class PurchaseDetails implements java.io.Serializable {
         this.caseQuantity = caseQuantity;
     }
 
+    @Column(name = "units_quantity", nullable = false, length = 19)
     public Integer getUnitsQuantity() {
         return unitsQuantity;
     }
@@ -116,6 +118,7 @@ public class PurchaseDetails implements java.io.Serializable {
         this.unitsQuantity = unitsQuantity;
     }
 
+    @Column(name = "free_quantity", nullable = false, length = 19)
     public Integer getFreeUnits() {
         return freeUnits;
     }
@@ -124,6 +127,8 @@ public class PurchaseDetails implements java.io.Serializable {
         this.freeUnits = freeUnits;
     }
 
+    @Column(name = "basic_rate", nullable = false, length = 19)
+    
     public Double getBasicRate() {
         return basicRate;
     }
@@ -132,6 +137,7 @@ public class PurchaseDetails implements java.io.Serializable {
         this.basicRate = basicRate;
     }
 
+    @Column(name = "gross_amount", nullable = false, length = 19)
     public Double getGrossAmount() {
         return grossAmount;
     }
@@ -140,6 +146,7 @@ public class PurchaseDetails implements java.io.Serializable {
         this.grossAmount = grossAmount;
     }
 
+    @Column(name = "scheme", nullable = false, length = 19)
     public Integer getScheme() {
         return scheme;
     }
@@ -148,6 +155,7 @@ public class PurchaseDetails implements java.io.Serializable {
         this.scheme = scheme;
     }
 
+    @Column(name = "cd", nullable = false, length = 19)
     public Double getCd() {
         return cd;
     }
@@ -156,6 +164,7 @@ public class PurchaseDetails implements java.io.Serializable {
         this.cd = cd;
     }
 
+    @Column(name = "tax_percentage", nullable = false, length = 19)
     public Double getTaxPercentage() {
         return taxPercentage;
     }
@@ -164,6 +173,7 @@ public class PurchaseDetails implements java.io.Serializable {
         this.taxPercentage = taxPercentage;
     }
 
+    @Column(name = "tax", nullable = false, length = 19)
     public Double getTax() {
         return tax;
     }
@@ -172,6 +182,7 @@ public class PurchaseDetails implements java.io.Serializable {
         this.tax = tax;
     }
 
+    @Column(name = "net_amount", nullable = false, length = 19)
     public Double getNetAmount() {
         return netAmount;
     }
