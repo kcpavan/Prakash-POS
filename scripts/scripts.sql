@@ -289,3 +289,10 @@ values(1,1,10,15.50,1,'2012-09-20 21:21:04'),
 */
 
 
+
+insert into storedb.item_category
+(category_name) values('Rice'),('Spices');
+
+
+insert into storedb.billing_type
+(type_desc) values('retail'),('wholesale');

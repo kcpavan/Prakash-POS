@@ -25,7 +25,7 @@
                 <Label font="$x1" text="Barcode" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                 <Label font="$x1" text="MRP" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                 <Label font="$x1" text="Weight" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                <Label font="$x1" text="Weight Unit" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                <Label font="$x1" text="UOM" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                 <Label font="$x1" text="Actual Price" GridPane.columnIndex="0" GridPane.rowIndex="5" />
                 <TextField fx:id="itemName" prefHeight="26.0" prefWidth="168.0" promptText="Name" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                 <TextField fx:id="itemBarcode" prefHeight="26.0" prefWidth="231.0" promptText="Barcode" GridPane.columnIndex="1" GridPane.rowIndex="1" />

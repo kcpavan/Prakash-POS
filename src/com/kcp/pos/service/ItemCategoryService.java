@@ -42,4 +42,12 @@ public class ItemCategoryService {
         }
     return itemDos;
     } 
+    
+     public ItemCategory getItemCategoryByName(String name)
+    {
+        return(itemCategoryDao.findByName(name));
+    }
+    
+    
+    
 }

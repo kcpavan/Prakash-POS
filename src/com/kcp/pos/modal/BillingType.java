@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  *
@@ -17,6 +19,9 @@ import static javax.persistence.GenerationType.IDENTITY;
  */
 @Entity
 @Table(name = "billing_type", catalog = "storedb")
+@NamedQueries({
+    @NamedQuery(name = "BillingType.findAll", query = "SELECT i FROM BillingType i"),
+    @NamedQuery(name = "BillingType.findByName", query = "SELECT i FROM BillingType i where i.typeDesc=:name")})
 public class BillingType {
     
     private Integer idPk;
