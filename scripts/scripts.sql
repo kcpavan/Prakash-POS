@@ -60,6 +60,7 @@ create table storedb.billing_type
 (id_pk integer primary key not null auto_increment,
 type_desc varchar(250) not null);
 
+
 drop table if exists storedb.item_details;
 create table storedb.item_details
 (id_pk integer primary key not null auto_increment,
@@ -68,7 +69,8 @@ mrp double not null,
 actual_price double not null,
 start_range integer  null,
 end_range integer  null,
-billing_price double not null,
+retail_billing_price double not null,
+wholesale_billing_price double not null,
 billing_type_id_fk int not null,
 enabled boolean not null,
 modified_by int not null,

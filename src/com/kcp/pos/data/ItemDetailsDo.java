@@ -13,6 +13,7 @@ import com.kcp.pos.modal.Users;
 import java.util.Date;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
@@ -20,13 +21,25 @@ import javafx.beans.property.SimpleIntegerProperty;
  */
 public class ItemDetailsDo {
     
+     private SimpleIntegerProperty idPk=new SimpleIntegerProperty();
+	private SimpleStringProperty itemName=new SimpleStringProperty();
+	private SimpleStringProperty barcode=new SimpleStringProperty();
+	private SimpleDoubleProperty mrp=new SimpleDoubleProperty();
+	private SimpleDoubleProperty weight=new SimpleDoubleProperty();
+	private SimpleStringProperty weightUnit=new SimpleStringProperty();
+	private SimpleDoubleProperty actualPrice=new SimpleDoubleProperty();
+	//private SimpleDoubleProperty sellingPrice=new SimpleDoubleProperty();
+        private SimpleDoubleProperty wholesalePrice=new SimpleDoubleProperty();
+        private SimpleDoubleProperty retailPrice=new SimpleDoubleProperty();
+    
      private SimpleIntegerProperty itemId;
     
     private SimpleIntegerProperty startRange=new SimpleIntegerProperty();
     private SimpleIntegerProperty endRange= new SimpleIntegerProperty();
-    private SimpleDoubleProperty billingPrice = new SimpleDoubleProperty();
-    private SimpleDoubleProperty mrp = new SimpleDoubleProperty();
-    private SimpleDoubleProperty actualPrice = new SimpleDoubleProperty();
+    private SimpleDoubleProperty retailBillingPrice = new SimpleDoubleProperty();
+    private SimpleDoubleProperty wholesaleBillingPrice = new SimpleDoubleProperty();
+    
+    
     private SimpleIntegerProperty billingTypeId = new SimpleIntegerProperty();
     
    
@@ -36,21 +49,28 @@ public class ItemDetailsDo {
     
     
     public ItemDetailsDo(ItemDetails itemDetails) {
+        this.idPk.set(itemDetails.getIdPk());
+        this.itemName.set(itemDetails.getItem().getItemName());
+        this.barcode.set(itemDetails.getItem().getBarcode());
+//        this.mrp.set(items.getMrp());
+        this.weight.set(itemDetails.getItem().getWeight());
+        this.weightUnit.set(itemDetails.getItem().getUom());
         this.itemId.set(itemDetails.getItem().getIdPk());
         /*this.startRange.set(itemDetails.getStartRange());
         this.endRange.set(itemDetails.getEndRange());*/
-        this.billingPrice.set(itemDetails.getBillingPrice());
+        this.retailBillingPrice.set(itemDetails.getRetailBillingPrice());
+        this.wholesaleBillingPrice.set(itemDetails.getWholesaleBillingPrice());
         this.mrp.set(itemDetails.getMrp());
         this.actualPrice.set(itemDetails.getActualPrice());
         this.billingTypeId.set(itemDetails.getBillingType().getIdPk());
               
         
-        /*this.startRange2.set(billingPrice.getStartRange2());
-        this.endRange2.set(billingPrice.getEndRange2()) ;
-        this.billingPrice2.set(billingPrice.getBillingPrice2());
-        this.startRange3.set(billingPrice.getStartRange3() );
-        this.endRange3.set(billingPrice.getEndRange3() );
-        this.billingPrice3.set(billingPrice.getBillingPrice3() );*/
+        /*this.startRange2.set(retailBillingPrice.getStartRange2());
+        this.endRange2.set(retailBillingPrice.getEndRange2()) ;
+        this.billingPrice2.set(retailBillingPrice.getBillingPrice2());
+        this.startRange3.set(retailBillingPrice.getStartRange3() );
+        this.endRange3.set(retailBillingPrice.getEndRange3() );
+        this.billingPrice3.set(retailBillingPrice.getBillingPrice3() );*/
     }
 
     
@@ -82,9 +102,10 @@ public class ItemDetailsDo {
     }
 
     public Double getBillingPrice() {
-        return billingPrice.get();
+        return retailBillingPrice.get();
     }
 
+    
     
     /*public void setBillingPrice1(SimpleDoubleProperty billingPrice1) {
         this.billingPrice1 = billingPrice1;
@@ -137,7 +158,120 @@ public class ItemDetailsDo {
     public void setBillingPrice3(SimpleDoubleProperty billingPrice3) {
         this.billingPrice3 = billingPrice3;
     }*/
+
+    public Integer getItemId() {
+        return itemId.get();
+    }
+
+    public void setItemId(SimpleIntegerProperty itemId) {
+        this.itemId = itemId;
+    }
+
+    public Double getRetailBillingPrice() {
+        return retailBillingPrice.get();
+    }
+
+    public void setRetailBillingPrice(SimpleDoubleProperty retailBillingPrice) {
+        this.retailBillingPrice = retailBillingPrice;
+    }
+
+    public Double getWholesaleBillingPrice() {
+        return wholesaleBillingPrice.get();
+    }
+
+    public void setWholesaleBillingPrice(SimpleDoubleProperty wholesaleBillingPrice) {
+        this.wholesaleBillingPrice = wholesaleBillingPrice;
+    }
+
+    public Double getMrp() {
+        return mrp.get();
+    }
+
+    public void setMrp(SimpleDoubleProperty mrp) {
+        this.mrp = mrp;
+    }
+
+    public Double getActualPrice() {
+        return actualPrice.get();
+    }
+
+    public void setActualPrice(SimpleDoubleProperty actualPrice) {
+        this.actualPrice = actualPrice;
+    }
+
+    public Integer getBillingTypeId() {
+        return billingTypeId.get();
+    }
+
+    public void setBillingTypeId(SimpleIntegerProperty billingTypeId) {
+        this.billingTypeId = billingTypeId;
+    }
     
+     public String getItemName() {
+        return itemName.get();
+    }
+
+    
+
+    public String getBarcode() {
+        return barcode.get();
+    }
+
+    public void setBarcode(SimpleStringProperty barcode) {
+        this.barcode = barcode;
+    }
+
+ 
+
+    public double getWeight() {
+        return weight.get();
+    }
+
+    public void setWeight(SimpleDoubleProperty weight) {
+        this.weight = weight;
+    }
+
+    public String getWeightUnit() {
+        return weightUnit.get();
+    }
+
+    public void setWeightUnit(SimpleStringProperty weightUnit) {
+        this.weightUnit = weightUnit;
+    }
+
+   
+        
+        
+            public Integer getIdPk() {
+        return idPk.get();
+    }
+
+    public void setIdPk(SimpleIntegerProperty idPk) {
+        this.idPk = idPk;
+    }
+
+
+    public void setItemName(SimpleStringProperty itemName) {
+        this.itemName = itemName;
+    }
+
+    public Double getWholesalePrice() {
+        return wholesalePrice.get();
+    }
+
+    public void setWholesalePrice(SimpleDoubleProperty wholesalePrice) {
+        this.wholesalePrice = wholesalePrice;
+    }
+
+    public Double getRetailPrice() {
+        return retailPrice.get();
+    }
+
+    public void setRetailPrice(SimpleDoubleProperty retailPrice) {
+        this.retailPrice = retailPrice;
+    }
+        
+        
     
     
 }

@@ -44,20 +44,31 @@ public class ItemDetails implements Serializable{
     private Items item;
     private double mrp;
     private double actualPrice;
-    private double billingPrice;
+    
+    private double retailBillingPrice;
+    private double wholesaleBillingPrice;
+    
     private BillingType billingType;
     private Date modifiedDate;
+    private Boolean enabled;
 
-    public ItemDetails(Integer idPk, Users users, Items items, double mrp, double actualPrice, double billingPrice, BillingType billingType, Date modifiedDate) {
+    public ItemDetails(Integer idPk, Users users, Items item, double mrp, double actualPrice, double retailBillingPrice, double wholesaleBillingPrice, BillingType billingType, Date modifiedDate, Boolean enabled) {
         this.idPk = idPk;
         this.users = users;
-        this.item = items;
+        this.item = item;
         this.mrp = mrp;
         this.actualPrice = actualPrice;
-        this.billingPrice = billingPrice;
+        this.retailBillingPrice = retailBillingPrice;
+        this.wholesaleBillingPrice = wholesaleBillingPrice;
         this.billingType = billingType;
         this.modifiedDate = modifiedDate;
+        this.enabled = enabled;
     }
+    
+
+    
+
+    
 
     public ItemDetails() {
     }
@@ -125,14 +136,7 @@ public class ItemDetails implements Serializable{
         this.item = items;
     }
 
-    @Column(name = "billing_price", nullable = false, length = 19)
-    public double getBillingPrice() {
-        return billingPrice;
-    }
-
-    public void setBillingPrice(double billingPrice) {
-        this.billingPrice = billingPrice;
-    }
+    
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "billing_type_id_fk", nullable = false)
@@ -142,6 +146,34 @@ public class ItemDetails implements Serializable{
 
     public void setBillingType(BillingType billingType) {
         this.billingType = billingType;
+    }
+
+    
+    @Column(name = "enabled", nullable = false)
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Column(name = "retail_billing_price", nullable = false, length = 19)
+    public double getRetailBillingPrice() {
+        return retailBillingPrice;
+    }
+
+    public void setRetailBillingPrice(double retailBillingPrice) {
+        this.retailBillingPrice = retailBillingPrice;
+    }
+
+    @Column(name = "wholesale_billing_price", nullable = false, length = 19)
+    public double getWholesaleBillingPrice() {
+        return wholesaleBillingPrice;
+    }
+
+    public void setWholesaleBillingPrice(double wholesaleBillingPrice) {
+        this.wholesaleBillingPrice = wholesaleBillingPrice;
     }
     
     

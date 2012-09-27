@@ -31,7 +31,7 @@ public class InvoiceDetailsDo {
          this.itemName.set(invoiceDetails.getItemDetails().getItem().getItemName());
        this.barcode.set(invoiceDetails.getItemDetails().getItem().getBarcode());
        //this.mrp.set(invoiceDetails.getItems().getMrp());
-       this.billingPrice.set(invoiceDetails.getItemDetails().getBillingPrice());
+       this.billingPrice.set(invoiceDetails.getItemDetails().getRetailBillingPrice());
        this.quantity.set(invoiceDetails.getQuantity());
        this.total.set(invoiceDetails.getTotal());
        
@@ -42,7 +42,7 @@ public class InvoiceDetailsDo {
        this.itemName.set(invoiceDetails.getItemDetails().getItem().getItemName());
        this.barcode.set(invoiceDetails.getItemDetails().getItem().getBarcode());
 //       this.mrp.set(invoiceDetails.getItems().getMrp());
-       this.billingPrice.set(invoiceDetails.getItemDetails().getBillingPrice());
+       this.billingPrice.set(invoiceDetails.getItemDetails().getRetailBillingPrice());
        this.quantity.set(invoiceDetails.getQuantity());
        this.total.set(invoiceDetails.getTotal());
        return this;

@@ -33,13 +33,12 @@ public class BillingTypeDaoImpl implements BillingTypeDao {
         this.entityManager = entityManager;
     }
     
-        @Transactional
+        
      public BillingType findByName(String name) 
         {
             log.debug("getting Item instance with name: " + name);
 		try {
                    
-                    
 			Query instance = entityManager.
                                 createNamedQuery("BillingType.findByName")
                                 .setParameter("name", name);

@@ -8,10 +8,12 @@ import com.kcp.pos.dao.BillingTypeDao;
 import com.kcp.pos.dao.BillingTypeDaoImpl;
 import com.kcp.pos.dao.ItemCategoryDao;
 import com.kcp.pos.dao.ItemDao;
+import com.kcp.pos.dao.ItemDetailsDao;
 import com.kcp.pos.dao.UserDao;
 import com.kcp.pos.dao.commonDao;
 import com.kcp.pos.dao.commonDaoImpl;
 import com.kcp.pos.data.ItemCategoryDo;
+import com.kcp.pos.data.ItemDetailsDo;
 import com.kcp.pos.data.ItemDo;
 import com.kcp.pos.modal.BillingType;
 import com.kcp.pos.modal.ItemCategory;
@@ -61,8 +63,8 @@ public class MainController implements Initializable {
     private TextField itemWeight;
     @FXML
     private TextField actualPrice;
-    @FXML
-    private TextField sellingPrice;
+    /*@FXML
+    private TextField sellingPrice;*/
     @FXML
     private CheckBox hasGift = new CheckBox();
     @FXML
@@ -70,8 +72,17 @@ public class MainController implements Initializable {
     @FXML
     private ChoiceBox category = new ChoiceBox();
     @FXML
-    public TableView<ItemDo> dataTable;
-    private final ObservableList<ItemDo> dataTableData = FXCollections.observableArrayList();
+    private TextField retailPrice;
+    @FXML
+    private TextField wholesalePrice;
+    
+            
+            
+    
+    @FXML
+    public TableView<ItemDetailsDo> dataTable;
+    //private final ObservableList<ItemDo> dataTableData = FXCollections.observableArrayList();
+    private final ObservableList<ItemDetailsDo> dataTableData = FXCollections.observableArrayList();
     @FXML
     private TableColumn<ItemDo, String> itemNameCol;
     @FXML
@@ -85,7 +96,10 @@ public class MainController implements Initializable {
     @FXML
     private TableColumn<ItemDo, Double> itemActualPriceCol;
     @FXML
-    private TableColumn<ItemDo, Double> itemSellingPriceCol;
+    private TableColumn<ItemDetailsDo, Double> itemRetailBillingPriceCol;
+    
+    @FXML
+    private TableColumn<ItemDetailsDo, Double> itemWholesaleBillingPriceCol;
     @FXML
     private TableColumn<ItemDo, Double> itemHasGiftCol;
     @FXML
@@ -152,12 +166,16 @@ public class MainController implements Initializable {
             UserDao userDao = (UserDao) ApplicationMain.applicationContext.getBean("userDaoImpl");
             item.setUsers(userDao.findById(1));
 
-            BillingTypeDao billingTypeDao=new BillingTypeDaoImpl();
-            BillingType billingType=billingTypeDao.findByName("retail");
-            itemDetails.setBillingType(billingType);
+            BillingTypeDao billingTypeDao = (BillingTypeDao) ApplicationMain.applicationContext.getBean("billingTypeDaoImpl");
             
-            
+            itemDetails.setBillingType(billingTypeDao.findByName("retail"));
+            itemDetails.setRetailBillingPrice(Double.valueOf(retailPrice.getText()));
+            itemDetails.setWholesaleBillingPrice(Double.valueOf(wholesalePrice.getText()));
+            itemDetails.setModifiedDate(new Date());
+            itemDetails.setUsers(userDao.findById(1));
+            itemDetails.setEnabled(Boolean.TRUE);
             itemService.itemSave(item);
+            
             itemDetails.setItem(item);
             
             
@@ -197,8 +215,10 @@ public class MainController implements Initializable {
             itemWeightCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("weight"));
             itemWeightUnitCol.setCellValueFactory(new PropertyValueFactory<ItemDo, String>("weightUnit"));
             itemActualPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("actualPrice"));
-            itemSellingPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("sellingPrice"));
+            itemRetailBillingPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("retailBillingPrice"));
+            itemWholesaleBillingPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("wholesaleBillingPrice"));
             itemHasGiftCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("hasGift"));
+           
 
 
             fillDataTable();
@@ -212,7 +232,8 @@ public class MainController implements Initializable {
         itemMrp.clear();
         itemWeight.clear();
         actualPrice.clear();
-        sellingPrice.clear();
+        retailPrice.clear();
+        wholesalePrice.clear();
 
     }
 
@@ -227,8 +248,15 @@ public class MainController implements Initializable {
         if (itemService == null) {
             itemService = (ItemService) ApplicationMain.applicationContext.getBean("itemService");
         }
-        List<ItemDo> items = itemService.getAllItems();
-
-        dataTableData.setAll(items);
+        List<ItemDetailsDo> itemDetailsDoList=null;
+        List<Items> items = itemService.getAllItems();
+        for(Items item:itemService.getAllItems())
+        {
+            for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
+                itemDetailsDoList.add(itemsDetails);
+            }
+            
+        }
+        dataTableData.setAll(itemDetailsDoList);
     }
 }

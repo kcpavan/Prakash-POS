@@ -110,7 +110,7 @@ public class PurchaseController implements Initializable {
     ItemService itemService = new ItemService();
 
     public List<ItemDo> getItemList() {
-        List<ItemDo> list = itemService.getAllItems();
+        List<ItemDo> list = itemService.getAllItemsDo();
         setItemList(list);
         return list;
     }
@@ -219,13 +219,13 @@ public class PurchaseController implements Initializable {
 
         itemName.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
         itemService = (ItemService) ApplicationMain.applicationContext.getBean("itemService");
-        List<ItemDo> itemList = itemService.getAllItems();
+        List<ItemDo> itemList = itemService.getAllItemsDo();
 
         for (ItemDo item : itemList) {
             itemMap.put(item.getItemName(), item);
             itemName.getItems().add(item.getItemName());
         }
-        /* List<Items> itemList = itemDao.getAllItems();
+        /* List<Items> itemList = itemDao.getAllItemsDo();
 
          for (Items item : itemList) {
          itemMap.put(item.getName(), item);

@@ -57,12 +57,16 @@ public class ItemService {
     
     
     
-    public List<ItemDo> getAllItems(){
+    public List<ItemDo> getAllItemsDo(){
    List<ItemDo> itemDos = new ArrayList<ItemDo>();
         for (Items items : itemDao.findByAll()) {
            itemDos.add(new ItemDo(items)); 
         }
     return itemDos;
+    }
+    
+     public List<Items> getAllItems(){
+        return itemDao.findByAll();
     }
     
     public Items getItemByName(String name)
@@ -81,11 +85,22 @@ public class ItemService {
         return(new ItemDetailsDo(itemDetailsDao.findByItemIdBillingType(Id,1)));
     }
     
-     public ItemDetails getItemDetailsByItemId(Integer Id)
+     public List<ItemDetailsDo> getItemDetailsByItemId(Integer id)
+    {
+         List<ItemDetailsDo> itemDetailsDos = new ArrayList<ItemDetailsDo>();
+        for (ItemDetails items : itemDetailsDao.findByItemId(id)) {
+           itemDetailsDos.add(new ItemDetailsDo(items)); 
+        }
+    return itemDetailsDos;
+       
+    }
+     
+     public ItemDetails getItemDetailsByItemIdBillingType(Integer Id,Integer type)
     {
         
-        return itemDetailsDao.findByItemIdBillingType(Id,1);
+        return(itemDetailsDao.findByItemIdBillingType(Id,1));
     }
+    
     
     public Double getBillingPriceByItemId(Integer id)
     {

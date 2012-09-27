@@ -187,7 +187,7 @@ public class InvoiceController implements Initializable {
   //      BillingPrice billingPrice = null;
        
         Items item = itemService.getItemByName(selectedItem.toString());
-        ItemDetails itemDetails= itemService.getItemDetailsByItemId(item.getIdPk());
+        ItemDetails itemDetails= itemService.getItemDetailsByItemIdBillingType(item.getIdPk(),1);
         
         String itemName = item.getItemName();
 
@@ -207,7 +207,7 @@ public class InvoiceController implements Initializable {
                 //invoiceDetails.set(billingPrice);
                 //Double price = billingPrice.getBillingPrice();
                 //double itemTotalPrice = price * invoiceDetails.getQuantity();
-                double itemTotalPrice = itemDetails.getBillingPrice() * invoiceDetails.getQuantity();
+                double itemTotalPrice = itemDetails.getRetailBillingPrice()* invoiceDetails.getQuantity();
                 invoiceDetails.setTotal(itemTotalPrice);
                 invoiceDetails.setItemDetails(itemDetails);
   
@@ -222,7 +222,7 @@ public class InvoiceController implements Initializable {
             //billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
             //invoiceDetails.setBillingPrice(billingPrice);
                 //Double price = billingPrice.getBillingPrice();
-                double itemTotalPrice = itemDetails.getBillingPrice() * Integer.parseInt(itemQty);
+                double itemTotalPrice = itemDetails.getRetailBillingPrice() * Integer.parseInt(itemQty);
                 invoiceDetails.setTotal(itemTotalPrice);
 
                 invoiceDetails.setInvoice(invoice);
@@ -305,7 +305,7 @@ public class InvoiceController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         itemName.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
         itemService = (ItemService) ApplicationMain.applicationContext.getBean("itemService");
-        List<ItemDo> itemList = itemService.getAllItems();
+        List<ItemDo> itemList = itemService.getAllItemsDo();
 
         for (ItemDo item : itemList) {
             itemMap.put(item.getItemName(), item);
