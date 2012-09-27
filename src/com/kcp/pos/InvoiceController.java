@@ -134,8 +134,8 @@ public class InvoiceController implements Initializable {
     @FXML
     private void handleButtonAction(ActionEvent event) {
 
-        invoiceService = (InvoiceService) ApplicationMain.applicationContext.getBean("invoiceService");
-        UserDao userDao = (UserDao) ApplicationMain.applicationContext.getBean("userDaoImpl");
+        invoiceService = (InvoiceService) ApplicationMain.springContext.getBean("invoiceService");
+        UserDao userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
         
         //InvoiceDetails invoiceDetails = null;
 
@@ -171,7 +171,7 @@ public class InvoiceController implements Initializable {
 
         //invoiceService.getInvoiceDetailsDoById(invoice.getIdPk());
 
-        itemService = (ItemService) ApplicationMain.applicationContext.getBean("itemService");
+        itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
         String itemQty = itemQuantity.getText();
 
         if (KCPUtils.isNullString(itemQty)) {
@@ -183,7 +183,7 @@ public class InvoiceController implements Initializable {
             return;
         }
 
-//        billingService = (BillingService) ApplicationMain.applicationContext.getBean("billingService");
+//        billingService = (BillingService) ApplicationMain.springContext.getBean("billingService");
   //      BillingPrice billingPrice = null;
        
         Items item = itemService.getItemByName(selectedItem.toString());
@@ -304,7 +304,7 @@ public class InvoiceController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         itemName.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
-        itemService = (ItemService) ApplicationMain.applicationContext.getBean("itemService");
+        itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
         List<ItemDo> itemList = itemService.getAllItemsDo();
 
         for (ItemDo item : itemList) {

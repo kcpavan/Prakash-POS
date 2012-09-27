@@ -218,7 +218,7 @@ public class PurchaseController implements Initializable {
         itemName.getItems().removeAll("Items 1", "Items 2", "Items 3", " ");
 
         itemName.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
-        itemService = (ItemService) ApplicationMain.applicationContext.getBean("itemService");
+        itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
         List<ItemDo> itemList = itemService.getAllItemsDo();
 
         for (ItemDo item : itemList) {

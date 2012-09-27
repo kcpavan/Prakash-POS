@@ -153,20 +153,20 @@ public class MainController implements Initializable {
             System.out.println("reenter item");
             return;
         }
-             itemCategoryService= (ItemCategoryService) ApplicationMain.applicationContext.getBean("itemCategoryService");
+             itemCategoryService= (ItemCategoryService) ApplicationMain.springContext.getBean("itemCategoryService");
             itemCategoryService.getItemCategoryByName((String)selectedItem);
            
             item.setUom((String) weightUnit.getSelectionModel().getSelectedItem());
             item.setModifiedDate(new Date());
            // Object selectedItem = category.getSelectionModel().getSelectedItem();
             System.out.println("selectedItem:" + selectedItem);
-            ItemCategoryDao itemCategoryDao = (ItemCategoryDao) ApplicationMain.applicationContext.getBean("itemCategoryDaoImpl");
+            ItemCategoryDao itemCategoryDao = (ItemCategoryDao) ApplicationMain.springContext.getBean("itemCategoryDaoImpl");
             item.setItemCategory(itemCategoryDao.findByName(selectedItem.toString()));
-            itemService = (ItemService) ApplicationMain.applicationContext.getBean("itemService");
-            UserDao userDao = (UserDao) ApplicationMain.applicationContext.getBean("userDaoImpl");
+            itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
+            UserDao userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
             item.setUsers(userDao.findById(1));
 
-            BillingTypeDao billingTypeDao = (BillingTypeDao) ApplicationMain.applicationContext.getBean("billingTypeDaoImpl");
+            BillingTypeDao billingTypeDao = (BillingTypeDao) ApplicationMain.springContext.getBean("billingTypeDaoImpl");
             
             itemDetails.setBillingType(billingTypeDao.findByName("retail"));
             itemDetails.setRetailBillingPrice(Double.valueOf(retailPrice.getText()));
@@ -197,7 +197,7 @@ public class MainController implements Initializable {
             category.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
 
             ItemCategoryService itemCategoryService =
-                    (ItemCategoryService) ApplicationMain.applicationContext.getBean("itemCategoryService");
+                    (ItemCategoryService) ApplicationMain.springContext.getBean("itemCategoryService");
             List<ItemCategoryDo> itemCategoryList = itemCategoryService.getAllItems();
 
             for (ItemCategoryDo item : itemCategoryList) {
@@ -246,7 +246,7 @@ public class MainController implements Initializable {
 
     private void fillDataTable() {
         if (itemService == null) {
-            itemService = (ItemService) ApplicationMain.applicationContext.getBean("itemService");
+            itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
         }
         List<ItemDetailsDo> itemDetailsDoList=null;
         List<Items> items = itemService.getAllItems();
