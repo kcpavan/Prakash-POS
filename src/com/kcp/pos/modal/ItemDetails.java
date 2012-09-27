@@ -125,7 +125,7 @@ public class ItemDetails implements Serializable{
         this.modifiedDate = modifiedDate;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "item_id_fk", nullable = false)
 
     public Items getItem() {

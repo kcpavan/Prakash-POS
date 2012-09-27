@@ -32,7 +32,7 @@ public class ItemDetailsDo {
         private SimpleDoubleProperty wholesalePrice=new SimpleDoubleProperty();
         private SimpleDoubleProperty retailPrice=new SimpleDoubleProperty();
     
-     private SimpleIntegerProperty itemId;
+     private SimpleIntegerProperty itemId=new SimpleIntegerProperty();
     
     private SimpleIntegerProperty startRange=new SimpleIntegerProperty();
     private SimpleIntegerProperty endRange= new SimpleIntegerProperty();

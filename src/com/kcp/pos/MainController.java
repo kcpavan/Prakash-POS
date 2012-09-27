@@ -23,6 +23,7 @@ import com.kcp.pos.service.ItemCategoryService;
 import com.kcp.pos.service.ItemService;
 import com.kcp.pos.utils.KCPUtils;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -236,6 +237,11 @@ public class MainController implements Initializable {
         wholesalePrice.clear();
 
     }
+     private ApplicationMain application;
+     void setApp(ApplicationMain aThis) {
+         System.out.println("aThis"+aThis);
+        this.application = aThis;
+    }
 
     private void animateMessage() {
         FadeTransition ft = new FadeTransition(Duration.millis(1000), label);
@@ -248,7 +254,7 @@ public class MainController implements Initializable {
         if (itemService == null) {
             itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
         }
-        List<ItemDetailsDo> itemDetailsDoList=null;
+        List<ItemDetailsDo> itemDetailsDoList=new ArrayList<ItemDetailsDo>();
         List<Items> items = itemService.getAllItems();
         for(Items item:itemService.getAllItems())
         {
