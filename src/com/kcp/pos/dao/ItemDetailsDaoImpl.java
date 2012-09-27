@@ -61,7 +61,7 @@ class ItemDetailsDaoImpl implements ItemDetailsDao{
                      */
 			//ItemDetails instance = entityManager.find(ItemDetails.class, id);
                     Query instance = entityManager.createNamedQuery("ItemDetails.findByItemIdBillingType")
-                                .setParameter("itemId", id).setParameter("type", type);
+                                .setParameter("id", id).setParameter("type", type);
 			
                    List<ItemDetails> elementList =new ArrayList<ItemDetails>();
                         elementList = instance.getResultList();

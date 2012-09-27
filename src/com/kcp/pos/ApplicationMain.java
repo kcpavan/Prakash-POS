@@ -87,8 +87,10 @@ public class ApplicationMain extends Application {
     
        private void gotoMain() {
         try {
-            MainController main = (MainController) replaceSceneContent("Main.fxml");
-            main.setApp(this);
+            //MainController main = (MainController) replaceSceneContent("Main.fxml");
+             //main.setApp(this);
+            InvoiceController invoice=(InvoiceController)replaceSceneContent("Invoice.fxml");
+            invoice.setApp(this);
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }

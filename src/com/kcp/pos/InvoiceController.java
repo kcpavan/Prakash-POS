@@ -463,4 +463,10 @@ public class InvoiceController implements Initializable {
         //invoiceDao.deleteInvoiceItem(invoiceId, itemId);
         //invoiceDao.deleteInvoiceItem(1,1);
     }
+    
+    private ApplicationMain application;
+     void setApp(ApplicationMain aThis) {
+         System.out.println("aThis"+aThis);
+        this.application = aThis;
+    }
 }

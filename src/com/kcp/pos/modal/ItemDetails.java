@@ -33,7 +33,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "ItemDetails.findById", query = "SELECT i FROM ItemDetails i where i.idPk=:id"),
     
     @NamedQuery(name = "ItemDetails.findByItemIdBillingType", query = "SELECT i FROM ItemDetails i "
-        + "where i.item.idPk=:id and i.billingType.idPk=:billingType")
+        + "where i.item.idPk=:id and i.billingType.idPk=:type")
 })
     
 
