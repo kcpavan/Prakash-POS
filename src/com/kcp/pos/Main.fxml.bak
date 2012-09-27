@@ -10,102 +10,11 @@
 
 <AnchorPane id="AnchorPane" fx:id="main_window" xmlns:fx="http://javafx.com/fxml" fx:controller="com.kcp.pos.MainController">
   <children>
-    <SplitPane dividerPositions="0.5730659025787965" focusTraversable="true" orientation="VERTICAL" prefHeight="700.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <SplitPane dividerPositions="0.42120343839541546" focusTraversable="true" orientation="VERTICAL" prefHeight="700.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="410.0" prefWidth="698.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="317.0" prefWidth="698.0">
           <children>
-            <Button fx:id="button" layoutX="630.0" layoutY="315.0" onAction="#handleButtonAction" text="Save" />
-            <GridPane alignment="CENTER" layoutX="12.0" layoutY="39.0" prefHeight="317.0" prefWidth="337.0">
-              <children>
-                <Label alignment="CENTER" contentDisplay="CENTER" text="Item Name" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                  <font>
-                    <Font size="15.0" fx:id="x1" />
-                  </font>
-                </Label>
-                <Label font="$x1" text="Barcode" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                <Label font="$x1" text="MRP" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                <Label font="$x1" text="Weight" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                <Label font="$x1" text="UOM" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                <Label font="$x1" text="Actual Price" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-                <TextField fx:id="itemName" prefHeight="26.0" prefWidth="168.0" promptText="Name" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                <TextField fx:id="itemBarcode" prefHeight="26.0" prefWidth="231.0" promptText="Barcode" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField fx:id="itemMrp" prefHeight="26.0" prefWidth="231.0" promptText="M.R.P" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <TextField fx:id="itemWeight" prefHeight="26.0" prefWidth="231.0" promptText="Weight" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <TextField fx:id="actualPrice" prefHeight="25.999900000002526" prefWidth="231.0" promptText="Actual Price" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                <ChoiceBox fx:id="weightUnit" onInputMethodTextChanged="#handleButtonAction" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                  <items>
-                    <FXCollections fx:factory="observableArrayList">
-                      <String fx:value="Item 1" />
-                      <String fx:value="Item 2" />
-                      <String fx:value="Item 3" />
-                    </FXCollections>
-                  </items>
-                </ChoiceBox>
-              </children>
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="164.0" minWidth="10.0" prefWidth="106.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="231.0" minWidth="10.0" prefWidth="231.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
-            <GridPane layoutX="378.0" layoutY="59.0" prefHeight="103.0" prefWidth="297.0">
-              <children>
-                <ChoiceBox id="weightUnit" fx:id="category" onInputMethodTextChanged="#handleButtonAction" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                  <items>
-                    <FXCollections fx:factory="observableArrayList">
-                      <String fx:value="Item 1" />
-                      <String fx:value="Item 2" />
-                      <String fx:value="Item 3" />
-                    </FXCollections>
-                  </items>
-                </ChoiceBox>
-                <Label font="$x1" text="Category" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <Label font="$x1" text="Has Gift Item" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                <CheckBox fx:id="hasGift" mnemonicParsing="false" text="Yes" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-              </children>
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="107.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="191.0" minWidth="10.0" prefWidth="190.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
             <Label fx:id="label" layoutX="428.0" layoutY="351.0" minHeight="16.0" minWidth="69.0" />
-            <Label layoutX="309.0" layoutY="6.0" text="Items">
-              <font>
-                <Font name="System Bold" size="20.0" />
-              </font>
-            </Label>
-            <GridPane layoutX="378.0" layoutY="219.0" prefHeight="89.0" prefWidth="297.0">
-              <children>
-                <Label font="$x1" text="wholesale" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                <TextField id="sellingPrice" fx:id="wholesalePrice" prefHeight="26.0" prefWidth="190.0" promptText="Billing Price" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Label font="$x1" text="Retail" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                <TextField id="sellingPrice" fx:id="retailPrice" prefHeight="26.0" prefWidth="190.0" promptText="Billing Price" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-              </children>
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="107.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="191.0" minWidth="10.0" prefWidth="190.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
-            <Label layoutX="381.0" layoutY="175.0" prefWidth="163.0" text="Selling Price">
-              <font>
-                <Font size="20.0" />
-              </font>
-            </Label>
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
@@ -125,7 +34,7 @@
                             <TableColumn prefWidth="75.0" text="Weight Unit" fx:id="itemWeightUnitCol" />
                             <TableColumn prefWidth="75.0" text="Actual Price" fx:id="itemActualPriceCol" />
                             <TableColumn prefWidth="75.0" text="Retail Price" fx:id="itemRetailBillingPriceCol" />
-                            <TableColumn prefWidth="75.0" text="Wholesale Price" fx:id="itemWholesaleSellingPriceCol" />
+                            <TableColumn prefWidth="75.0" text="Wholesale Price" fx:id="itemWholesaleBillingPriceCol" />
                             <TableColumn prefWidth="75.0" text="Has Gift" fx:id="itemHasGiftCol" />
                           </columns>
                         </TableView>
@@ -133,9 +42,94 @@
                     </AnchorPane>
                   </content>
                 </Tab>
-                <Tab text="Stocks">
+                <Tab text="Item Details">
                   <content>
-                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                      <children>
+                        <Label layoutX="307.0" layoutY="14.0" prefWidth="149.0" text="Items Details">
+                          <font>
+                            <Font name="System Bold" size="20.0" />
+                          </font>
+                        </Label>
+                        <GridPane alignment="CENTER" layoutX="12.0" layoutY="12.0" prefHeight="335.0" prefWidth="337.0">
+                          <children>
+                            <Label alignment="CENTER" contentDisplay="CENTER" text="Item Name" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                              <font>
+                                <Font size="15.0" fx:id="x1" />
+                              </font>
+                            </Label>
+                            <Label font="$x1" text="Barcode" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                            <Label font="$x1" text="MRP" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                            <Label font="$x1" text="Weight" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                            <Label font="$x1" text="UOM" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                            <Label font="$x1" text="Actual Price" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                            <TextField fx:id="itemName" prefHeight="26.0" prefWidth="168.0" promptText="Name" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                            <TextField fx:id="itemBarcode" prefHeight="26.0" prefWidth="231.0" promptText="Barcode" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <TextField fx:id="itemMrp" prefHeight="26.0" prefWidth="231.0" promptText="M.R.P" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                            <TextField fx:id="itemWeight" prefHeight="26.0" prefWidth="231.0" promptText="Weight" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                            <TextField fx:id="actualPrice" prefHeight="25.999900000002526" prefWidth="231.0" promptText="Actual Price" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                            <ChoiceBox fx:id="weightUnit" onInputMethodTextChanged="#handleButtonAction" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                              <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                  <String fx:value="Item 1" />
+                                  <String fx:value="Item 2" />
+                                  <String fx:value="Item 3" />
+                                </FXCollections>
+                              </items>
+                            </ChoiceBox>
+                          </children>
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="164.0" minWidth="10.0" prefWidth="106.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="231.0" minWidth="10.0" prefWidth="231.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
+                        <GridPane layoutX="387.0" layoutY="73.0" prefHeight="204.0" prefWidth="297.0">
+                          <children>
+                            <ChoiceBox id="weightUnit" fx:id="category" onInputMethodTextChanged="#handleButtonAction" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                              <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                  <String fx:value="Item 1" />
+                                  <String fx:value="Item 2" />
+                                  <String fx:value="Item 3" />
+                                </FXCollections>
+                              </items>
+                            </ChoiceBox>
+                            <Label font="$x1" text="Category" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                            <Label font="$x1" text="Has Gift Item" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                            <CheckBox fx:id="hasGift" mnemonicParsing="false" text="Yes" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <Label prefWidth="163.0" text="Selling Price" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                              <font>
+                                <Font size="20.0" />
+                              </font>
+                            </Label>
+                            <Label font="$x1" text="Retail" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                            <Label font="$x1" text="wholesale" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                            <TextField id="sellingPrice" fx:id="retailPrice" prefHeight="26.0" prefWidth="190.0" promptText="Billing Price" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                            <TextField id="sellingPrice" fx:id="wholesalePrice" prefHeight="26.0" prefWidth="190.0" promptText="Billing Price" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                          </children>
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="144.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="191.0" minWidth="10.0" prefWidth="153.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
+                        <Button fx:id="button" layoutX="595.0" layoutY="335.0" onAction="#handleButtonAction" text="Save" />
+                      </children>
+                    </AnchorPane>
                   </content>
                 </Tab>
               </tabs>
