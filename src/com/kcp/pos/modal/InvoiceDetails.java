@@ -16,8 +16,9 @@ import javax.persistence.Table;
 @Table(name = "invoice_details", catalog = "storedb")
 @NamedQueries({
     @NamedQuery(name = "InvoiceDetails.findAllById", query = "SELECT c FROM InvoiceDetails c WHERE c.invoice.idPk = :id"),
-    @NamedQuery(name = "InvoiceDetails.findByInvoiceItemId", query = "SELECT c FROM InvoiceDetails c "
-        + "WHERE c.itemDetails.idPk = :itemId and c.invoice.idPk=:type"),
+    @NamedQuery(name = "InvoiceDetails.findByInvoiceItemId", 
+        query = "SELECT c FROM InvoiceDetails c "
+        + "WHERE c.itemDetails.idPk = :itemId and c.invoice.idPk=:invoiceId"),
     
 })
 public class InvoiceDetails implements java.io.Serializable {

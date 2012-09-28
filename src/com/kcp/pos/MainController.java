@@ -65,7 +65,7 @@ public class MainController implements Initializable {
     @FXML
     private TextField actualPrice;
     /*@FXML
-    private TextField sellingPrice;*/
+     private TextField sellingPrice;*/
     @FXML
     private CheckBox hasGift = new CheckBox();
     @FXML
@@ -76,10 +76,6 @@ public class MainController implements Initializable {
     private TextField retailPrice;
     @FXML
     private TextField wholesalePrice;
-    
-            
-            
-    
     @FXML
     public TableView<ItemDetailsDo> dataTable;
     //private final ObservableList<ItemDo> dataTableData = FXCollections.observableArrayList();
@@ -98,7 +94,6 @@ public class MainController implements Initializable {
     private TableColumn<ItemDo, Double> itemActualPriceCol;
     @FXML
     private TableColumn<ItemDetailsDo, Double> itemRetailBillingPriceCol;
-    
     @FXML
     private TableColumn<ItemDetailsDo, Double> itemWholesaleBillingPriceCol;
     @FXML
@@ -115,7 +110,7 @@ public class MainController implements Initializable {
     public void setItemService(ItemService itemService) {
         this.itemService = itemService;
     }
-      @Autowired
+    @Autowired
     private ItemCategoryService itemCategoryService;
 
     public ItemCategoryService getItemCategoryService() {
@@ -128,6 +123,27 @@ public class MainController implements Initializable {
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
+        itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
+
+        if (KCPUtils.isNullString(itemName.getText())) {
+            label.setText("Please enter item name");
+            animateMessage();
+            fillDataTable();
+            System.out.println("reenter item");
+            return;
+        }
+        for (Items item : itemService.getAllItems()) {
+            if (item.getItemName().equalsIgnoreCase(itemName.getText())) {
+                label.setText("Item already exists");
+                animateMessage();
+                fillDataTable();
+                System.out.println("reenter item");
+                return;
+            }
+
+        }
+
+
         Items item = new Items();
         item.setItemName(itemName.getText());
         item.setBarcode(itemBarcode.getText());
@@ -139,93 +155,87 @@ public class MainController implements Initializable {
         itemDetails.setActualPrice(Double.valueOf(actualPrice.getText()));
         commonDao comDao = new commonDaoImpl();
         /*List list = comDao.getLookUpValues(
-                ItemCategory.class, "typeDesc");
-        if (!KCPUtils.isNullList(list)) {
-            for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-                ItemCategory obj = (ItemCategory) iterator.next();
-            }*/
-            String selectedItem =(String)category.getSelectionModel().getSelectedItem();
-            
-             if (KCPUtils.isNullString(selectedItem))
-                  {
+         ItemCategory.class, "typeDesc");
+         if (!KCPUtils.isNullList(list)) {
+         for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+         ItemCategory obj = (ItemCategory) iterator.next();
+         }*/
+        String selectedItem = (String) category.getSelectionModel().getSelectedItem();
+
+        if (KCPUtils.isNullString(selectedItem)) {
             label.setText("Please select item");
             animateMessage();
             fillDataTable();
             System.out.println("reenter item");
             return;
         }
-             itemCategoryService= (ItemCategoryService) ApplicationMain.springContext.getBean("itemCategoryService");
-            itemCategoryService.getItemCategoryByName((String)selectedItem);
-           
-            item.setUom((String) weightUnit.getSelectionModel().getSelectedItem());
-            item.setModifiedDate(new Date());
-           // Object selectedItem = category.getSelectionModel().getSelectedItem();
-            System.out.println("selectedItem:" + selectedItem);
-            ItemCategoryDao itemCategoryDao = (ItemCategoryDao) ApplicationMain.springContext.getBean("itemCategoryDaoImpl");
-            item.setItemCategory(itemCategoryDao.findByName(selectedItem.toString()));
-            itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
-            UserDao userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
-            item.setUsers(userDao.findById(1));
+        itemCategoryService = (ItemCategoryService) ApplicationMain.springContext.getBean("itemCategoryService");
+        itemCategoryService.getItemCategoryByName((String) selectedItem);
 
-            BillingTypeDao billingTypeDao = (BillingTypeDao) ApplicationMain.springContext.getBean("billingTypeDaoImpl");
-            
-            itemDetails.setBillingType(billingTypeDao.findByName("retail"));
-            itemDetails.setRetailBillingPrice(Double.valueOf(retailPrice.getText()));
-            itemDetails.setWholesaleBillingPrice(Double.valueOf(wholesalePrice.getText()));
-            itemDetails.setModifiedDate(new Date());
-            itemDetails.setUsers(userDao.findById(1));
-            itemDetails.setEnabled(Boolean.TRUE);
-            itemService.itemSave(item);
-            
-            itemDetails.setItem(item);
-            
-            
-            itemService.itemDetailsSave(itemDetails);
-            label.setText("Item Saved");
-            animateMessage();
-            fillDataTable();
-            clearForm();
-            System.out.println("saved");
+        item.setUom((String) weightUnit.getSelectionModel().getSelectedItem());
+        item.setModifiedDate(new Date());
+        // Object selectedItem = category.getSelectionModel().getSelectedItem();
+        System.out.println("selectedItem:" + selectedItem);
+        ItemCategoryDao itemCategoryDao = (ItemCategoryDao) ApplicationMain.springContext.getBean("itemCategoryDaoImpl");
+        item.setItemCategory(itemCategoryDao.findByName(selectedItem.toString()));
+
+        UserDao userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
+        item.setUsers(userDao.findById(1));
+
+        BillingTypeDao billingTypeDao = (BillingTypeDao) ApplicationMain.springContext.getBean("billingTypeDaoImpl");
+
+        itemDetails.setBillingType(billingTypeDao.findByName("retail"));
+        itemDetails.setRetailBillingPrice(Double.valueOf(retailPrice.getText()));
+        itemDetails.setWholesaleBillingPrice(Double.valueOf(wholesalePrice.getText()));
+        itemDetails.setModifiedDate(new Date());
+        itemDetails.setUsers(userDao.findById(1));
+        itemDetails.setEnabled(Boolean.TRUE);
+        itemService.itemSave(item);
+
+        itemDetails.setItem(item);
+
+
+        itemService.itemDetailsSave(itemDetails);
+        label.setText("Item Saved");
+        animateMessage();
+        fillDataTable();
+        clearForm();
+        System.out.println("saved");
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        weightUnit.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
+        weightUnit.getItems().addAll("choose", "mg", "cg", "dg", "g", "kg");
+        category.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
+
+        ItemCategoryService itemCategoryService =
+                (ItemCategoryService) ApplicationMain.springContext.getBean("itemCategoryService");
+        List<ItemCategoryDo> itemCategoryList = itemCategoryService.getAllItems();
+
+        for (ItemCategoryDo item : itemCategoryList) {
+
+            category.getItems().add(item.getItemName());
         }
 
-        @Override
-        public void initialize
-        (URL url, ResourceBundle rb
-        
-            ) {
-         weightUnit.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
-            weightUnit.getItems().addAll("choose", "mg", "cg", "dg", "g", "kg");
-            category.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
-
-            ItemCategoryService itemCategoryService =
-                    (ItemCategoryService) ApplicationMain.springContext.getBean("itemCategoryService");
-            List<ItemCategoryDo> itemCategoryList = itemCategoryService.getAllItems();
-
-            for (ItemCategoryDo item : itemCategoryList) {
-
-                category.getItems().add(item.getItemName());
-            }
-
-            dataTable.setItems(dataTableData);
-            itemBarcodeCol.setCellValueFactory(
-                    new PropertyValueFactory<ItemDo, String>("barcode"));
-            itemNameCol.setCellValueFactory(
-                    new PropertyValueFactory<ItemDo, String>("itemName"));
-            itemMRP.setCellValueFactory(
-                    new PropertyValueFactory<ItemDo, Double>("mrp"));
-            itemWeightCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("weight"));
-            itemWeightUnitCol.setCellValueFactory(new PropertyValueFactory<ItemDo, String>("weightUnit"));
-            itemActualPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("actualPrice"));
-            itemRetailBillingPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("retailBillingPrice"));
-            itemWholesaleBillingPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("wholesaleBillingPrice"));
-            itemHasGiftCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("hasGift"));
-           
+        dataTable.setItems(dataTableData);
+        itemBarcodeCol.setCellValueFactory(
+                new PropertyValueFactory<ItemDo, String>("barcode"));
+        itemNameCol.setCellValueFactory(
+                new PropertyValueFactory<ItemDo, String>("itemName"));
+        itemMRP.setCellValueFactory(
+                new PropertyValueFactory<ItemDo, Double>("mrp"));
+        itemWeightCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("weight"));
+        itemWeightUnitCol.setCellValueFactory(new PropertyValueFactory<ItemDo, String>("weightUnit"));
+        itemActualPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("actualPrice"));
+        itemRetailBillingPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("retailBillingPrice"));
+        itemWholesaleBillingPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("wholesaleBillingPrice"));
+        itemHasGiftCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("hasGift"));
 
 
-            fillDataTable();
-        }   
-    
-    
+
+        fillDataTable();
+    }
 
     private void clearForm() {
         itemName.clear();
@@ -237,9 +247,10 @@ public class MainController implements Initializable {
         wholesalePrice.clear();
 
     }
-     private ApplicationMain application;
-     void setApp(ApplicationMain aThis) {
-         System.out.println("aThis"+aThis);
+    private ApplicationMain application;
+
+    void setApp(ApplicationMain aThis) {
+        System.out.println("aThis" + aThis);
         this.application = aThis;
     }
 
@@ -254,14 +265,13 @@ public class MainController implements Initializable {
         if (itemService == null) {
             itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
         }
-        List<ItemDetailsDo> itemDetailsDoList=new ArrayList<ItemDetailsDo>();
+        List<ItemDetailsDo> itemDetailsDoList = new ArrayList<ItemDetailsDo>();
         List<Items> items = itemService.getAllItems();
-        for(Items item:itemService.getAllItems())
-        {
+        for (Items item : itemService.getAllItems()) {
             for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
                 itemDetailsDoList.add(itemsDetails);
             }
-            
+
         }
         dataTableData.setAll(itemDetailsDoList);
     }

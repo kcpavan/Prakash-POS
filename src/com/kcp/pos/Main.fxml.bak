@@ -15,6 +15,13 @@
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="317.0" prefWidth="698.0">
           <children>
             <Label fx:id="label" layoutX="428.0" layoutY="351.0" minHeight="16.0" minWidth="69.0" />
+            <Label layoutX="33.0" layoutY="108.0" prefHeight="27.0" prefWidth="54.0" text="Item">
+              <font>
+                <Font size="16.0" fx:id="x2" />
+              </font>
+            </Label>
+            <TextField layoutX="87.0" layoutY="111.0" prefWidth="200.0" />
+            <Button font="$x2" layoutX="321.0" layoutY="108.0" mnemonicParsing="false" prefHeight="22.0" text="search" />
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
@@ -46,7 +53,7 @@
                   <content>
                     <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                       <children>
-                        <Label layoutX="307.0" layoutY="14.0" prefWidth="149.0" text="Items Details">
+                        <Label layoutX="307.0" layoutY="8.0" prefWidth="149.0" text="Items Details">
                           <font>
                             <Font name="System Bold" size="20.0" />
                           </font>

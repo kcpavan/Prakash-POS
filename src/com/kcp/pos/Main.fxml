@@ -10,11 +10,10 @@
 
 <AnchorPane id="AnchorPane" fx:id="main_window" xmlns:fx="http://javafx.com/fxml" fx:controller="com.kcp.pos.MainController">
   <children>
-    <SplitPane dividerPositions="0.42120343839541546" focusTraversable="true" orientation="VERTICAL" prefHeight="700.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <SplitPane dividerPositions="0.2693409742120344" focusTraversable="true" orientation="VERTICAL" prefHeight="700.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="317.0" prefWidth="698.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="204.0" prefWidth="698.0">
           <children>
-            <Label fx:id="label" layoutX="428.0" layoutY="351.0" minHeight="16.0" minWidth="69.0" />
             <Label layoutX="33.0" layoutY="108.0" prefHeight="27.0" prefWidth="54.0" text="Item">
               <font>
                 <Font size="16.0" fx:id="x2" />
@@ -135,6 +134,7 @@
                           </rowConstraints>
                         </GridPane>
                         <Button fx:id="button" layoutX="595.0" layoutY="335.0" onAction="#handleButtonAction" text="Save" />
+                        <Label fx:id="label" layoutX="445.0" layoutY="345.0" prefHeight="27.0" prefWidth="72.0" text="Label" />
                       </children>
                     </AnchorPane>
                   </content>
