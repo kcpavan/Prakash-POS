@@ -19,24 +19,25 @@ import javax.persistence.TemporalType;
 public class Stocks implements java.io.Serializable {
 
 	private Integer idPk;
-	private Items items;
+	private ItemDetails itemDetails;
 	private Users users;
-	private long quantity;
+	private Integer quantity;
 	private String quantityUnit;
 	private Date modifiedDate;
 
 	public Stocks() {
 	}
 
-	public Stocks(Items items, Users users, long quantity, String quantityUnit,
-			Date modifiedDate) {
-		this.items = items;
-		this.users = users;
-		this.quantity = quantity;
-		this.quantityUnit = quantityUnit;
-		this.modifiedDate = modifiedDate;
-	}
+    public Stocks(Integer idPk, ItemDetails itemDetails, Users users, Integer quantity, String quantityUnit, Date modifiedDate) {
+        this.idPk = idPk;
+        this.itemDetails = itemDetails;
+        this.users = users;
+        this.quantity = quantity;
+        this.quantityUnit = quantityUnit;
+        this.modifiedDate = modifiedDate;
+    }
 
+	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id_pk", unique = true, nullable = false)
@@ -48,15 +49,7 @@ public class Stocks implements java.io.Serializable {
 		this.idPk = idPk;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "item_id_fk", nullable = false)
-	public Items getItems() {
-		return this.items;
-	}
-
-	public void setItems(Items items) {
-		this.items = items;
-	}
+	
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "modified_by", nullable = false)
@@ -69,11 +62,11 @@ public class Stocks implements java.io.Serializable {
 	}
 
 	@Column(name = "quantity", nullable = false)
-	public long getQuantity() {
+	public Integer getQuantity() {
 		return this.quantity;
 	}
 
-	public void setQuantity(long quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 
@@ -95,5 +88,17 @@ public class Stocks implements java.io.Serializable {
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
+
+        @ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "item_details_id_fk", nullable = false)
+	public ItemDetails getItemDetails() {
+        return itemDetails;
+    }
+
+    public void setItemDetails(ItemDetails itemDetails) {
+        this.itemDetails = itemDetails;
+    }
+        
+        
 
 }

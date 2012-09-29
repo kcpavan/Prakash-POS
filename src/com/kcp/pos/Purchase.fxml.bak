@@ -25,7 +25,7 @@
                 <Label font="$x1" text="Barcode" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                 <Label font="$x1" text="MRP" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                 <Label font="$x1" text="Basic Rate" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                <TextField id="itemBarcode" fx:id="barcode" onKeyReleased="#handleBarcodeAction" prefHeight="26.0" prefWidth="231.0" promptText="Barcode" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField id="itemBarcode" fx:id="barcode" prefHeight="26.0" prefWidth="231.0" promptText="Barcode" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <TextField id="itemMrp" fx:id="mrp" prefHeight="26.0" prefWidth="231.0" promptText="M.R.P" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <TextField id="itemWeight" fx:id="basicRate" prefHeight="26.0" prefWidth="231.0" promptText="Basic Rate" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                 <ChoiceBox fx:id="itemName" GridPane.columnIndex="1" GridPane.rowIndex="0">

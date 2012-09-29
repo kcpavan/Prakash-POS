@@ -30,6 +30,13 @@ create table storedb.item_category
 (id_pk integer primary key not null auto_increment,
 category_name varchar(250) not null);
 
+drop table if exists storedb.uom ;
+create table storedb.uom
+(idpk integer not null auto_increment primary key,
+uom varchar(50) not null);
+
+insert into storedb.uom(uom) values('kg'),('gm'),('pkt'),('box'),('case'),('doz'),('sheet');
+
 
 drop table if exists storedb.items;
 create table storedb.items 
@@ -37,7 +44,7 @@ create table storedb.items
 item_name varchar(250) not null,
 barcode varchar(250) not null,
 category_id_fk int null,
-uom varchar(32) null,
+uom_id_fk integer not null,
 /*mrp double not null,*/
 weight double not null,
 
@@ -250,6 +257,9 @@ CONSTRAINT fk_billing_price_id
 );
 
 
+
+
+
 INSERT INTO storedb.users
 (first_name,last_name,username,password,group_id_fk,user_state)
 
@@ -299,11 +309,9 @@ insert into storedb.item_category
 insert into storedb.billing_type
 (type_desc) values('retail'),('wholesale');
 
-insert into 
-storedb.distributor;
+insert into storedb.distributor
 (name ,
 address,
 phone_number,
 modified_by,
-modified_date)
-('Jaysree','abc xyz','12343','1','2012-09-20 21:21:04'));
+modified_date) values('Jaysree','abc xyz','12343','1','2012-09-20 21:21:04');

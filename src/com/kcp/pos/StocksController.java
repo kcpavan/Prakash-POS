@@ -5,6 +5,15 @@
 package com.kcp.pos;
 
 
+import com.kcp.pos.dao.InvoiceDao;
+import com.kcp.pos.dao.InvoiceDaoImpl;
+import com.kcp.pos.dao.ItemDao;
+import com.kcp.pos.dao.ItemsDaoImpl;
+import com.kcp.pos.dao.StocksDao;
+import com.kcp.pos.dao.StocksDaoImpl;
+import com.kcp.pos.data.StocksDo;
+import com.kcp.pos.modal.Items;
+import com.kcp.pos.modal.Stocks;
 import com.kcp.pos.utils.KCPUtils;
 import java.net.URL;
 import java.util.ArrayList;
@@ -53,35 +62,35 @@ public class StocksController implements Initializable{
     @FXML
     private TextField freeUnits;
     
-  /*  @FXML
-    public TableView<Stocks> dataTable;
+    @FXML
+    public TableView<StocksDo> dataTable;
     
-    private final ObservableList<Stocks> dataTableData = FXCollections.observableArrayList();
+    private final ObservableList<StocksDo> dataTableData = FXCollections.observableArrayList();
     @FXML
-    private TableColumn<Item, String> itemNameCol;
+    private TableColumn<StocksDo, String> itemNameCol;
     @FXML
-    private TableColumn<Item, String> itemBarcodeCol;
+    private TableColumn<StocksDo, String> itemBarcodeCol;
     @FXML
-    private TableColumn<Item, Double> itemMRPCol;
+    private TableColumn<StocksDo, Double> itemMRPCol;
     @FXML
-    private TableColumn<Item, Double> caseQuantityCol;
+    private TableColumn<StocksDo, Double> caseQuantityCol;
     @FXML
-    private TableColumn<Item, Double> unitsQuantityCol;
+    private TableColumn<StocksDo, Double> unitsQuantityCol;
     @FXML
-    private TableColumn<Item, Double> freeUnitsCol;
+    private TableColumn<StocksDo, Double> freeUnitsCol;
     
     private List<Stocks> stocksList = new ArrayList<Stocks>();
-    private List<Item> itemList = new ArrayList<Item>();
-    private Map<String, Item> itemMap = new HashMap<String, Item>();
-    ItemDao itemDao = new ItemDaoImpl();
+    private List<Items> itemList = new ArrayList<Items>();
+    private Map<String, Items> itemMap = new HashMap<String, Items>();
+    ItemDao itemDao = new ItemsDaoImpl();
 
-    public List<Item> getItemList() {
-        List<Item> list = itemDao.getAllItems();
+    public List<Items> getItemList() {
+        List<Items> list = itemDao.findByAll();
         setItemList(list);
         return list;
     }
 
-    public void setItemList(List<Item> itemList) {
+    public void setItemList(List<Items> itemList) {
         this.itemList = itemList;
     }
     InvoiceDao invoiceDao = new InvoiceDaoImpl();
@@ -94,7 +103,7 @@ public class StocksController implements Initializable{
         this.stocksList = stocksList;
     }
 
-     StocksDao stocksDao = new StocksDaoImpl();*/
+     StocksDao stocksDao = new StocksDaoImpl();
      
     @FXML
     private void handleButtonAction(ActionEvent event) {
@@ -240,7 +249,11 @@ public class StocksController implements Initializable{
                 
     }
 
-   
+    private ApplicationMain application;
+     void setApp(ApplicationMain aThis) {
+         System.out.println("aThis"+aThis);
+        this.application = aThis;
+    }
 
  
     

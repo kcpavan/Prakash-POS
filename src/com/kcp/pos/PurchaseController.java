@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -140,6 +141,20 @@ public class PurchaseController implements Initializable {
      @Autowired
     private PurchaseService purchaseService;
      Purchase purchase=null;
+     
+     
+     @FXML
+    private void handleBarcodeAction(ActionEvent event)
+    {
+        System.out.println("handleBarcodeAction() start");
+        mrp.requestFocus();
+        /*Platform.runLater(new Runnable() {
+	@Override
+	public void run() {
+	    mrp.requestFocus();
+	}
+});*/
+    }
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
@@ -364,4 +379,7 @@ public class PurchaseController implements Initializable {
         System.out.println("aThis" + aThis);
         this.application = aThis;
     }
+    
+     
+    
 }

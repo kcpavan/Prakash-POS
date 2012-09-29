@@ -91,8 +91,10 @@ public class ApplicationMain extends Application {
              //main.setApp(this);
             /*InvoiceController invoice=(InvoiceController)replaceSceneContent("Invoice.fxml");
             invoice.setApp(this);*/
-            PurchaseController purchase=(PurchaseController)replaceSceneContent("Purchase.fxml");
-            purchase.setApp(this);
+            /*PurchaseController purchase=(PurchaseController)replaceSceneContent("Purchase.fxml");
+            purchase.setApp(this);*/
+            StocksController stocks=(StocksController)replaceSceneContent("Stocks.fxml");
+            stocks.setApp(this);
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
