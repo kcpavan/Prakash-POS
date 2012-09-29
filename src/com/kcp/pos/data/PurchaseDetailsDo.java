@@ -16,8 +16,9 @@ import javafx.beans.property.SimpleStringProperty;
 public class PurchaseDetailsDo {
 
     private SimpleIntegerProperty idPk = new SimpleIntegerProperty();
-    private SimpleIntegerProperty itemId = new SimpleIntegerProperty();
     
+    private SimpleIntegerProperty itemId = new SimpleIntegerProperty();
+    private SimpleIntegerProperty itemDetailsId = new SimpleIntegerProperty();
     private SimpleStringProperty itemName = new SimpleStringProperty();
     private SimpleStringProperty barcode = new SimpleStringProperty();
     
@@ -40,9 +41,10 @@ public class PurchaseDetailsDo {
   
     public PurchaseDetailsDo(PurchaseDetails purchaseDetails) {
         this.idPk.set(purchaseDetails.getIdPk());
-        this.itemId.set(purchaseDetails.getItems().getIdPk());
-        this.itemName.set(purchaseDetails.getItems().getItemName());
-        this.barcode.set(purchaseDetails.getItems().getBarcode());
+        this.itemId.set(purchaseDetails.getItemDetails().getItem().getIdPk());
+        this.itemDetailsId.set(purchaseDetails.getItemDetails().getIdPk());
+        this.itemName.set(purchaseDetails.getItemDetails().getItem().getItemName());
+        this.barcode.set(purchaseDetails.getItemDetails().getItem().getBarcode());
         this.purchase.set(purchaseDetails.getPurchase().getPurchaseNumber());
         this.mrp.set(purchaseDetails.getMrp());
         this.caseQuantity.set(purchaseDetails.getCaseQuantity());

@@ -19,20 +19,20 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "distributor", catalog = "storedb")
-public class ItemDistributor implements java.io.Serializable {
+public class Distributor implements java.io.Serializable {
 
 	private Integer idPk;
 	private Users users;
-	private int name;  
+	private String name;  
 	private String address;
 	private int phoneNumber;
 	private Date modifiedDate;
 	private Set<Purchase> purchases = new HashSet<Purchase>(0);
 
-	public ItemDistributor() {
+	public Distributor() {
 	}
 
-	public ItemDistributor(Users users, int name, String address, int phoneNumber,
+	public Distributor(Users users, String name, String address, int phoneNumber,
 			Date modifiedDate) {
 		this.users = users;
 		this.name = name;
@@ -41,7 +41,7 @@ public class ItemDistributor implements java.io.Serializable {
 		this.modifiedDate = modifiedDate;
 	}
 
-	public ItemDistributor(Users users, int name, String address, int phoneNumber,
+	public Distributor(Users users, String name, String address, int phoneNumber,
 			Date modifiedDate, Set purchases) {
 		this.users = users;
 		this.name = name;
@@ -73,11 +73,11 @@ public class ItemDistributor implements java.io.Serializable {
 	}
 
 	@Column(name = "name", nullable = false)
-	public int getName() {
+	public String getName() {
 		return this.name;
 	}
 
-	public void setName(int name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 

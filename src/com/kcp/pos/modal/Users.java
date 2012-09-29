@@ -27,7 +27,7 @@ public class Users implements java.io.Serializable {
 	private String username;
 	private String password;
 	private int userState;
-	private Set<ItemDistributor> distributors = new HashSet<ItemDistributor>(0);
+	private Set<Distributor> distributors = new HashSet<Distributor>(0);
 	private Set<Items> itemses = new HashSet<Items>(0);
 	private Set<Invoice> invoices = new HashSet<Invoice>(0);
 	private Set<Stocks> stockses = new HashSet<Stocks>(0);
@@ -129,11 +129,11 @@ public class Users implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "users")
-	public Set<ItemDistributor> getDistributors() {
+	public Set<Distributor> getDistributors() {
 		return this.distributors;
 	}
 
-	public void setDistributors(Set<ItemDistributor> distributors) {
+	public void setDistributors(Set<Distributor> distributors) {
 		this.distributors = distributors;
 	}
 

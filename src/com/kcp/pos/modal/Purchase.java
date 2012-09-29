@@ -22,35 +22,27 @@ import javax.persistence.TemporalType;
 public class Purchase implements java.io.Serializable {
 
 	private Integer idPk;
-	private ItemDistributor distributor;
+	private Distributor distributor;
 	private Users users;
 	private int purchaseNumber;
-	private Date receivedDate;
+	//private Date receivedDate;
 	private Date modifiedDate;
 	private Set<PurchaseDetails> purchaseDetailses = new HashSet<PurchaseDetails>(0);
 
 	public Purchase() {
 	}
 
-	public Purchase(ItemDistributor distributor, Users users, int purchaseNumber,
-			Date receivedDate, Date modifiedDate) {
-		this.distributor = distributor;
-		this.users = users;
-		this.purchaseNumber = purchaseNumber;
-		this.receivedDate = receivedDate;
-		this.modifiedDate = modifiedDate;
-	}
+    public Purchase(Integer idPk, Distributor distributor, Users users, int purchaseNumber, Date modifiedDate) {
+        this.idPk = idPk;
+        this.distributor = distributor;
+        this.users = users;
+        this.purchaseNumber = purchaseNumber;
+        this.modifiedDate = modifiedDate;
+    }
 
-	public Purchase(ItemDistributor distributor, Users users, int purchaseNumber,
-			Date receivedDate, Date modifiedDate, Set purchaseDetailses) {
-		this.distributor = distributor;
-		this.users = users;
-		this.purchaseNumber = purchaseNumber;
-		this.receivedDate = receivedDate;
-		this.modifiedDate = modifiedDate;
-		this.purchaseDetailses = purchaseDetailses;
-	}
+	
 
+	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id_pk", unique = true, nullable = false)
@@ -64,11 +56,11 @@ public class Purchase implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "distibutor_id_fk", nullable = false)
-	public ItemDistributor getDistributor() {
+	public Distributor getDistributor() {
 		return this.distributor;
 	}
 
-	public void setDistributor(ItemDistributor distributor) {
+	public void setDistributor(Distributor distributor) {
 		this.distributor = distributor;
 	}
 
@@ -91,7 +83,7 @@ public class Purchase implements java.io.Serializable {
 		this.purchaseNumber = purchaseNumber;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
+	/*@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "received_date", nullable = false, length = 19)
 	public Date getReceivedDate() {
 		return this.receivedDate;
@@ -99,7 +91,7 @@ public class Purchase implements java.io.Serializable {
 
 	public void setReceivedDate(Date receivedDate) {
 		this.receivedDate = receivedDate;
-	}
+	}*/
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "modified_date", nullable = false, length = 19)

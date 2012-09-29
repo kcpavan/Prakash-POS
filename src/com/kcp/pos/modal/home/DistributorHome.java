@@ -1,7 +1,7 @@
 package com.kcp.pos.modal.home;
 
 
-import com.kcp.pos.modal.ItemDistributor;
+import com.kcp.pos.modal.Distributor;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.commons.logging.Log;
@@ -20,7 +20,7 @@ public class DistributorHome {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	public void persist(ItemDistributor transientInstance) {
+	public void persist(Distributor transientInstance) {
 		log.debug("persisting Distributor instance");
 		try {
 			entityManager.persist(transientInstance);
@@ -31,7 +31,7 @@ public class DistributorHome {
 		}
 	}
 
-	public void remove(ItemDistributor persistentInstance) {
+	public void remove(Distributor persistentInstance) {
 		log.debug("removing Distributor instance");
 		try {
 			entityManager.remove(persistentInstance);
@@ -42,10 +42,10 @@ public class DistributorHome {
 		}
 	}
 
-	public ItemDistributor merge(ItemDistributor detachedInstance) {
+	public Distributor merge(Distributor detachedInstance) {
 		log.debug("merging Distributor instance");
 		try {
-			ItemDistributor result = entityManager.merge(detachedInstance);
+			Distributor result = entityManager.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -54,10 +54,10 @@ public class DistributorHome {
 		}
 	}
 
-	public ItemDistributor findById(Integer id) {
+	public Distributor findById(Integer id) {
 		log.debug("getting Distributor instance with id: " + id);
 		try {
-			ItemDistributor instance = entityManager.find(ItemDistributor.class, id);
+			Distributor instance = entityManager.find(Distributor.class, id);
 			log.debug("get successful");
 			return instance;
 		} catch (RuntimeException re) {

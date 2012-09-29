@@ -151,7 +151,6 @@ public class InvoiceController implements Initializable {
 
         String invoiceNum = invoiceNumber.getText();
 
-
         if (invoiceNum == null || invoiceNum.equalsIgnoreCase("")) {
             invoice = new Invoice();
             invoice.setModifiedDate(new Date());

@@ -54,6 +54,7 @@ public class InvoiceDetailsDaoImpl implements InvoiceDetailsDao {
 	
     }
     
+    
      public InvoiceDetails findByInvoiceItemId(Integer invoiceId,Integer itemId) 
     {
         log.debug("getting InvoiceDetails instance with ItemId: " + itemId);

@@ -4,7 +4,7 @@
  */
 package com.kcp.pos.data;
 
-import com.kcp.pos.modal.ItemDistributor;
+import com.kcp.pos.modal.Distributor;
 import com.kcp.pos.modal.Purchase;
 import com.kcp.pos.modal.PurchaseDetails;
 import com.kcp.pos.modal.Users;
@@ -89,7 +89,7 @@ public class PurchaseDo {
         this.distributor.set(purchase.getDistributor().getIdPk());
         this.users.set(purchase.getUsers().getIdPk());
         this.purchaseNumber.set(purchase.getPurchaseNumber());
-        this.receivedDate.set(purchase.getReceivedDate().toString());
+      //  this.receivedDate.set(purchase.getReceivedDate().toString());
         this.modifiedDate.set(purchase.getModifiedDate().toString());
     }
         

@@ -4,16 +4,24 @@
  */
 package com.kcp.pos;
 
+import com.kcp.pos.dao.DistributorDao;
+import com.kcp.pos.dao.UserDao;
 import com.kcp.pos.data.InvoiceDetailsDo;
 import com.kcp.pos.data.ItemDo;
 import com.kcp.pos.data.PurchaseDetailsDo;
+import com.kcp.pos.modal.Invoice;
+import com.kcp.pos.modal.InvoiceDetails;
+import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
+import com.kcp.pos.modal.Purchase;
+import com.kcp.pos.modal.PurchaseDetails;
 import com.kcp.pos.service.InvoiceService;
 import com.kcp.pos.service.ItemService;
 import com.kcp.pos.service.PurchaseService;
 import com.kcp.pos.utils.KCPUtils;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +44,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -127,16 +136,16 @@ public class PurchaseController implements Initializable {
     public void setPurchaseDetails(List<PurchaseDetailsDo> purchaseDetails) {
         this.purchaseDetails = purchaseDetails;
     }
-    PurchaseService purchaseService = new PurchaseService();
+    
+     @Autowired
+    private PurchaseService purchaseService;
+     Purchase purchase=null;
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
-
-        PurchaseDetailsDo purchaseDetails = new PurchaseDetailsDo();
-
-
+         purchaseService = (PurchaseService) ApplicationMain.springContext.getBean("purchaseService");
+        PurchaseDetails purchaseDetails = new PurchaseDetails();
         Object selectedItem = itemName.getSelectionModel().getSelectedItem();
-
         if (selectedItem == null) {
             label.setText("Please select item");
             animateMessage();
@@ -146,66 +155,84 @@ public class PurchaseController implements Initializable {
             return;
         }
 
+        UserDao userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
         String purchaseId = purchaseNumber.getText();
         System.out.println("UI purchase Id:" + purchaseId);
-        /*
-         if (purchaseId == null || KCPUtils.isNullString(purchaseId)|| Integer.parseInt(purchaseId)==0)
-         {
-         purchaseId = new Integer(purchaseService.getPurchaseId()).toString();
-         purchaseNumber.setText(purchaseId);
-         System.out.println("new purchase number:" + purchaseId);
-         }
 
-         Items item=itemDao.getItemByName(selectedItem.toString());
+        DistributorDao distributorDao = (DistributorDao) ApplicationMain.springContext.getBean("distributorDaoImpl");
+       
+        if (purchaseId == null || KCPUtils.isNullString(purchaseId) || Integer.parseInt(purchaseId) == 0) {
+            purchase = new Purchase();
+            purchase.setModifiedDate(new Date());
+            purchase.setUsers(userDao.findById(1));
+            purchase.setDistributor(distributorDao.findById(1));
+            purchaseService.purchaseSave(purchase);
+
+            purchaseNumber.setText(new Integer(purchase.getIdPk()).toString());
+            System.out.println("new purchase number:" + purchaseId);
+        }
+
+        itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
+         Items item = itemService.getItemByName(selectedItem.toString());
+        ItemDetails itemDetails= itemService.getItemDetailsByItemIdBillingType(item.getIdPk(),1);
         
         
-         purchaseDetails.setPurchaseId(Integer.parseInt(purchaseId));
-         purchaseDetails.setItemId(item.getItemId());
-         purchaseDetails.setMrp(Double.parseDouble(mrp.getText()));
-         purchaseDetails.setCaseQuantity(Integer.parseInt(caseQuantity.getText()));
-        
-         String itemQty = unitsQuantity.getText();
-         if (KCPUtils.isNullString(itemQty)) {
-         label.setText("Please select item quantity");
-         animateMessage();
-         fillDataTable();
 
-         System.out.println("reenter item");
-         return;
-         }
-         purchaseDetails.setUnitsQuantity(Integer.parseInt(unitsQuantity.getText()));
+        
+
+
+
+        
+        purchaseDetails.setPurchase(purchase);
+        purchaseDetails.setItemDetails(itemDetails);
+        purchaseDetails.setMrp(Double.parseDouble(mrp.getText()));
+        purchaseDetails.setCaseQuantity(Integer.parseInt(caseQuantity.getText()));
         
         
-         
-         purchaseDetails.setFreeUnits(Integer.parseInt(freeUnits.getText()));
-
-         purchaseDetails.setBasicRate(Double.parseDouble(basicRate.getText()));
-         purchaseDetails.setGrossAmount(Double.parseDouble(grossAmount.getText()));
-         purchaseDetails.setScheme(Integer.parseInt(scheme.getText()));
-         purchaseDetails.setCd(Double.parseDouble(CD.getText()));
-
-         purchaseDetails.setTaxPercentage(Double.parseDouble(taxPercentage.getText()));
-         purchaseDetails.setTax(Double.parseDouble(taxAmount.getText()));
-         purchaseDetails.setNetAmount(Double.parseDouble(netAmount.getText()));
-
-
-      
-
-
+        
        
 
+        String itemQty = unitsQuantity.getText();
+        if (KCPUtils.isNullString(itemQty)) {
+            label.setText("Please select item quantity");
+            animateMessage();
+            fillDataTable();
 
-       
-         System.out.println("itemQuantity:" + itemQty);
-
-      
-         purchaseService.addPurcaseItem(purchaseDetails);
-        
-      
-         */
+            System.out.println("reenter item");
+            return;
+        }
+        purchaseDetails.setUnitsQuantity(Integer.parseInt(unitsQuantity.getText()));
 
 
-        label.setText("Items Saved");
+
+        purchaseDetails.setFreeUnits(Integer.parseInt(freeUnits.getText()));
+
+        purchaseDetails.setBasicRate(Double.parseDouble(basicRate.getText()));
+        purchaseDetails.setGrossAmount(Double.parseDouble(grossAmount.getText()));
+        purchaseDetails.setScheme(Integer.parseInt(scheme.getText()));
+        purchaseDetails.setCd(Double.parseDouble(CD.getText()));
+
+        purchaseDetails.setTaxPercentage(Double.parseDouble(taxPercentage.getText()));
+        purchaseDetails.setTax(Double.parseDouble(taxAmount.getText()));
+        purchaseDetails.setNetAmount(Double.parseDouble(netAmount.getText()));
+
+
+
+
+
+
+
+
+
+        System.out.println("itemQuantity:" + itemQty);
+
+
+       // purchaseService.addPurcaseItem(purchaseDetails);
+         purchaseService.purchaseDetailsSave(purchaseDetails);
+
+
+          
+                 label.setText("Items Saved");
         animateMessage();
         fillDataTable();
         clearForm();
@@ -309,29 +336,32 @@ public class PurchaseController implements Initializable {
 
     private void fillDataTable() {
 
-        List<PurchaseDetailsDo> purchaseDetailsList=null;
+        List<PurchaseDetailsDo> purchaseDetailsList = null;
         purchaseNumber.getText();
-        if (!KCPUtils.isNullString(purchaseNumber.getText())) 
-        {
+        if (!KCPUtils.isNullString(purchaseNumber.getText())) {
 
 
             purchaseDetailsList = purchaseService.getPurchaseDetails(Integer.parseInt(purchaseNumber.getText()));
 
 
             dataTableData.setAll(purchaseDetailsList);
-        }
-        else
-        {
-            purchaseDetailsList=new ArrayList<PurchaseDetailsDo>();
+        } else {
+            purchaseDetailsList = new ArrayList<PurchaseDetailsDo>();
         }
 
 
 
-        
 
-       
 
-      
+
+
+
         dataTableData.setAll(purchaseDetailsList);
+    }
+    private ApplicationMain application;
+
+    void setApp(ApplicationMain aThis) {
+        System.out.println("aThis" + aThis);
+        this.application = aThis;
     }
 }

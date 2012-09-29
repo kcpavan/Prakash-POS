@@ -25,8 +25,10 @@ import javax.persistence.Table;
 public class PurchaseDetails implements java.io.Serializable {
 
     private Integer idPk;
-    private Items items;
+    //private Items items;
+    private ItemDetails itemDetails;
     private Purchase purchase;
+    
     private Double mrp;
     private Integer caseQuantity;
     private Integer unitsQuantity;
@@ -42,9 +44,9 @@ public class PurchaseDetails implements java.io.Serializable {
     public PurchaseDetails() {
     }
 
-    public PurchaseDetails(Integer idPk, Items items, Purchase purchase, Double mrp, Integer caseQuantity, Integer unitsQuantity, Integer freeUnits, Double basicRate, Double grossAmount, Integer scheme, Double cd, Double taxPercentage, Double tax, Double netAmount) {
+    public PurchaseDetails(Integer idPk, ItemDetails itemDetails, Purchase purchase, Double mrp, Integer caseQuantity, Integer unitsQuantity, Integer freeUnits, Double basicRate, Double grossAmount, Integer scheme, Double cd, Double taxPercentage, Double tax, Double netAmount) {
         this.idPk = idPk;
-        this.items = items;
+        this.itemDetails = itemDetails;
         this.purchase = purchase;
         this.mrp = mrp;
         this.caseQuantity = caseQuantity;
@@ -59,6 +61,8 @@ public class PurchaseDetails implements java.io.Serializable {
         this.netAmount = netAmount;
     }
 
+   
+
     
 
     @Id
@@ -72,7 +76,7 @@ public class PurchaseDetails implements java.io.Serializable {
         this.idPk = idPk;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id_fk", nullable = false)
     public Items getItems() {
         return this.items;
@@ -80,9 +84,11 @@ public class PurchaseDetails implements java.io.Serializable {
 
     public void setItems(Items items) {
         this.items = items;
-    }
+    }*/
+    
+    
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "purchase_id_fk", nullable = false)
     public Purchase getPurchase() {
         return this.purchase;
@@ -191,6 +197,18 @@ public class PurchaseDetails implements java.io.Serializable {
         this.netAmount = netAmount;
     }
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "item_details_id_fk", nullable = false)
+    public ItemDetails getItemDetails() {
+        return itemDetails;
+    }
+
+    public void setItemDetails(ItemDetails itemDetails) {
+        this.itemDetails = itemDetails;
+    }
+
+    
+    
 
     
 }

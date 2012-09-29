@@ -107,7 +107,7 @@ CONSTRAINT fk_modified_user
 drop table if exists storedb.distributor;
 create table storedb.distributor
 (id_pk integer primary key not null auto_increment,
-name integer not null,
+name varchar(60) not null,
 address varchar(100) not null,
 phone_number integer(12) not null,
 modified_by int not null,
@@ -141,7 +141,7 @@ drop table if exists storedb.purchase_details;
 create table storedb.purchase_details
 (id_pk integer primary key not null auto_increment,
 purchase_id_fk integer not null,
-item_id_fk integer not null,
+item_details_id_fk integer not null,
 mrp double not null,
 case_quantity integer null,
 units_quantity integer null,
@@ -155,8 +155,8 @@ tax double not null,
 net_amount double not null,
 
 CONSTRAINT fk_purchasedet_item_id
-	FOREIGN KEY(`item_id_fk`) 
-	REFERENCES `items`(`id_pk`),
+	FOREIGN KEY(`item_details_id_fk`) 
+	REFERENCES `item_details`(`id_pk`),
 CONSTRAINT fk_purchase_id
 	FOREIGN KEY(`purchase_id_fk`) 
 	REFERENCES `purchase`(`id_pk`)
@@ -298,3 +298,12 @@ insert into storedb.item_category
 
 insert into storedb.billing_type
 (type_desc) values('retail'),('wholesale');
+
+insert into 
+storedb.distributor;
+(name ,
+address,
+phone_number,
+modified_by,
+modified_date)
+('Jaysree','abc xyz','12343','1','2012-09-20 21:21:04'));

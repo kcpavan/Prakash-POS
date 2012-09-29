@@ -15,11 +15,13 @@ import com.kcp.pos.modal.PurchaseDetails;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Prakash
  */
+@Service
 public class PurchaseService {
     @Autowired
     private PurchaseDao purchaseDao;
@@ -35,8 +37,8 @@ public class PurchaseService {
         purchaseDao.persist(purchase);
     }
 
-  public void purchaseDetailsSave(Purchase purchase){
-        purchaseDao.persist(purchase);
+  public void purchaseDetailsSave(PurchaseDetails purchaseDetails){
+        purchaseDetailsDao.persist(purchaseDetails);
     }
 
   
