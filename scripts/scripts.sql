@@ -33,9 +33,9 @@ category_name varchar(250) not null);
 drop table if exists storedb.uom ;
 create table storedb.uom
 (idpk integer not null auto_increment primary key,
-uom varchar(50) not null);
+uom_desc varchar(50) not null);
 
-insert into storedb.uom(uom) values('kg'),('gm'),('pkt'),('box'),('case'),('doz'),('sheet');
+insert into storedb.uom(uom_desc) values('kg'),('gm'),('pkt'),('box'),('case'),('doz'),('sheet');
 
 
 drop table if exists storedb.items;

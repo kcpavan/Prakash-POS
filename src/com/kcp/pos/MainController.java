@@ -9,18 +9,22 @@ import com.kcp.pos.dao.BillingTypeDaoImpl;
 import com.kcp.pos.dao.ItemCategoryDao;
 import com.kcp.pos.dao.ItemDao;
 import com.kcp.pos.dao.ItemDetailsDao;
+import com.kcp.pos.dao.UOMDao;
+import com.kcp.pos.dao.UOMDaoImpl;
 import com.kcp.pos.dao.UserDao;
 import com.kcp.pos.dao.commonDao;
 import com.kcp.pos.dao.commonDaoImpl;
 import com.kcp.pos.data.ItemCategoryDo;
 import com.kcp.pos.data.ItemDetailsDo;
 import com.kcp.pos.data.ItemDo;
+import com.kcp.pos.data.UOMDo;
 import com.kcp.pos.modal.BillingType;
 import com.kcp.pos.modal.ItemCategory;
 import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.service.ItemCategoryService;
 import com.kcp.pos.service.ItemService;
+import com.kcp.pos.service.UOMService;
 import com.kcp.pos.utils.KCPUtils;
 import java.net.URL;
 import java.util.ArrayList;
@@ -69,7 +73,7 @@ public class MainController implements Initializable {
     @FXML
     private CheckBox hasGift = new CheckBox();
     @FXML
-    private ChoiceBox weightUnit = new ChoiceBox();
+    private ChoiceBox uom = new ChoiceBox();
     @FXML
     private ChoiceBox category = new ChoiceBox();
     @FXML
@@ -172,7 +176,7 @@ public class MainController implements Initializable {
         itemCategoryService = (ItemCategoryService) ApplicationMain.springContext.getBean("itemCategoryService");
         itemCategoryService.getItemCategoryByName((String) selectedItem);
 
-        item.setUom((String) weightUnit.getSelectionModel().getSelectedItem());
+        item.setUom((String) uom.getSelectionModel().getSelectedItem());
         item.setModifiedDate(new Date());
         // Object selectedItem = category.getSelectionModel().getSelectedItem();
         System.out.println("selectedItem:" + selectedItem);
@@ -205,19 +209,34 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        weightUnit.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
-        weightUnit.getItems().addAll("choose", "mg", "cg", "dg", "g", "kg");
+        uom.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
+        //uom.getItems().addAll("choose", "mg", "cg", "dg", "g", "kg");
         category.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
 
         ItemCategoryService itemCategoryService =
                 (ItemCategoryService) ApplicationMain.springContext.getBean("itemCategoryService");
         List<ItemCategoryDo> itemCategoryList = itemCategoryService.getAllItems();
+        
+        
 
         for (ItemCategoryDo item : itemCategoryList) {
 
             category.getItems().add(item.getItemName());
         }
 
+        UOMDao uOMDao = new UOMDaoImpl();
+        
+         UOMService uOMService =
+                (UOMService) ApplicationMain.springContext.getBean("UOMService");
+        
+        for (UOMDo uOMDo : uOMService.getAllUOM()) {
+
+            uom.getItems().add(uOMDo.getUomDesc());
+        }
+        
+        
+        
+        
         dataTable.setItems(dataTableData);
         itemBarcodeCol.setCellValueFactory(
                 new PropertyValueFactory<ItemDo, String>("barcode"));
