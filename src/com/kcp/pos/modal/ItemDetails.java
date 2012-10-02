@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -47,12 +48,18 @@ public class ItemDetails implements Serializable{
     
     private double retailBillingPrice;
     private double wholesaleBillingPrice;
+    private double tax;
     
     private BillingType billingType;
+    private UOM uom;
+    //private double actualPrice;
+    //private double sellingPrice;
+    private boolean hasfree;
     private Date modifiedDate;
     private Boolean enabled;
+    private static final Logger LOG = Logger.getLogger(ItemDetails.class.getName());
 
-    public ItemDetails(Integer idPk, Users users, Items item, double mrp, double actualPrice, double retailBillingPrice, double wholesaleBillingPrice, BillingType billingType, Date modifiedDate, Boolean enabled) {
+    public ItemDetails(Integer idPk, Users users, Items item, double mrp, double actualPrice, double retailBillingPrice, double wholesaleBillingPrice, double tax, BillingType billingType, UOM uom, boolean hasfree, Date modifiedDate, Boolean enabled) {
         this.idPk = idPk;
         this.users = users;
         this.item = item;
@@ -60,10 +67,25 @@ public class ItemDetails implements Serializable{
         this.actualPrice = actualPrice;
         this.retailBillingPrice = retailBillingPrice;
         this.wholesaleBillingPrice = wholesaleBillingPrice;
+        this.tax = tax;
         this.billingType = billingType;
+        this.uom = uom;
+        this.hasfree = hasfree;
         this.modifiedDate = modifiedDate;
         this.enabled = enabled;
     }
+
+    @Column(name = "tax", nullable = false, length = 19)
+    public double getTax() {
+        return tax;
+    }
+
+    public void setTax(double tax) {
+        this.tax = tax;
+    }
+
+   
+    
     
 
     
@@ -176,7 +198,25 @@ public class ItemDetails implements Serializable{
         this.wholesaleBillingPrice = wholesaleBillingPrice;
     }
     
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "uom_id_fk")
+    public UOM getUom() {
+        return this.uom;
+    }
+
+    public void setUom(UOM uom) {
+        this.uom = uom;
+    }
     
+     @Column(name = "hasfree", nullable = false)
+    public boolean isHasfree() {
+        return this.hasfree;
+    }
+
+    public void setHasfree(boolean hasfree) {
+        this.hasfree = hasfree;
+    }
+
     
     
 }

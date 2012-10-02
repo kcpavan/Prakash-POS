@@ -5,10 +5,7 @@
 package com.kcp.pos;
 
 import com.kcp.pos.dao.BillingTypeDao;
-import com.kcp.pos.dao.BillingTypeDaoImpl;
 import com.kcp.pos.dao.ItemCategoryDao;
-import com.kcp.pos.dao.ItemDao;
-import com.kcp.pos.dao.ItemDetailsDao;
 import com.kcp.pos.dao.UOMDao;
 import com.kcp.pos.dao.UOMDaoImpl;
 import com.kcp.pos.dao.UserDao;
@@ -18,8 +15,6 @@ import com.kcp.pos.data.ItemCategoryDo;
 import com.kcp.pos.data.ItemDetailsDo;
 import com.kcp.pos.data.ItemDo;
 import com.kcp.pos.data.UOMDo;
-import com.kcp.pos.modal.BillingType;
-import com.kcp.pos.modal.ItemCategory;
 import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.service.ItemCategoryService;
@@ -29,7 +24,6 @@ import com.kcp.pos.utils.KCPUtils;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
@@ -81,6 +75,8 @@ public class MainController implements Initializable {
     @FXML
     private TextField wholesalePrice;
     @FXML
+    private TextField tax;
+    @FXML
     public TableView<ItemDetailsDo> dataTable;
     //private final ObservableList<ItemDo> dataTableData = FXCollections.observableArrayList();
     private final ObservableList<ItemDetailsDo> dataTableData = FXCollections.observableArrayList();
@@ -100,10 +96,13 @@ public class MainController implements Initializable {
     private TableColumn<ItemDetailsDo, Double> itemRetailBillingPriceCol;
     @FXML
     private TableColumn<ItemDetailsDo, Double> itemWholesaleBillingPriceCol;
+    
     @FXML
-    private TableColumn<ItemDo, Double> itemHasGiftCol;
+    private TableColumn<ItemDetailsDo, Double> taxCol;
+    
     @FXML
-    private TableColumn<ItemDo, Double> itemTotalAmountsCol;
+    private TableColumn<ItemDetailsDo, Double> itemHasGiftCol;
+ 
     @Autowired
     private ItemService itemService;
 
@@ -157,6 +156,7 @@ public class MainController implements Initializable {
         itemDetails.setMrp(Double.valueOf(itemMrp.getText()));
         item.setWeight(Double.valueOf(itemWeight.getText()));
         itemDetails.setActualPrice(Double.valueOf(actualPrice.getText()));
+        itemDetails.setHasfree(Boolean.valueOf(hasGift.getText()));
         commonDao comDao = new commonDaoImpl();
         /*List list = comDao.getLookUpValues(
          ItemCategory.class, "typeDesc");
@@ -178,7 +178,7 @@ public class MainController implements Initializable {
 
         
         UOMService uOMService=(UOMService) ApplicationMain.springContext.getBean("UOMService");
-        uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem());
+        
        
         item.setModifiedDate(new Date());
         // Object selectedItem = category.getSelectionModel().getSelectedItem();
@@ -186,12 +186,23 @@ public class MainController implements Initializable {
         ItemCategoryDao itemCategoryDao = (ItemCategoryDao) ApplicationMain.springContext.getBean("itemCategoryDaoImpl");
         item.setItemCategory(itemCategoryDao.findByName(selectedItem.toString()));
 
+        
         UserDao userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
         item.setUsers(userDao.findById(1));
 
         BillingTypeDao billingTypeDao = (BillingTypeDao) ApplicationMain.springContext.getBean("billingTypeDaoImpl");
 
         itemDetails.setBillingType(billingTypeDao.findByName("retail"));
+        
+      
+        System.out.println("UOM:"+uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()).getUomDesc());
+       itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
+       
+        for (UOMDo uOMDo : uOMService.getAllUOM()) {
+            System.out.println("size:"+uOMService.getAllUOM().size());
+            uom.getItems().add(uOMDo.getUomDesc());
+        }
+        
         itemDetails.setRetailBillingPrice(Double.valueOf(retailPrice.getText()));
         itemDetails.setWholesaleBillingPrice(Double.valueOf(wholesalePrice.getText()));
         itemDetails.setModifiedDate(new Date());
@@ -227,13 +238,13 @@ public class MainController implements Initializable {
             category.getItems().add(item.getItemName());
         }
 
-        UOMDao uOMDao = new UOMDaoImpl();
+       
         
          UOMService uOMService =
                 (UOMService) ApplicationMain.springContext.getBean("UOMService");
         
         for (UOMDo uOMDo : uOMService.getAllUOM()) {
-
+            System.out.println("size:"+uOMService.getAllUOM().size());
             uom.getItems().add(uOMDo.getUomDesc());
         }
         
@@ -252,13 +263,12 @@ public class MainController implements Initializable {
         itemActualPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("actualPrice"));
         itemRetailBillingPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("retailBillingPrice"));
         itemWholesaleBillingPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("wholesaleBillingPrice"));
-        itemHasGiftCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("hasGift"));
-
-
-
+        taxCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("tax"));
+        itemHasGiftCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("hasGift"));
         fillDataTable();
     }
 
+    
     private void clearForm() {
         itemName.clear();
         itemBarcode.clear();
@@ -267,6 +277,7 @@ public class MainController implements Initializable {
         actualPrice.clear();
         retailPrice.clear();
         wholesalePrice.clear();
+        tax.clear();
 
     }
     private ApplicationMain application;

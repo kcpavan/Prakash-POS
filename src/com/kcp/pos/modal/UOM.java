@@ -20,9 +20,9 @@ import javax.persistence.NamedQuery;
 @Entity
 @Table(name = "uom", catalog = "storedb")
 @NamedQueries({
-    @NamedQuery(name = "UOM.findAll", query = "SELECT c FROM UOM c")
+    @NamedQuery(name = "UOM.findAll", query = "SELECT c FROM UOM c"),
+    @NamedQuery(name = "UOM.findByName", query = "SELECT i FROM UOM i where i.uomDesc=:name"),})
     
-})
 public class UOM {
     
     Integer idPk;

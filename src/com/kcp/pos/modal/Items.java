@@ -34,10 +34,7 @@ public class Items implements java.io.Serializable {
     private String barcode;
     //private double mrp;
     private double weight;
-    private UOM uom;
-    //private double actualPrice;
-    //private double sellingPrice;
-    private boolean hasfree;
+    
     private Date modifiedDate;
     //private Set<Stocks> stockses = new HashSet<Stocks>(0);
     //private Set<PurchaseDetails> purchaseDetailses = new HashSet<PurchaseDetails>(0);
@@ -113,15 +110,7 @@ public class Items implements java.io.Serializable {
         this.weight = weight;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "uom_id_fk")
-    public UOM getUom() {
-        return this.uom;
-    }
-
-    public void setUom(UOM uom) {
-        this.uom = uom;
-    }
+    
 
     /*@Column(name = "actual_price", nullable = false, precision = 22, scale = 0)
      public double getActualPrice() {
@@ -140,15 +129,7 @@ public class Items implements java.io.Serializable {
      public void setSellingPrice(double sellingPrice) {
      this.sellingPrice = sellingPrice;
      }*/
-    @Column(name = "hasfree", nullable = false)
-    public boolean isHasfree() {
-        return this.hasfree;
-    }
-
-    public void setHasfree(boolean hasfree) {
-        this.hasfree = hasfree;
-    }
-
+   
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_date", nullable = false, length = 19)
     public Date getModifiedDate() {

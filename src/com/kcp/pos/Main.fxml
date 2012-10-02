@@ -42,6 +42,7 @@
                             <TableColumn prefWidth="75.0" text="Retail Price" fx:id="itemRetailBillingPriceCol" />
                             <TableColumn prefWidth="75.0" text="Wholesale Price" fx:id="itemWholesaleBillingPriceCol" />
                             <TableColumn prefWidth="75.0" text="Has Gift" fx:id="itemHasGiftCol" />
+                            <TableColumn prefWidth="75.0" text="Column X" fx:id="taxCol" />
                           </columns>
                         </TableView>
                       </children>
@@ -74,7 +75,7 @@
                             <TextField fx:id="itemMrp" prefHeight="26.0" prefWidth="231.0" promptText="M.R.P" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                             <TextField fx:id="itemWeight" prefHeight="26.0" prefWidth="231.0" promptText="Weight" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                             <TextField fx:id="actualPrice" prefHeight="25.999900000002526" prefWidth="231.0" promptText="Actual Price" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                            <ChoiceBox fx:id="weightUnit" onInputMethodTextChanged="#handleButtonAction" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                            <ChoiceBox id="weightUnit" fx:id="uom" onInputMethodTextChanged="#handleButtonAction" GridPane.columnIndex="1" GridPane.rowIndex="4">
                               <items>
                                 <FXCollections fx:factory="observableArrayList">
                                   <String fx:value="Item 1" />
@@ -135,6 +136,8 @@
                         </GridPane>
                         <Button fx:id="button" layoutX="595.0" layoutY="335.0" onAction="#handleButtonAction" text="Save" />
                         <Label fx:id="label" layoutX="445.0" layoutY="345.0" prefHeight="27.0" prefWidth="72.0" text="Label" />
+                        <Label font="$x2" layoutX="387.0" layoutY="286.0" prefHeight="22.0" prefWidth="54.0" text="Tax" />
+                        <TextField fx:id="tax" layoutX="534.0" layoutY="288.0" prefWidth="149.0" />
                       </children>
                     </AnchorPane>
                   </content>

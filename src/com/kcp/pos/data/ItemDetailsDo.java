@@ -11,6 +11,7 @@ import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.modal.Users;
 import java.util.Date;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -30,6 +31,9 @@ public class ItemDetailsDo {
     private SimpleDoubleProperty actualPrice = new SimpleDoubleProperty();
     //private SimpleDoubleProperty sellingPrice=new SimpleDoubleProperty();
     private SimpleDoubleProperty wholesalePrice = new SimpleDoubleProperty();
+    private SimpleDoubleProperty tax = new SimpleDoubleProperty();
+    private SimpleBooleanProperty hasFree = new SimpleBooleanProperty();
+    
     private SimpleDoubleProperty retailPrice = new SimpleDoubleProperty();
     private SimpleIntegerProperty itemId = new SimpleIntegerProperty();
     private SimpleIntegerProperty startRange = new SimpleIntegerProperty();
@@ -44,15 +48,18 @@ public class ItemDetailsDo {
         this.barcode.set(itemDetails.getItem().getBarcode());
 //        this.mrp.set(items.getMrp());
         this.weight.set(itemDetails.getItem().getWeight());
-        this.uom.set(itemDetails.getItem().getUom().getUomDesc());
+        this.uom.set(itemDetails.getUom().getUomDesc());
         this.itemId.set(itemDetails.getItem().getIdPk());
         /*this.startRange.set(itemDetails.getStartRange());
          this.endRange.set(itemDetails.getEndRange());*/
         this.retailBillingPrice.set(itemDetails.getRetailBillingPrice());
         this.wholesaleBillingPrice.set(itemDetails.getWholesaleBillingPrice());
+        this.tax.set(itemDetails.getTax());
         this.mrp.set(itemDetails.getMrp());
         this.actualPrice.set(itemDetails.getActualPrice());
-        this.billingTypeId.set(itemDetails.getBillingType().getIdPk());
+        this.hasFree.set(itemDetails.isHasfree());
+        
+        
 
 
         /*this.startRange2.set(retailBillingPrice.getStartRange2());
@@ -245,4 +252,23 @@ public class ItemDetailsDo {
     public void setRetailPrice(SimpleDoubleProperty retailPrice) {
         this.retailPrice = retailPrice;
     }
+
+    public Double getTax() {
+        return tax.get();
+    }
+
+    public void setTax(SimpleDoubleProperty tax) {
+        this.tax = tax;
+    }
+
+    public Boolean getHasFree() {
+        return hasFree.get();
+    }
+
+    public void setHasFree(SimpleBooleanProperty hasFree) {
+        this.hasFree = hasFree;
+    }
+    
+    
+    
 }
