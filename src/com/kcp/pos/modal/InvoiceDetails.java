@@ -19,6 +19,9 @@ import javax.persistence.Table;
     @NamedQuery(name = "InvoiceDetails.findByInvoiceItemId", 
         query = "SELECT c FROM InvoiceDetails c "
         + "WHERE c.itemDetails.idPk = :itemId and c.invoice.idPk=:invoiceId"),
+    @NamedQuery(name = "InvoiceDetails.findByItemId", 
+        query = "SELECT c FROM InvoiceDetails c "
+        + "WHERE c.itemDetails.idPk = :itemId ")
     
 })
 public class InvoiceDetails implements java.io.Serializable {

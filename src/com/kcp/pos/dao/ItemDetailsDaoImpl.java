@@ -94,6 +94,25 @@ class ItemDetailsDaoImpl implements ItemDetailsDao{
 		}
 	
         }
+        
+         public List<ItemDetails>  findAllByItemId(Integer id) {
+             
+             log.debug("getting Items instance with id: " + id);
+		try {
+                    Query instance = entityManager.createNamedQuery("ItemDetails.findAllById")
+                                .setParameter("id", id);
+			log.debug("get successful");
+			List<ItemDetails> elementList =new ArrayList<ItemDetails>();
+                        elementList = instance.getResultList();
+                       // return elementList.isEmpty() ? null : elementList.get(0).getBillingPrice();
+                         return elementList;
+                        
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+             
+         }
         public Double findBillingPriceByItemId(Integer itemId) {
 		log.debug("getting Items instance with id: " + itemId);
 		try {

@@ -22,7 +22,8 @@
             <TextField layoutX="87.0" layoutY="111.0" prefWidth="200.0" />
             <Button font="$x2" layoutX="321.0" layoutY="108.0" mnemonicParsing="false" prefHeight="22.0" text="search" />
             <Button fx:id="Add" layoutX="468.0" layoutY="144.0" mnemonicParsing="false" onAction="#addItem" prefWidth="97.0" text="Add Item" />
-            <Button fx:id="delButton" layoutX="595.0" layoutY="144.0"  onAction="#deleteItem" mnemonicParsing="false" text="Delete Item" />
+            <Button fx:id="delButton" layoutX="595.0" layoutY="144.0" mnemonicParsing="false" onAction="#deleteItem" text="Delete Item" />
+            <Label fx:id="outputLabel" layoutX="101.0" layoutY="155.0" prefHeight="22.0" prefWidth="166.0" />
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">

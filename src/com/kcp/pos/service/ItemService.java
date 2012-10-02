@@ -4,10 +4,12 @@
  */
 package com.kcp.pos.service;
 
+import com.kcp.pos.ApplicationMain;
 import com.kcp.pos.dao.ItemDao;
 import com.kcp.pos.dao.ItemDetailsDao;
 import com.kcp.pos.data.ItemDetailsDo;
 import com.kcp.pos.data.ItemDo;
+import com.kcp.pos.modal.InvoiceDetails;
 import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public class ItemService {
     
     @Autowired
     private ItemDetailsDao itemDetailsDao;
+    @Autowired
+    private InvoiceService invoiceService;
 
     public ItemDetailsDao getItemDeItemDao() {
         return itemDetailsDao;
@@ -85,13 +89,32 @@ public class ItemService {
         return(new ItemDetailsDo(itemDetailsDao.findByItemIdBillingType(Id,1)));
     }
     
-     public List<ItemDetailsDo> getItemDetailsByItemId(Integer id)
+    public List<ItemDetailsDo> getItemDetailsByItemId(Integer id)
     {
          List<ItemDetailsDo> itemDetailsDos = new ArrayList<ItemDetailsDo>();
         for (ItemDetails items : itemDetailsDao.findByItemId(id)) {
            itemDetailsDos.add(new ItemDetailsDo(items)); 
         }
     return itemDetailsDos;
+       
+    }
+     
+     public Boolean getAllItemDetailsByItemId(Integer id)
+    {
+         List<ItemDetailsDo> itemDetailsDos = new ArrayList<ItemDetailsDo>();
+         invoiceService = (InvoiceService) ApplicationMain.springContext.getBean("invoiceService");
+         List<InvoiceDetails> invoiceDetailses=null;
+         
+        for (ItemDetails items : itemDetailsDao.findAllByItemId(id)) {
+            invoiceDetailses=invoiceService.getInvoiceDetailsById(items.getIdPk());
+            if(invoiceDetailses!=null && invoiceDetailses.size()>0)
+         {
+             System.out.println("item id:"+items.getIdPk()
+                     );
+             return true;
+         }
+        }
+    return false;
        
     }
      

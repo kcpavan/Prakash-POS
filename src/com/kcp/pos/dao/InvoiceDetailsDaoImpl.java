@@ -77,7 +77,26 @@ public class InvoiceDetailsDaoImpl implements InvoiceDetailsDao {
 		}
     }
     
-    /*public List<InvoiceDetails> findByAll() ;
-    public InvoiceDetails findByName(String itemName) ;*/
+   public List<InvoiceDetails> findByItemId(Integer itemId) 
+   {
+       log.debug("getting InvoiceDetails instance with ItemId: " + itemId);
+		try {
+			Query instance = entityManager.createNamedQuery("InvoiceDetails.findByInvoiceItemId")
+                                .setParameter("itemId", itemId);
+			log.debug("get successful");
+                        
+                        List<InvoiceDetails> elementList =new ArrayList<InvoiceDetails>();
+                        elementList = instance.getResultList();
+                        return elementList;
+
+                       /* Object result = instance.getSingleResult();
+                        if(result==null)return null;
+                        return (InvoiceDetails)result;*/
+                        
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+   }
     
 }

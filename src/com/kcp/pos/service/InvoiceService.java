@@ -65,4 +65,10 @@ public class InvoiceService {
      {
          return invoiceDetailsDao.findByInvoiceItemId(invoiceId,itemId);
      }
+     
+     public List<InvoiceDetails> getInvoiceDetailsByItemId(Integer invoiceId,Integer itemId)
+     {
+         return invoiceDetailsDao.findByItemId(itemId);
+     }
+     
 }

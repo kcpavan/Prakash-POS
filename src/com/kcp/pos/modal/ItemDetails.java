@@ -31,7 +31,10 @@ import javax.persistence.TemporalType;
 @Table(name = "item_details", catalog = "storedb")
 @NamedQueries({
     @NamedQuery(name = "ItemDetails.findAll", query = "SELECT i FROM ItemDetails i"),
-    @NamedQuery(name = "ItemDetails.findById", query = "SELECT i FROM ItemDetails i where i.idPk=:id"),
+    @NamedQuery(name = "ItemDetails.findById", query = "SELECT i FROM ItemDetails i where i.idPk=:id"
+        + " and i.enabled=true"),
+    @NamedQuery(name = "ItemDetails.findAllById", query = "SELECT i FROM ItemDetails i where i.idPk=:id"),
+    
     
     @NamedQuery(name = "ItemDetails.findByItemIdBillingType", query = "SELECT i FROM ItemDetails i "
         + "where i.item.idPk=:id and i.billingType.idPk=:type")

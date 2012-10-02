@@ -65,6 +65,9 @@ public class MainController implements Initializable
     @FXML
     private Label label;
     @FXML
+    private Label outputLabel;
+    
+    @FXML
     private TextField itemName;
     @FXML
     private TextField itemBarcode;
@@ -358,6 +361,7 @@ public class MainController implements Initializable
         retailPrice.clear();
         wholesalePrice.clear();
         tax.clear();
+        outputLabel.setText("");
 
     }
     private ApplicationMain application;
@@ -404,7 +408,12 @@ public class MainController implements Initializable
     @FXML
     private void deleteItem(ActionEvent event) {
   
-           dataTableData.get(index.get());
+           if(itemService.getAllItemDetailsByItemId(dataTableData.get(index.get()).getItemId()))
+           {
+               outputLabel.setText("Item already invoiced");
+               return;
+           }
+           
            dataTableData.remove(index.get());
            dataTable.getSelectionModel().clearSelection();
        
