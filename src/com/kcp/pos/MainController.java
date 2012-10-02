@@ -19,9 +19,7 @@ import com.kcp.pos.service.ItemCategoryService;
 import com.kcp.pos.service.ItemService;
 import com.kcp.pos.service.UOMService;
 import com.kcp.pos.utils.KCPUtils;
-import com.sun.prism.impl.Disposer.Record;
-import java.awt.Button;
-import java.awt.Insets;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,20 +33,20 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import javafx.util.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -422,7 +420,20 @@ public class MainController implements Initializable
         }
      
      
-     
+     @FXML
+     public void gotoBarcode(KeyEvent e)
+     {
+         
+          
+          
+         System.out.println("In barcode");
+          
+         if(e.getCode()==KeyCode.ENTER)
+         {
+             System.out.println("Enter key pressed");
+            itemBarcode.requestFocus();
+         }
+     }
 }
 
 

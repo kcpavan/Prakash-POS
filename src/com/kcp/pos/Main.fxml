@@ -74,7 +74,7 @@
                             <Label font="$x1" text="Weight" GridPane.columnIndex="0" GridPane.rowIndex="3" />
                             <Label font="$x1" text="UOM" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                             <Label font="$x1" text="Actual Price" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-                            <TextField fx:id="itemName" prefHeight="26.0" prefWidth="168.0" promptText="Name" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                            <TextField fx:id="itemName" onKeyReleased="#gotoBarcode" prefHeight="26.0" prefWidth="168.0" promptText="Name" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                             <TextField fx:id="itemBarcode" prefHeight="26.0" prefWidth="231.0" promptText="Barcode" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                             <TextField fx:id="itemMrp" prefHeight="26.0" prefWidth="231.0" promptText="M.R.P" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                             <TextField fx:id="itemWeight" prefHeight="26.0" prefWidth="231.0" promptText="Weight" GridPane.columnIndex="1" GridPane.rowIndex="3" />
