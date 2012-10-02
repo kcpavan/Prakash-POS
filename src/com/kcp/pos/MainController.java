@@ -35,6 +35,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -76,6 +78,9 @@ public class MainController implements Initializable {
     private TextField wholesalePrice;
     @FXML
     private TextField tax;
+    
+    @FXML
+    private TextField add;
     @FXML
     public TableView<ItemDetailsDo> dataTable;
     //private final ObservableList<ItemDo> dataTableData = FXCollections.observableArrayList();
@@ -103,6 +108,14 @@ public class MainController implements Initializable {
     @FXML
     private TableColumn<ItemDetailsDo, Double> itemHasGiftCol;
  
+    @FXML
+    private TabPane tabPane;
+    
+    @FXML
+    private Tab itemDetails_tab;
+    
+    
+    
     @Autowired
     private ItemService itemService;
 
@@ -308,4 +321,13 @@ public class MainController implements Initializable {
         }
         dataTableData.setAll(itemDetailsDoList);
     }
+    
+    
+     @FXML
+    private void addItem(ActionEvent event) {
+  
+            tabPane.getSelectionModel().select(itemDetails_tab);
+         //itemDetails_tab
+       
+        }
 }
