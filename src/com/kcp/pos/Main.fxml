@@ -21,7 +21,8 @@
             </Label>
             <TextField layoutX="87.0" layoutY="111.0" prefWidth="200.0" />
             <Button font="$x2" layoutX="321.0" layoutY="108.0" mnemonicParsing="false" prefHeight="22.0" text="search" />
-            <Button fx:id="Add" layoutX="587.0" layoutY="150.0" mnemonicParsing="false" onAction="#addItem" prefWidth="97.0" text="Add Item" />
+            <Button fx:id="Add" layoutX="468.0" layoutY="144.0" mnemonicParsing="false" onAction="#addItem" prefWidth="97.0" text="Add Item" />
+            <Button fx:id="delButton" layoutX="595.0" layoutY="144.0"  onAction="#deleteItem" mnemonicParsing="false" text="Delete Item" />
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
@@ -44,6 +45,7 @@
                             <TableColumn prefWidth="75.0" text="Wholesale Price" fx:id="itemWholesaleBillingPriceCol" />
                             <TableColumn prefWidth="75.0" text="Has Gift" fx:id="itemHasGiftCol" />
                             <TableColumn prefWidth="75.0" text="Tax" fx:id="taxCol" />
+                            <TableColumn prefWidth="75.0" text="Column X" />
                           </columns>
                         </TableView>
                       </children>

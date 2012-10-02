@@ -6,8 +6,6 @@ package com.kcp.pos;
 
 import com.kcp.pos.dao.BillingTypeDao;
 import com.kcp.pos.dao.ItemCategoryDao;
-import com.kcp.pos.dao.UOMDao;
-import com.kcp.pos.dao.UOMDaoImpl;
 import com.kcp.pos.dao.UserDao;
 import com.kcp.pos.dao.commonDao;
 import com.kcp.pos.dao.commonDaoImpl;
@@ -21,12 +19,19 @@ import com.kcp.pos.service.ItemCategoryService;
 import com.kcp.pos.service.ItemService;
 import com.kcp.pos.service.UOMService;
 import com.kcp.pos.utils.KCPUtils;
+import com.sun.prism.impl.Disposer.Record;
+import java.awt.Button;
+import java.awt.Insets;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -34,13 +39,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+
 import javafx.util.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -50,7 +59,8 @@ import org.springframework.stereotype.Component;
  * @author pavankumar
  */
 @Component
-public class MainController implements Initializable {
+public class MainController implements Initializable  
+{
 
     @FXML
     private Label label;
@@ -137,6 +147,30 @@ public class MainController implements Initializable {
         this.itemCategoryService = itemCategoryService;
     }
 
+    
+    private IntegerProperty index = new SimpleIntegerProperty();
+ 
+ 
+    public final double getIndex() {
+        return index.get();
+    }
+ 
+    
+    public final void setIndex(Integer value) {
+        index.set(value);
+    }
+ 
+    
+    public IntegerProperty indexProperty() {
+        return index;
+    }
+    
+    
+    
+   
+    
+        
+    
     @FXML
     private void handleButtonAction(ActionEvent event) {
         itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
@@ -236,6 +270,39 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+    
+        
+        
+        indexProperty().addListener(new ChangeListener() {
+ 
+            @Override
+            public void changed(ObservableValue o, Object oldVal,
+                    Object newVal) {
+                System.out.println("Index has changed!");
+            }
+        });
+        
+        
+        dataTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+ 
+            @Override
+            public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+                ItemDetailsDo item = (ItemDetailsDo) newValue;
+                setIndex(dataTableData.indexOf(newValue));
+ 
+                System.out.println("OK");
+ 
+ 
+ 
+ 
+ 
+            }
+        });
+ 
+ 
+       
+        
         uom.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
         //uom.getItems().addAll("choose", "mg", "cg", "dg", "g", "kg");
         category.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
@@ -329,5 +396,25 @@ public class MainController implements Initializable {
             tabPane.getSelectionModel().select(itemDetails_tab);
          //itemDetails_tab
        
+            
+            
         }
+     
+     
+    @FXML
+    private void deleteItem(ActionEvent event) {
+  
+           dataTableData.get(index.get());
+           dataTableData.remove(index.get());
+           dataTable.getSelectionModel().clearSelection();
+       
+ 
+            
+        }
+     
+     
+     
 }
+
+
+ 
