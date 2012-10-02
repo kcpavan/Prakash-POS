@@ -51,11 +51,11 @@ public class UOMDaoImpl implements UOMDao{
 	}
         
         
-        public UOM findByName(String itemName) 
+        public UOM findByName(String name) 
         {
-            log.debug("getting UOM instance with name: " + itemName);
+            log.debug("getting UOM instance with name: " + name);
 		try {
-			Query instance = entityManager.createNamedQuery("UOM.findByName").setParameter("name", itemName);
+			Query instance = entityManager.createNamedQuery("UOM.findByName").setParameter("name", name);
 			log.debug("get successful");
 			return (UOM)instance.getSingleResult();
 		} catch (RuntimeException re) {

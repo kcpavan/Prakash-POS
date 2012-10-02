@@ -26,7 +26,7 @@ public class ItemDetailsDo {
     private SimpleStringProperty barcode = new SimpleStringProperty();
     private SimpleDoubleProperty mrp = new SimpleDoubleProperty();
     private SimpleDoubleProperty weight = new SimpleDoubleProperty();
-    private SimpleStringProperty weightUnit = new SimpleStringProperty();
+    private SimpleStringProperty uom = new SimpleStringProperty();
     private SimpleDoubleProperty actualPrice = new SimpleDoubleProperty();
     //private SimpleDoubleProperty sellingPrice=new SimpleDoubleProperty();
     private SimpleDoubleProperty wholesalePrice = new SimpleDoubleProperty();
@@ -44,7 +44,7 @@ public class ItemDetailsDo {
         this.barcode.set(itemDetails.getItem().getBarcode());
 //        this.mrp.set(items.getMrp());
         this.weight.set(itemDetails.getItem().getWeight());
-        this.weightUnit.set(itemDetails.getItem().getUom());
+        this.uom.set(itemDetails.getItem().getUom().getUomDesc());
         this.itemId.set(itemDetails.getItem().getIdPk());
         /*this.startRange.set(itemDetails.getStartRange());
          this.endRange.set(itemDetails.getEndRange());*/
@@ -211,11 +211,11 @@ public class ItemDetailsDo {
     }
 
     public String getWeightUnit() {
-        return weightUnit.get();
+        return uom.get();
     }
 
-    public void setWeightUnit(SimpleStringProperty weightUnit) {
-        this.weightUnit = weightUnit;
+    public void setUom(SimpleStringProperty uom) {
+        this.uom = uom;
     }
 
     public Integer getIdPk() {

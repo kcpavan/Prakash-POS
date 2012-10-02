@@ -9,6 +9,7 @@ import com.kcp.pos.dao.UOMDao;
 import com.kcp.pos.data.InvoiceDetailsDo;
 import com.kcp.pos.data.UOMDo;
 import com.kcp.pos.modal.InvoiceDetails;
+import com.kcp.pos.modal.ItemCategory;
 import com.kcp.pos.modal.UOM;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,10 @@ public class UOMService {
     return uOMDos;
     }
    
+        public UOM getUOMByName(String name)
+    {
+        return(uOMDao.findByName(name));
+    }
   
     
 }

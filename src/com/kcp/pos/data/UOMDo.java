@@ -14,8 +14,8 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class UOMDo {
     
-     private SimpleIntegerProperty idPk;
-	private SimpleStringProperty uomDesc;
+     private SimpleIntegerProperty idPk=new SimpleIntegerProperty();
+	private SimpleStringProperty uomDesc=new SimpleStringProperty();
 
     public UOMDo(SimpleIntegerProperty idPk, SimpleStringProperty uomDesc) {
         this.idPk = idPk;

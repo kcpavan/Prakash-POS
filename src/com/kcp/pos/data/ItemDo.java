@@ -20,7 +20,7 @@ public class ItemDo {
 	private SimpleStringProperty barcode=new SimpleStringProperty();
 	private SimpleDoubleProperty mrp=new SimpleDoubleProperty();
 	private SimpleDoubleProperty weight=new SimpleDoubleProperty();
-	private SimpleStringProperty weightUnit=new SimpleStringProperty();
+	private SimpleStringProperty uom=new SimpleStringProperty();
 	private SimpleDoubleProperty actualPrice=new SimpleDoubleProperty();
 	//private SimpleDoubleProperty sellingPrice=new SimpleDoubleProperty();
         private SimpleDoubleProperty wholesalePrice=new SimpleDoubleProperty();
@@ -32,7 +32,8 @@ public class ItemDo {
         this.barcode.set(items.getBarcode());
 //        this.mrp.set(items.getMrp());
         this.weight.set(items.getWeight());
-        this.weightUnit.set(items.getUom());
+        //this.uom.set(items.getUom());
+        this.uom.set(items.getUom().getUomDesc());
        // this.actualPrice.set(items.getActualPrice());
        // this.retailPrice.set(items.geti)
        // this.sellingPrice.set(items.getSellingPrice());
@@ -78,12 +79,12 @@ public class ItemDo {
         this.weight = weight;
     }
 
-    public String getWeightUnit() {
-        return weightUnit.get();
+    public String getUom() {
+        return uom.get();
     }
 
-    public void setWeightUnit(SimpleStringProperty weightUnit) {
-        this.weightUnit = weightUnit;
+    public void setUom(SimpleStringProperty weightUnit) {
+        this.uom = weightUnit;
     }
 
     public double getActualPrice() {

@@ -34,7 +34,7 @@ public class Items implements java.io.Serializable {
     private String barcode;
     //private double mrp;
     private double weight;
-    private String uom;
+    private UOM uom;
     //private double actualPrice;
     //private double sellingPrice;
     private boolean hasfree;
@@ -113,12 +113,13 @@ public class Items implements java.io.Serializable {
         this.weight = weight;
     }
 
-    @Column(name = "uom", nullable = false, length = 50)
-    public String getUom() {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "uom_id_fk")
+    public UOM getUom() {
         return this.uom;
     }
 
-    public void setUom(String uom) {
+    public void setUom(UOM uom) {
         this.uom = uom;
     }
 

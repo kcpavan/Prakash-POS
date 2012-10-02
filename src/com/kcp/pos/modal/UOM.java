@@ -20,7 +20,7 @@ import javax.persistence.NamedQuery;
 @Entity
 @Table(name = "uom", catalog = "storedb")
 @NamedQueries({
-    @NamedQuery(name = "UOM.findAll", query = "SELECT c FROM uom c")
+    @NamedQuery(name = "UOM.findAll", query = "SELECT c FROM UOM c")
     
 })
 public class UOM {

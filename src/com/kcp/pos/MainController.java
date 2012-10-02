@@ -176,7 +176,10 @@ public class MainController implements Initializable {
         itemCategoryService = (ItemCategoryService) ApplicationMain.springContext.getBean("itemCategoryService");
         itemCategoryService.getItemCategoryByName((String) selectedItem);
 
-        item.setUom((String) uom.getSelectionModel().getSelectedItem());
+        
+        UOMService uOMService=(UOMService) ApplicationMain.springContext.getBean("UOMService");
+        uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem());
+       
         item.setModifiedDate(new Date());
         // Object selectedItem = category.getSelectionModel().getSelectedItem();
         System.out.println("selectedItem:" + selectedItem);
