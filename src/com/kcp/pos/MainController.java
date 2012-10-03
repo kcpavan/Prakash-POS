@@ -426,14 +426,16 @@ public class MainController implements Initializable
          
           
           
-         System.out.println("In barcode");
+         //System.out.println("In barcode");
           
          if(e.getCode()==KeyCode.ENTER)
          {
-             System.out.println("Enter key pressed");
+             //System.out.println("Enter key pressed");
             itemBarcode.requestFocus();
          }
      }
+     
+     
 }
 
 
