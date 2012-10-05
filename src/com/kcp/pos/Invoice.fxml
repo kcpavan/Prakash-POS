@@ -10,7 +10,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="main_window" prefHeight="771.0" prefWidth="700.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.kcp.pos.InvoiceController">
   <children>
-    <SplitPane dividerPositions="0.48634590377113135, 0.988296488946684" focusTraversable="true" orientation="VERTICAL" prefHeight="700.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <SplitPane dividerPositions="0.4759427828348505, 0.9713914174252276" focusTraversable="true" orientation="VERTICAL" prefHeight="700.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="256.0" prefWidth="698.0">
           <children>
@@ -81,13 +81,32 @@
               </rowConstraints>
             </GridPane>
             <Label fx:id="label" layoutX="394.0" layoutY="197.0" minHeight="16.0" minWidth="69.0" />
-            <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="8.0" layoutX="250.0" layoutY="14.0" prefWidth="69.0" text="Invoice">
+            <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="8.0" layoutX="242.0" layoutY="36.0" prefWidth="69.0" text="Invoice">
               <font>
                 <Font size="16.0" fx:id="x2" />
               </font>
             </Label>
             <Label fx:id="invoiceNumber" layoutX="366.0" layoutY="14.0" prefHeight="22.0" prefWidth="71.0" />
             <Label fx:id="invoiceNumber" layoutX="335.0" layoutY="17.0" prefWidth="69.0" />
+            <MenuBar layoutY="1.0" prefWidth="698.0">
+              <menus>
+                <Menu mnemonicParsing="false" onAction="#openMain" text="Master">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#openMain" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Invoice">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Invoice Details" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="431.0" prefWidth="698.0">

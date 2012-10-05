@@ -24,6 +24,25 @@
             <Button fx:id="Add" layoutX="468.0" layoutY="144.0" mnemonicParsing="false" onAction="#addItem" prefWidth="97.0" text="Add Item" />
             <Button fx:id="delButton" layoutX="595.0" layoutY="144.0" mnemonicParsing="false" onAction="#deleteItem" text="Delete Item" />
             <Label fx:id="outputLabel" layoutX="101.0" layoutY="155.0" prefHeight="22.0" prefWidth="166.0" />
+            <MenuBar layoutX="2.0" prefWidth="698.0">
+              <menus>
+                <Menu mnemonicParsing="false" onAction="#openMain" text="Master">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Invoice">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Invoice Details" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">

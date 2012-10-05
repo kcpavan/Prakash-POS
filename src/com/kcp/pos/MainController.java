@@ -272,6 +272,8 @@ public class MainController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        
+        
     
         
         
@@ -347,6 +349,8 @@ public class MainController implements Initializable
         taxCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("tax"));
         itemHasGiftCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("hasGift"));
         fillDataTable();
+        
+        
     }
 
     
@@ -436,6 +440,30 @@ public class MainController implements Initializable
      }
      
      
+             @FXML
+     public void OpenInvoice(ActionEvent e)
+     {
+         
+         
+          
+          application.gotoInvoice();
+         //System.out.println("In barcode");
+          
+        
+     }
+     
+     
+             @FXML
+     public void openMain(ActionEvent e)
+     {
+         
+         
+          
+          application.gotoInvoice();
+         //System.out.println("In barcode");
+          
+        
+     }
 }
 
 

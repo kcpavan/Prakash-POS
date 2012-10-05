@@ -468,4 +468,28 @@ public class InvoiceController implements Initializable {
          System.out.println("aThis"+aThis);
         this.application = aThis;
     }
+     
+            @FXML
+     public void openMain(ActionEvent e)
+     {
+         
+         
+          
+          application.gotoMain();
+         //System.out.println("In barcode");
+          
+        
+     }
+            
+                   @FXML
+     public void OpenInvoice(ActionEvent e)
+     {
+         
+         
+          
+          application.gotoInvoice();
+         //System.out.println("In barcode");
+          
+        
+     }
 }
