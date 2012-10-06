@@ -34,6 +34,9 @@ public class Items implements java.io.Serializable {
     private String barcode;
     //private double mrp;
     private double weight;
+    private UOM uom;
+
+    
     
     private Date modifiedDate;
     //private Set<Stocks> stockses = new HashSet<Stocks>(0);
@@ -139,6 +142,9 @@ public class Items implements java.io.Serializable {
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
+    
+    
+    
 
    /* @OneToMany(fetch = FetchType.LAZY, mappedBy = "items")
     public Set<Stocks> getStockses() {
@@ -165,4 +171,14 @@ public class Items implements java.io.Serializable {
     public void setInvoiceDetailses(Set<InvoiceDetails> invoiceDetailses) {
         this.invoiceDetailses = invoiceDetailses;
     }*/
+
+     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "uom_id_fk")
+    public UOM getUom() {
+        return this.uom;
+    }
+
+    public void setUom(UOM uom) {
+        this.uom = uom;
+    }
 }

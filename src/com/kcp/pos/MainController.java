@@ -244,8 +244,8 @@ public class MainController implements Initializable
         
       
         System.out.println("UOM:"+uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()).getUomDesc());
-       itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
-       
+       //itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
+       item.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
         for (UOMDo uOMDo : uOMService.getAllUOM()) {
             System.out.println("size:"+uOMService.getAllUOM().size());
             uom.getItems().add(uOMDo.getUomDesc());

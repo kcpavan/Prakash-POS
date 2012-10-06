@@ -18,16 +18,20 @@ import javafx.beans.property.SimpleStringProperty;
 public class InvoiceDetailsDo {
 
     //private ItemDo items;
+    private SimpleIntegerProperty invoiceDetailsId = new SimpleIntegerProperty();
+    private SimpleIntegerProperty invoiceId = new SimpleIntegerProperty();
     private SimpleStringProperty itemName = new SimpleStringProperty();
     private SimpleStringProperty barcode = new SimpleStringProperty();
     private SimpleDoubleProperty mrp = new SimpleDoubleProperty();
     //private BillingPriceDo billingPrice;
     private SimpleDoubleProperty billingPrice=new SimpleDoubleProperty();
-    private SimpleIntegerProperty quantity = new SimpleIntegerProperty();
+    private SimpleDoubleProperty quantity = new SimpleDoubleProperty();
     private SimpleDoubleProperty total = new SimpleDoubleProperty();
     
      public InvoiceDetailsDo(InvoiceDetails invoiceDetails) {
        //this.itemName.set(invoiceDetails.getItems().getItemName());
+         this.invoiceDetailsId.set(invoiceDetails.getIdPk());
+         this.invoiceId.set(invoiceDetails.getInvoice().getIdPk());
          this.itemName.set(invoiceDetails.getItemDetails().getItem().getItemName());
        this.barcode.set(invoiceDetails.getItemDetails().getItem().getBarcode());
        //this.mrp.set(invoiceDetails.getItems().getMrp());
@@ -57,12 +61,12 @@ public class InvoiceDetailsDo {
         this.items = items;
     }
 */
-    public Integer getQuantity() {
+    public Double getQuantity() {
         return quantity.get();
     }
 
-    public void setQuantity(SimpleIntegerProperty quantity) {
-        this.quantity = quantity;
+    public void setQuantity(Double quantity) {
+        this.quantity.set(quantity);
     }
 
     public Double getTotal() {
@@ -88,8 +92,8 @@ public class InvoiceDetailsDo {
         return barcode.get();
     }
 
-    public void setBarcode(SimpleStringProperty barcode) {
-        this.barcode = barcode;
+    public void setBarcode(String barcode) {
+        this.barcode.set(barcode);
     }
 
     public Double getMrp() {
@@ -125,5 +129,35 @@ public class InvoiceDetailsDo {
         this.total.set(invoiceDetails.getTotal());
     }*/
 
+    public Integer getInvoiceDetailsId() {
+        return invoiceDetailsId.get();
+    }
+
+    public void setInvoiceDetailsId(SimpleIntegerProperty invoiceDetailsId) {
+        this.invoiceDetailsId = invoiceDetailsId;
+    }
+
+    public Integer getInvoiceId() {
+        return invoiceId.get();
+    }
+
+    public void setInvoiceId(SimpleIntegerProperty invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+   
+
+    public void setBarcode(SimpleStringProperty barcode) {
+        this.barcode = barcode;
+    }
+
+   
+
+    public void setQuantity(SimpleDoubleProperty quantity) {
+        this.quantity = quantity;
+    }
+
+    
+    
   
 }

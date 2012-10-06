@@ -19,6 +19,7 @@ import com.kcp.pos.modal.Items;
 import com.kcp.pos.service.InvoiceService;
 import com.kcp.pos.service.ItemService;
 import com.kcp.pos.utils.KCPUtils;
+import com.sun.prism.impl.Disposer.Record;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,13 +37,31 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
 /**
  *
@@ -69,9 +88,7 @@ public class InvoiceController implements Initializable {
     @FXML
     private TextField itemQuantity;
     @FXML
-    private TextField wholesalePrice;
-    @FXML
-    private TextField retailPrice;
+    private TextField tax;
     
     
     @FXML
@@ -97,7 +114,6 @@ public class InvoiceController implements Initializable {
     private InvoiceService invoiceService;
     @Autowired
     private ItemService itemService;
-   
     private List<InvoiceDetailsDo> invoiceDetailsDoList = new ArrayList<InvoiceDetailsDo>();
     private List<Items> itemList = new ArrayList<Items>();
     private Map<String, ItemDo> itemMap = new HashMap<String, ItemDo>();
@@ -136,7 +152,7 @@ public class InvoiceController implements Initializable {
 
         invoiceService = (InvoiceService) ApplicationMain.springContext.getBean("invoiceService");
         UserDao userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
-        
+
         //InvoiceDetails invoiceDetails = null;
 
         Object selectedItem = itemName.getSelectionModel().getSelectedItem();
@@ -151,22 +167,23 @@ public class InvoiceController implements Initializable {
 
         String invoiceNum = invoiceNumber.getText();
 
-        if (invoiceNum == null || invoiceNum.equalsIgnoreCase("")) {
+        if (invoiceNum == null || invoiceNum.equalsIgnoreCase("")) 
+        {
             invoice = new Invoice();
             invoice.setModifiedDate(new Date());
 
-            
+
             invoice.setUsers(userDao.findById(1));
             invoiceService.invoiceSave(invoice);
             System.out.println("invoice id pk:" + invoice.getIdPk());
             //invoiceNum = new Integer(invoiceDao.getInvoiceId()).toString();
 
             invoiceNumber.setText(new Integer(invoice.getIdPk()).toString());
-           
+
         }
 
         //invoiceDetails.setInvoice(Integer.parseInt(invoiceNum));
-        
+
 
         //invoiceService.getInvoiceDetailsDoById(invoice.getIdPk());
 
@@ -183,111 +200,114 @@ public class InvoiceController implements Initializable {
         }
 
 //        billingService = (BillingService) ApplicationMain.springContext.getBean("billingService");
-  //      BillingPrice billingPrice = null;
-       
+        //      BillingPrice billingPrice = null;
+
+        System.out.println("Selected item is :"+selectedItem.toString());
         Items item = itemService.getItemByName(selectedItem.toString());
-        ItemDetails itemDetails= itemService.getItemDetailsByItemIdBillingType(item.getIdPk(),1);
-        
+        ItemDetails itemDetails = itemService.getItemDetailsByItemIdBillingType(item.getIdPk(), 1);
+
         String itemName = item.getItemName();
 
-        System.out.println("invoiceIdPk:"+invoice.getIdPk());
-        System.out.println("itemIdPk:"+item.getIdPk());
-      
-       
-        InvoiceDetails invoiceDetails=invoiceService.getInvoiceDetailsByInvoiceItemId(invoice.getIdPk(),item.getIdPk());
-        
-        if(invoiceDetails!=null)
-        {
-                
-                invoiceDetails.setQuantity(invoiceDetails.getQuantity() + Integer.parseInt(itemQty));
-                
-                //billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
-                //Double billingPrice=itemService.getBillingPriceByItemId(item.getIdPk());
-                //invoiceDetails.set(billingPrice);
-                //Double price = billingPrice.getBillingPrice();
-                //double itemTotalPrice = price * invoiceDetails.getQuantity();
-                double itemTotalPrice = itemDetails.getRetailBillingPrice()* invoiceDetails.getQuantity();
-                invoiceDetails.setTotal(itemTotalPrice);
-                invoiceDetails.setItemDetails(itemDetails);
-  
-        }
-        else
-        {
-            invoiceDetails=new InvoiceDetails();
+        System.out.println("invoiceIdPk:" + invoice.getIdPk());
+        System.out.println("itemIdPk:" + item.getIdPk());
+
+
+        InvoiceDetails invoiceDetails = invoiceService.getInvoiceDetailsByInvoiceItemId(invoice.getIdPk(), item.getIdPk());
+
+        if (invoiceDetails != null) {
+
+            System.out.println("invoiceDetails.getIdPk():"+invoiceDetails.getIdPk());
             
+            invoiceDetails.setQuantity(invoiceDetails.getQuantity() + Integer.parseInt(itemQty));
+
+            //billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
+            //Double billingPrice=itemService.getBillingPriceByItemId(item.getIdPk());
+            //invoiceDetails.set(billingPrice);
+            //Double price = billingPrice.getBillingPrice();
+            //double itemTotalPrice = price * invoiceDetails.getQuantity();
+            double itemTotalPrice = itemDetails.getRetailBillingPrice() * invoiceDetails.getQuantity();
+            invoiceDetails.setTotal(itemTotalPrice);
+            invoiceDetails.setItemDetails(itemDetails);
+
+        } else {
+            invoiceDetails = new InvoiceDetails();
+
             //invoiceDetails.setItems(item);
             invoiceDetails.setItemDetails(itemDetails);
-            invoiceDetails.setQuantity(Integer.parseInt(itemQty));
+            invoiceDetails.setQuantity(Double.parseDouble(itemQty));
             //billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
             //invoiceDetails.setBillingPrice(billingPrice);
-                //Double price = billingPrice.getBillingPrice();
-                double itemTotalPrice = itemDetails.getRetailBillingPrice() * Integer.parseInt(itemQty);
-                invoiceDetails.setTotal(itemTotalPrice);
+            //Double price = billingPrice.getBillingPrice();
+            System.out.println("itemDetails.getRetailBillingPrice() :" + itemDetails.getRetailBillingPrice());
+            System.out.println("itemQty:" + itemQty);
 
-                invoiceDetails.setInvoice(invoice);
+            double itemTotalPrice = itemDetails.getRetailBillingPrice() * Integer.parseInt(itemQty);
+            invoiceDetails.setTotal(itemTotalPrice);
+
+            invoiceDetails.setInvoice(invoice);
         }
-        /*List<InvoiceDetails> invoiceDetailslist= invoiceService.getInvoiceDetailsById(invoice.getIdPk());
-        if(invoiceDetailslist!=null)
-             System.out.println("invoice details size:"+invoiceService.getInvoiceDetailsById(invoice.getIdPk()).size());
-        else 
-             System.out.println("Invoice detail is null");
-        */
-        
-        
-        
-        /*if(invoiceService.getInvoiceDetailsById(invoice.getIdPk())==null
-                || invoiceService.getInvoiceDetailsById(invoice.getIdPk()).size()==0 )
-        {
-            System.out.println("Invoice detail is null");
-            invoiceDetails=new InvoiceDetails();
-            invoiceDetails.setItems(item);
-            invoiceDetails.setQuantity(Integer.parseInt(itemQty));
-                billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
-                invoiceDetails.setBillingPrice(billingPrice);
-                Double price = billingPrice.getBillingPrice();
-                double itemTotalPrice = price * Integer.parseInt(itemQty);
-                invoiceDetails.setTotal(itemTotalPrice);
+        /*List<InvoiceDetails> invoiceDetailslist= invoiceService.getInvoiceDetailsListById(invoice.getIdPk());
+         if(invoiceDetailslist!=null)
+         System.out.println("invoice details size:"+invoiceService.getInvoiceDetailsListById(invoice.getIdPk()).size());
+         else 
+         System.out.println("Invoice detail is null");
+         */
 
-                invoiceDetails.setInvoice(invoice);
-        }
+
+
+        /*if(invoiceService.getInvoiceDetailsListById(invoice.getIdPk())==null
+         || invoiceService.getInvoiceDetailsListById(invoice.getIdPk()).size()==0 )
+         {
+         System.out.println("Invoice detail is null");
+         invoiceDetails=new InvoiceDetails();
+         invoiceDetails.setItems(item);
+         invoiceDetails.setQuantity(Integer.parseInt(itemQty));
+         billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
+         invoiceDetails.setBillingPrice(billingPrice);
+         Double price = billingPrice.getBillingPrice();
+         double itemTotalPrice = price * Integer.parseInt(itemQty);
+         invoiceDetails.setTotal(itemTotalPrice);
+
+         invoiceDetails.setInvoice(invoice);
+         }
         
-        for (InvoiceDetails invoiceDet : invoiceService.getInvoiceDetailsById(invoice.getIdPk())) {
-            if (itemName.equalsIgnoreCase(invoiceDet.getItems().getItemName())) {
-                System.out.println("Invoice item already exists");
-                invoiceDetails=invoiceDet;
-                invoiceDetails.setQuantity(invoiceDet.getQuantity() + Integer.parseInt(itemQty));
+         for (InvoiceDetails invoiceDet : invoiceService.getInvoiceDetailsListById(invoice.getIdPk())) {
+         if (itemName.equalsIgnoreCase(invoiceDet.getItems().getItemName())) {
+         System.out.println("Invoice item already exists");
+         invoiceDetails=invoiceDet;
+         invoiceDetails.setQuantity(invoiceDet.getQuantity() + Integer.parseInt(itemQty));
                 
-                billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
-                invoiceDetails.setBillingPrice(billingPrice);
-                Double price = billingPrice.getBillingPrice();
-                double itemTotalPrice = price * invoiceDetails.getQuantity();
-                invoiceDetails.setTotal(itemTotalPrice);
+         billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
+         invoiceDetails.setBillingPrice(billingPrice);
+         Double price = billingPrice.getBillingPrice();
+         double itemTotalPrice = price * invoiceDetails.getQuantity();
+         invoiceDetails.setTotal(itemTotalPrice);
 
                 
                 
-            } else {
-                System.out.println("1st item");
-                invoiceDetails=new InvoiceDetails();
-                invoiceDetails.setItems(item);
-                invoiceDetails.setQuantity(Integer.parseInt(itemQty));
-                billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
-                invoiceDetails.setBillingPrice(billingPrice);
-                Double price = billingPrice.getBillingPrice();
-                double itemTotalPrice = price * Integer.parseInt(itemQty);
-                invoiceDetails.setTotal(itemTotalPrice);
+         } else {
+         System.out.println("1st item");
+         invoiceDetails=new InvoiceDetails();
+         invoiceDetails.setItems(item);
+         invoiceDetails.setQuantity(Integer.parseInt(itemQty));
+         billingPrice = billingService.getBillingPrice(item.getIdPk(), invoiceDetails.getQuantity());
+         invoiceDetails.setBillingPrice(billingPrice);
+         Double price = billingPrice.getBillingPrice();
+         double itemTotalPrice = price * Integer.parseInt(itemQty);
+         invoiceDetails.setTotal(itemTotalPrice);
 
-                invoiceDetails.setInvoice(invoice);
+         invoiceDetails.setInvoice(invoice);
                 
-            }
-            break;
+         }
+         break;
 
-        }
-        */
-
-
+         }
+         */
 
 
-        
+
+
+
         invoiceService.invoiceDetailsSave(invoiceDetails);
 
 
@@ -302,6 +322,31 @@ public class InvoiceController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        dataTable.setEditable(true);
+        Callback<TableColumn<InvoiceDetailsDo, Double>, TableCell<InvoiceDetailsDo, Double>> cellFactory =
+                new Callback<TableColumn<InvoiceDetailsDo, Double>, TableCell<InvoiceDetailsDo, Double>>() {
+                    public TableCell call(TableColumn p) {
+                        return new EditingCell();
+                    }
+                };
+
+        itemQuantityCol.setCellFactory(cellFactory);
+        itemQuantityCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<InvoiceDetailsDo, Double>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<InvoiceDetailsDo, Double> t) {
+                        InvoiceDetailsDo data = (InvoiceDetailsDo) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        data.setQuantity(t.getNewValue());
+                        InvoiceDetails det = invoiceService.getInvoiceDetailsById(data.getInvoiceDetailsId());
+
+                        det.setQuantity(data.getQuantity());
+                        det.setTotal(det.getQuantity() * det.getItemDetails().getRetailBillingPrice());
+
+                        invoiceService.invoiceDetailsSave(det);
+                        fillInvoiceDataTable();
+
+                    }
+                });
         itemName.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
         itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
         List<ItemDo> itemList = itemService.getAllItemsDo();
@@ -318,14 +363,16 @@ public class InvoiceController implements Initializable {
                 ItemDo item = itemMap.get(newItem);
 
                 ItemDetailsDo itemDetailsDo = itemService.getItemDetailsDoByItemId(item.getIdPk());
-                
+
                 itemBarcode.setText(item.getBarcode());
                 System.out.println("MRP:" + item.getMrp());
                 itemMrp.setText(new Double(item.getMrp()).toString());
                 itemWeight.setText(new Double(item.getWeight()).toString());
                 //weightUnit.setSelectionModel(item.getWeightUnit());
                 billingPrice.setText(new Double(itemDetailsDo.getBillingPrice()).toString());
-                
+                System.out.println("tax:"+itemDetailsDo.getTax());
+                System.out.println("tax string:"+new Double(itemDetailsDo.getTax()).toString());
+                tax.setText(new Double(itemDetailsDo.getTax()).toString());
 
 
             }
@@ -365,6 +412,10 @@ public class InvoiceController implements Initializable {
         itemBarcode.clear();
         itemMrp.clear();
         itemWeight.clear();
+        itemQuantity.clear();
+        billingPrice.clear();
+        tax.clear();
+        
 
 
     }
@@ -462,34 +513,113 @@ public class InvoiceController implements Initializable {
         //invoiceDao.deleteInvoiceItem(invoiceId, itemId);
         //invoiceDao.deleteInvoiceItem(1,1);
     }
-    
     private ApplicationMain application;
-     void setApp(ApplicationMain aThis) {
-         System.out.println("aThis"+aThis);
+
+    void setApp(ApplicationMain aThis) {
+        System.out.println("aThis" + aThis);
         this.application = aThis;
     }
-     
-            @FXML
-     public void openMain(ActionEvent e)
-     {
-         
-         
-          
-          application.gotoMain();
-         //System.out.println("In barcode");
-          
-        
-     }
-            
-                   @FXML
-     public void OpenInvoice(ActionEvent e)
-     {
-         
-         
-          
-          application.gotoInvoice();
-         //System.out.println("In barcode");
-          
-        
-     }
+
+    @FXML
+    public void openMain(ActionEvent e) {
+
+
+
+        application.gotoMain();
+        //System.out.println("In barcode");
+
+
+    }
+
+    @FXML
+    public void OpenInvoice(ActionEvent e) {
+
+
+
+        application.gotoInvoice();
+        //System.out.println("In barcode");
+
+
+    }
+}
+
+class EditingCell extends TableCell<InvoiceDetailsDo, Double> {
+
+    private TextField textField;
+
+    public EditingCell() {
+    }
+
+    @Override
+    public void startEdit() {
+        super.startEdit();
+
+        if (textField == null) {
+            createTextField();
+        }
+
+        setGraphic(textField);
+        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        textField.selectAll();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                textField.requestFocus();
+            }
+        });
+    }
+
+    @Override
+    public void cancelEdit() {
+        super.cancelEdit();
+
+        setText(String.valueOf(getItem()));
+        setContentDisplay(ContentDisplay.TEXT_ONLY);
+    }
+
+    @Override
+    public void updateItem(Double item, boolean empty) {
+        super.updateItem(item, empty);
+
+        System.out.println("UpdateItem:" + item);
+
+        if (empty) {
+            setText(null);
+            setGraphic(null);
+        } else {
+            if (isEditing()) {
+                if (textField != null) {
+                    textField.setText(getString());
+                }
+                setGraphic(textField);
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            } else {
+                setText(getString());
+                setContentDisplay(ContentDisplay.TEXT_ONLY);
+            }
+        }
+    }
+
+    private void createTextField() {
+        System.out.println("createTextField() start");
+        textField = new TextField(getString());
+        textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+        textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent t) {
+                if (t.getCode() == KeyCode.ENTER) {
+
+//                      InvoiceDetailsDo data = (InvoiceDetailsDo) t.getTableView().getItems().get(event.getTablePosition().getRow());
+                    commitEdit(Double.parseDouble(textField.getText()));
+                    //commitEdit(textField.getText());
+                } else if (t.getCode() == KeyCode.ESCAPE) {
+                    cancelEdit();
+                }
+            }
+        });
+    }
+
+    private String getString() {
+        return getItem() == null ? "" : getItem().toString();
+    }
 }

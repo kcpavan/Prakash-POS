@@ -51,7 +51,7 @@ weight double not null,
 /*weight_unit varchar(50)  null,
 actual_price double not null,
 selling_price double not null,*/
-hasfree boolean not null,
+/*hasfree boolean  null,*/
 modified_by int not null,
 modified_date timestamp,
 CONSTRAINT fk_category_id
@@ -79,6 +79,8 @@ end_range integer  null,
 retail_billing_price double not null,
 wholesale_billing_price double not null,
 billing_type_id_fk int not null,
+hasfree boolean  null,
+tax double null,
 enabled boolean not null,
 modified_by int not null,
 modified_date timestamp,
@@ -236,7 +238,7 @@ create table storedb.invoice_details
 invoice_id_fk integer not null,
 /*item_id_fk integer not null,*/
 itemdetails_id_fk integer not null,
-quantity integer not null,
+quantity double not null,
 total double not null,
 CONSTRAINT fk_invoicedet_invoice_id
 	FOREIGN KEY(`invoice_id_fk`) 

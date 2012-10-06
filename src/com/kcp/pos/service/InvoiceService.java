@@ -43,6 +43,11 @@ public class InvoiceService {
      public void invoiceDetailsSave(InvoiceDetails invoiceDetails){
         invoiceDetailsDao.persist(invoiceDetails);
     }
+     
+     
+             public void invoiceDetailsUpdate(InvoiceDetails invoiceDetails){
+        invoiceDetailsDao.merge(invoiceDetails);
+    }
   
     public List<InvoiceDetailsDo> getInvoiceDetailsDoById(Integer invoiceId){
    List<InvoiceDetailsDo> invoiceDos = new ArrayList<InvoiceDetailsDo>();
@@ -57,8 +62,12 @@ public class InvoiceService {
     }
           
         
-     public List<InvoiceDetails> getInvoiceDetailsById(Integer invoiceId){
+     public List<InvoiceDetails> getInvoiceDetailsListById(Integer invoiceId){
         return invoiceDao.findListById(invoiceId);
+    }
+     
+     public InvoiceDetails getInvoiceDetailsById(Integer invoiceId){
+        return invoiceDao.findById(invoiceId);
     }
    
      public InvoiceDetails getInvoiceDetailsByInvoiceItemId(Integer invoiceId,Integer itemId)

@@ -48,7 +48,7 @@ public class ItemDetailsDo {
         this.barcode.set(itemDetails.getItem().getBarcode());
 //        this.mrp.set(items.getMrp());
         this.weight.set(itemDetails.getItem().getWeight());
-        this.uom.set(itemDetails.getUom().getUomDesc());
+        this.uom.set(itemDetails.getItem().getUom().getUomDesc());
         this.itemId.set(itemDetails.getItem().getIdPk());
         /*this.startRange.set(itemDetails.getStartRange());
          this.endRange.set(itemDetails.getEndRange());*/

@@ -54,7 +54,7 @@ public class ItemDetails implements Serializable{
     private double tax;
     
     private BillingType billingType;
-    private UOM uom;
+   // private UOM uom;
     //private double actualPrice;
     //private double sellingPrice;
     private boolean hasfree;
@@ -62,7 +62,7 @@ public class ItemDetails implements Serializable{
     private Boolean enabled;
     private static final Logger LOG = Logger.getLogger(ItemDetails.class.getName());
 
-    public ItemDetails(Integer idPk, Users users, Items item, double mrp, double actualPrice, double retailBillingPrice, double wholesaleBillingPrice, double tax, BillingType billingType, UOM uom, boolean hasfree, Date modifiedDate, Boolean enabled) {
+    public ItemDetails(Integer idPk, Users users, Items item, double mrp, double actualPrice, double retailBillingPrice, double wholesaleBillingPrice, double tax, BillingType billingType,  boolean hasfree, Date modifiedDate, Boolean enabled) {
         this.idPk = idPk;
         this.users = users;
         this.item = item;
@@ -72,13 +72,13 @@ public class ItemDetails implements Serializable{
         this.wholesaleBillingPrice = wholesaleBillingPrice;
         this.tax = tax;
         this.billingType = billingType;
-        this.uom = uom;
+//        this.uom = uom;
         this.hasfree = hasfree;
         this.modifiedDate = modifiedDate;
         this.enabled = enabled;
     }
 
-    @Column(name = "tax", nullable = false, length = 19)
+    @Column(name = "tax", nullable = true, length = 19)
     public double getTax() {
         return tax;
     }
@@ -201,7 +201,7 @@ public class ItemDetails implements Serializable{
         this.wholesaleBillingPrice = wholesaleBillingPrice;
     }
     
-    @ManyToOne(fetch = FetchType.EAGER)
+   /* @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "uom_id_fk")
     public UOM getUom() {
         return this.uom;
@@ -209,9 +209,9 @@ public class ItemDetails implements Serializable{
 
     public void setUom(UOM uom) {
         this.uom = uom;
-    }
+    }*/
     
-     @Column(name = "hasfree", nullable = false)
+     @Column(name = "hasfree", nullable = true)
     public boolean isHasfree() {
         return this.hasfree;
     }

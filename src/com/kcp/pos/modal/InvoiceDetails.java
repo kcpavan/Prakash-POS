@@ -18,7 +18,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "InvoiceDetails.findAllById", query = "SELECT c FROM InvoiceDetails c WHERE c.invoice.idPk = :id"),
     @NamedQuery(name = "InvoiceDetails.findByInvoiceItemId", 
         query = "SELECT c FROM InvoiceDetails c "
-        + "WHERE c.itemDetails.idPk = :itemId and c.invoice.idPk=:invoiceId"),
+        + "WHERE c.itemDetails.item.idPk = :itemId and c.invoice.idPk=:invoiceId"),
     @NamedQuery(name = "InvoiceDetails.findByItemId", 
         query = "SELECT c FROM InvoiceDetails c "
         + "WHERE c.itemDetails.idPk = :itemId ")
@@ -31,13 +31,13 @@ public class InvoiceDetails implements java.io.Serializable {
    // private Items items;
     private ItemDetails itemDetails;
     //private BillingPrice billingPrice;
-    private Integer quantity;
+    private Double quantity;
     private double total;
 
     public InvoiceDetails() {
     }
 
-    public InvoiceDetails(Invoice invoice, Items items, Integer quantity,
+    public InvoiceDetails(Invoice invoice, Items items, Double quantity,
             double total) {
         this.invoice = invoice;
         //this.items = items;
@@ -100,11 +100,11 @@ public class InvoiceDetails implements java.io.Serializable {
     }*/
 
     @Column(name = "quantity", nullable = false, precision = 22, scale = 0)
-    public Integer getQuantity() {
+    public Double getQuantity() {
         return this.quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
 

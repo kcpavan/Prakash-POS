@@ -106,7 +106,7 @@ public class ItemService {
          List<InvoiceDetails> invoiceDetailses=null;
          
         for (ItemDetails items : itemDetailsDao.findAllByItemId(id)) {
-            invoiceDetailses=invoiceService.getInvoiceDetailsById(items.getIdPk());
+            invoiceDetailses=invoiceService.getInvoiceDetailsListById(items.getIdPk());
             if(invoiceDetailses!=null && invoiceDetailses.size()>0)
          {
              System.out.println("item id:"+items.getIdPk()

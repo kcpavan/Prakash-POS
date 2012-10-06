@@ -14,8 +14,10 @@ import java.util.List;
 public interface InvoiceDetailsDao {
     
     public void persist(InvoiceDetails transientInstance); 
+    public void merge(InvoiceDetails transientInstance); 
     public InvoiceDetails findByInvoiceItemId(Integer invoiceId,Integer itemId) ;
-    public List<InvoiceDetails> findByItemId(Integer itemId) ;
+    public List<InvoiceDetails> findByItemId(Integer itemId);
+    public InvoiceDetails findById(Integer id) ;
     /*public List<InvoiceDetails> findByAll() ;
     public InvoiceDetails findByName(String itemName) ;*/
     

@@ -54,13 +54,31 @@ public class InvoiceDetailsDaoImpl implements InvoiceDetailsDao {
 	
     }
     
+     public void merge(InvoiceDetails transientInstance)
+     {
+         
+		log.debug("Updating InvoiceDetails instance");
+		try {
+                        
+			entityManager.merge(transientInstance);
+                        entityManager.flush();
+			log.debug("persist successful");
+		} catch (RuntimeException re) {
+			log.error("persist failed", re);
+			throw re;
+		}
+	
+     }
+    
     
      public InvoiceDetails findByInvoiceItemId(Integer invoiceId,Integer itemId) 
     {
         log.debug("getting InvoiceDetails instance with ItemId: " + itemId);
 		try {
-			Query instance = entityManager.createNamedQuery("InvoiceDetails.findByInvoiceItemId")
-                                .setParameter("itemId", itemId).setParameter("invoiceId", invoiceId);
+			Query instance = entityManager.
+                                createNamedQuery("InvoiceDetails.findByInvoiceItemId")
+                                .setParameter("itemId", itemId)
+                                .setParameter("invoiceId", invoiceId);
 			log.debug("get successful");
                         
                         List<InvoiceDetails> elementList =new ArrayList<InvoiceDetails>();
@@ -98,5 +116,25 @@ public class InvoiceDetailsDaoImpl implements InvoiceDetailsDao {
 			throw re;
 		}
    }
+   
+    public InvoiceDetails findById(Integer id) 
+    {
+        log.debug("getting InvoiceDetails instance with ID: " + id);
+		try {
+			Query instance = entityManager.createNamedQuery("InvoiceDetails.findById")
+                                .setParameter("id", id);
+			log.debug("get successful");
+                        
+                        return (InvoiceDetails)instance.getSingleResult();
+
+                       /* Object result = instance.getSingleResult();
+                        if(result==null)return null;
+                        return (InvoiceDetails)result;*/
+                        
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+    }
     
 }
