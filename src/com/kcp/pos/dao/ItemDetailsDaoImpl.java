@@ -131,6 +131,24 @@ class ItemDetailsDaoImpl implements ItemDetailsDao{
 		}
 	}
         
+        public Boolean disableItemDetails(Integer itemId)
+        {
+            	log.debug("getting Items instance with id: " + itemId);
+		try {
+                    Query instance = entityManager.createNamedQuery("ItemDetails.setDisabled")
+                                .setParameter("id", itemId);
+			log.debug("get successful");
+                        instance.getSingleResult();
+                        
+                       // return elementList.isEmpty() ? null : elementList.get(0).getBillingPrice();
+                         return true;
+                        
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+        }
+        
        
         
     

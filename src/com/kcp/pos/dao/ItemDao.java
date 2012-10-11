@@ -18,6 +18,7 @@ import java.util.List;
     public Items findByName(String itemName) ;
     public Items findById(Integer id) ;
     public List<Items> findListByCriteria(String criteria);
+    
 		
     
 }

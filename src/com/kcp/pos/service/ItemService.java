@@ -56,6 +56,7 @@ public class ItemService {
     }
     
     public void itemDetailsSave(ItemDetails itemDetails){
+        itemDetailsDao.disableItemDetails(itemDetails.getIdPk());
         itemDetailsDao.persist(itemDetails);
     }
     

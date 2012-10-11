@@ -40,7 +40,10 @@ import javax.persistence.TemporalType;
     
     
     @NamedQuery(name = "ItemDetails.findByItemIdBillingType", query = "SELECT i FROM ItemDetails i "
-        + "where i.item.idPk=:id and i.billingType.idPk=:type")
+        + "where i.item.idPk=:id and i.billingType.idPk=:type"),
+    @NamedQuery(name = "ItemDetails.setDisabled", query = "update ItemDetails i "
+        + " set enabled=false "
+        + " where i.item.idPk=:id ")
 })
     
 
@@ -84,7 +87,7 @@ public class ItemDetails implements Serializable{
     
      public ItemDetails(ItemDetails itemDetails)
      {
-         this.idPk = itemDetails.idPk;
+       //  this.idPk = itemDetails.idPk;
         this.users = itemDetails.users;
         this.item = itemDetails.item;
         this.mrp = itemDetails.mrp;

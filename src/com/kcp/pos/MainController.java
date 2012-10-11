@@ -303,6 +303,7 @@ public class MainController implements Initializable
                         ItemDetails itemDetails=new ItemDetails(det);
 
                         itemDetails.setActualPrice(data.getActualPrice());
+                        itemDetails.setEnabled(true);
 
                         itemService.itemDetailsSave(itemDetails);
                         fillDataTable();
