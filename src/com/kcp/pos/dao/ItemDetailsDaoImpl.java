@@ -75,18 +75,19 @@ class ItemDetailsDaoImpl implements ItemDetailsDao{
 	}
 
           
-        public List<ItemDetails>  findByItemId(Integer id) 
+        //public List<ItemDetails>  findByItemId(Integer id) 
+        public ItemDetails  findByItemId(Integer id) 
         {
           
 		log.debug("getting Items instance with id: " + id);
 		try {
-                    Query instance = entityManager.createNamedQuery("ItemDetails.findById")
+                    Query instance = entityManager.createNamedQuery("ItemDetails.findByItemId")
                                 .setParameter("id", id);
 			log.debug("get successful");
 			List<ItemDetails> elementList =new ArrayList<ItemDetails>();
                         elementList = instance.getResultList();
-                       // return elementList.isEmpty() ? null : elementList.get(0).getBillingPrice();
-                         return elementList;
+                        return elementList.isEmpty() ? null : elementList.get(0);
+                         //return elementList;
                         
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -130,7 +131,7 @@ class ItemDetailsDaoImpl implements ItemDetailsDao{
 		}
 	}
         
-        
+       
         
     
 }

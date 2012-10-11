@@ -17,11 +17,10 @@ public interface ItemDetailsDao {
 
     public void persist(ItemDetails transientInstance); 
     public com.kcp.pos.modal.ItemDetails findByItemIdBillingType(Integer id,Integer type) ;
-    public List<ItemDetails>  findByItemId(Integer id) ;
+    public ItemDetails  findByItemId(Integer id) ;
     public List<ItemDetails>  findAllByItemId(Integer id) ;
     
     public Double findBillingPriceByItemId(Integer id) ;
-    //public Double findByItemId(Integer id) ;
     
     
 

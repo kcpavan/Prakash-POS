@@ -4,6 +4,7 @@
  */
 package com.kcp.pos.utils;
 
+import com.kcp.pos.data.InvoiceDetailsDo;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -12,6 +13,15 @@ import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.util.Callback;
 
 /**
  *
@@ -148,5 +158,10 @@ public class KCPUtils {
 		}
 		return returntype;
 	}
+        
+        
+        
+       
+
     
 }

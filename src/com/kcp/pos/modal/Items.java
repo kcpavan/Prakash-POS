@@ -18,11 +18,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+
 @Entity
 @Table(name = "items", catalog = "storedb")
 @NamedQueries({
     @NamedQuery(name = "Items.findAll", query = "SELECT i FROM Items i"),
-    @NamedQuery(name = "Items.findByName", query = "SELECT i FROM Items i where i.itemName=:name"),})
+    @NamedQuery(name = "Items.findByName", query = "SELECT i FROM Items i where i.itemName=:name"),
+    @NamedQuery(name = "Items.findByNameCriteria", query = "SELECT i FROM Items i where i.itemName like :criteria")})
 public class Items implements java.io.Serializable {
 
     private Integer idPk;

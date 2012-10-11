@@ -89,17 +89,24 @@ public class ItemService {
         return(new ItemDetailsDo(itemDetailsDao.findByItemIdBillingType(Id,1)));
     }
     
-    public List<ItemDetailsDo> getItemDetailsByItemId(Integer id)
+    /*public List<ItemDetailsDo> getItemDetailsListByItemId(Integer id)
     {
          List<ItemDetailsDo> itemDetailsDos = new ArrayList<ItemDetailsDo>();
         for (ItemDetails items : itemDetailsDao.findByItemId(id)) {
            itemDetailsDos.add(new ItemDetailsDo(items)); 
         }
     return itemDetailsDos;
-       
+      
+    }*/
+    
+    public ItemDetails getItemDetailsByItemId(Integer id)
+    {
+         return itemDetailsDao.findByItemId(id) ;
+         
     }
      
-     public Boolean getAllItemDetailsByItemId(Integer id)
+    
+    public Boolean getAllItemDetailsByItemId(Integer id)
     {
          List<ItemDetailsDo> itemDetailsDos = new ArrayList<ItemDetailsDo>();
          invoiceService = (InvoiceService) ApplicationMain.springContext.getBean("invoiceService");
@@ -130,5 +137,20 @@ public class ItemService {
         return itemDetailsDao.findBillingPriceByItemId(id);
     }
     
-   
+    public List<ItemDetailsDo> getItemsByCriteria(String criteria)
+    {
+        
+        //Get Item Names list
+        
+        //Get details for names
+        List<ItemDetailsDo> itemDetailsDos=new ArrayList<ItemDetailsDo>();
+                
+        for (Items item : itemDao.findListByCriteria(criteria)) 
+        {
+            itemDetailsDos.add(new ItemDetailsDo( itemDetailsDao.findByItemId(item.getIdPk())));
+        }
+        return itemDetailsDos;
+    }
+    
+    
 }

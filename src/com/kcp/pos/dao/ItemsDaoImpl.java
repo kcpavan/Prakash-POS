@@ -2,6 +2,7 @@ package com.kcp.pos.dao;
 
 
 import com.kcp.pos.modal.Items;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -105,6 +106,26 @@ public class ItemsDaoImpl implements ItemDao {
 			throw re;
 		}
 	}
+        
+        
+         
+          public List<Items> findListByCriteria(String criteria)
+    {
+         log.debug("getting Items instance with id: " + criteria);
+		try {
+                    Query instance = entityManager.createNamedQuery("Items.findByNameCriteria")
+                                .setParameter("criteria", "%"+criteria+"%");
+			log.debug("get successful");
+			List<Items> elementList =new ArrayList<Items>();
+                        elementList = instance.getResultList();
+                       // return elementList.isEmpty() ? null : elementList.get(0).getBillingPrice();
+                         return elementList;
+                        
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+    }
         
         
 }

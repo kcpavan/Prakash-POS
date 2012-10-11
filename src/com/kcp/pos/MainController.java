@@ -9,10 +9,12 @@ import com.kcp.pos.dao.ItemCategoryDao;
 import com.kcp.pos.dao.UserDao;
 import com.kcp.pos.dao.commonDao;
 import com.kcp.pos.dao.commonDaoImpl;
+import com.kcp.pos.data.InvoiceDetailsDo;
 import com.kcp.pos.data.ItemCategoryDo;
 import com.kcp.pos.data.ItemDetailsDo;
 import com.kcp.pos.data.ItemDo;
 import com.kcp.pos.data.UOMDo;
+import com.kcp.pos.modal.InvoiceDetails;
 import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.service.ItemCategoryService;
@@ -26,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
@@ -38,15 +41,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Callback;
 
 import javafx.util.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +95,8 @@ public class MainController implements Initializable
     private TextField wholesalePrice;
     @FXML
     private TextField tax;
+    @FXML
+    private TextField searchCriteria;
     
     @FXML
     private TextField add;
@@ -107,7 +115,7 @@ public class MainController implements Initializable
     @FXML
     private TableColumn<ItemDo, String> itemWeightUnitCol;
     @FXML
-    private TableColumn<ItemDo, Double> itemActualPriceCol;
+    private TableColumn<ItemDetailsDo, Double> itemActualPriceCol;
     @FXML
     private TableColumn<ItemDetailsDo, Double> itemRetailBillingPriceCol;
     @FXML
@@ -125,7 +133,7 @@ public class MainController implements Initializable
     @FXML
     private Tab itemDetails_tab;
     
-    
+    List<ItemDetailsDo> itemDetailsList=new ArrayList<ItemDetailsDo>();
     
     @Autowired
     private ItemService itemService;
@@ -272,10 +280,34 @@ public class MainController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        
-        
-    
-        
+        dataTable.setEditable(true);
+        Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactory =
+                new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
+                    public TableCell call(TableColumn p) {
+                        return new ItemEditingCell();
+                    }
+                };
+
+        itemActualPriceCol.setCellFactory(cellFactory);
+        itemActualPriceCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
+                        ItemDetailsDo data = (ItemDetailsDo) 
+                                t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        data.setActualPrice(t.getNewValue());
+                        
+                        ItemDetails det = itemService.
+                                getItemDetailsByItemId(data.getItemId());
+                        
+                        ItemDetails itemDetails=new ItemDetails(det);
+
+                        itemDetails.setActualPrice(data.getActualPrice());
+
+                        itemService.itemDetailsSave(itemDetails);
+                        fillDataTable();
+                    }
+                });
         
         indexProperty().addListener(new ChangeListener() {
  
@@ -295,17 +327,9 @@ public class MainController implements Initializable
                 setIndex(dataTableData.indexOf(newValue));
  
                 System.out.println("OK");
- 
- 
- 
- 
- 
             }
         });
  
- 
-       
-        
         uom.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
         //uom.getItems().addAll("choose", "mg", "cg", "dg", "g", "kg");
         category.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
@@ -343,11 +367,18 @@ public class MainController implements Initializable
                 new PropertyValueFactory<ItemDo, Double>("mrp"));
         itemWeightCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("weight"));
         itemWeightUnitCol.setCellValueFactory(new PropertyValueFactory<ItemDo, String>("weightUnit"));
-        itemActualPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("actualPrice"));
+        itemActualPriceCol.setCellValueFactory
+                (new PropertyValueFactory<ItemDetailsDo, Double>("actualPrice"));
         itemRetailBillingPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("retailBillingPrice"));
         itemWholesaleBillingPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("wholesaleBillingPrice"));
         taxCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("tax"));
         itemHasGiftCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("hasGift"));
+        itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
+         for (Items item : itemService.getAllItems()) {
+           // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
+                System.out.println("itemId:"+item.getIdPk());
+                itemDetailsList.add(itemService.getItemDetailsDoByItemId(item.getIdPk()));
+         }
         fillDataTable();
         
         
@@ -380,21 +411,28 @@ public class MainController implements Initializable
         ft.play();
     }
 
-    private void fillDataTable() {
+    
+   /* private void fillDataTable() {
         if (itemService == null) {
             itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
         }
         List<ItemDetailsDo> itemDetailsDoList = new ArrayList<ItemDetailsDo>();
         List<Items> items = itemService.getAllItems();
         for (Items item : itemService.getAllItems()) {
-            for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
-                itemDetailsDoList.add(itemsDetails);
-            }
+           // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
+                System.out.println("itemId:"+item.getIdPk());
+                itemDetailsDoList.add(itemService.getItemDetailsByItemId(item.getIdPk()));
+                
+            
 
         }
         dataTableData.setAll(itemDetailsDoList);
-    }
+    }*/
     
+    private void fillDataTable() {
+       
+        dataTableData.setAll(itemDetailsList);
+    }
     
      @FXML
     private void addItem(ActionEvent event) {
@@ -464,7 +502,116 @@ public class MainController implements Initializable
           
         
      }
+             
+    
+    @FXML
+    private void searchAction(ActionEvent event) {
+         
+          itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
+
+        if (KCPUtils.isNullString(searchCriteria.getText())) {
+            label.setText("Please enter product name");
+            animateMessage();
+            fillDataTable();
+            System.out.println("reenter item");
+            return;
+        }
+        
+        
+        itemDetailsList=itemService.getItemsByCriteria(searchCriteria.getText());
+        
+        
+        fillDataTable();
+        
+     }
+             
 }
+
+
+
+class ItemEditingCell extends TableCell<ItemDetailsDo, Double> {
+
+    private TextField textField;
+
+    public ItemEditingCell() {
+    }
+
+    @Override
+    public void startEdit() {
+        super.startEdit();
+
+        if (textField == null) {
+            createTextField();
+        }
+
+        setGraphic(textField);
+        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        textField.selectAll();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                textField.requestFocus();
+            }
+        });
+    }
+
+    @Override
+    public void cancelEdit() {
+        super.cancelEdit();
+
+        setText(String.valueOf(getItem()));
+        setContentDisplay(ContentDisplay.TEXT_ONLY);
+    }
+
+    @Override
+    public void updateItem(Double item, boolean empty) {
+        super.updateItem(item, empty);
+
+        System.out.println("UpdateItem:" + item);
+
+        if (empty) {
+            setText(null);
+            setGraphic(null);
+        } else {
+            if (isEditing()) {
+                if (textField != null) {
+                    textField.setText(getString());
+                }
+                setGraphic(textField);
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            } else {
+                setText(getString());
+                setContentDisplay(ContentDisplay.TEXT_ONLY);
+            }
+        }
+    }
+
+    private void createTextField() {
+        System.out.println("createTextField() start");
+        textField = new TextField(getString());
+        textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+        textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent t) {
+                if (t.getCode() == KeyCode.ENTER) {
+
+//                      InvoiceDetailsDo data = (InvoiceDetailsDo) t.getTableView().getItems().get(event.getTablePosition().getRow());
+                    commitEdit(Double.parseDouble(textField.getText()));
+                    //commitEdit(textField.getText());
+                } else if (t.getCode() == KeyCode.ESCAPE) {
+                    cancelEdit();
+                }
+            }
+        });
+    }
+
+    private String getString() {
+        return getItem() == null ? "" : getItem().toString();
+    }
+    
+    
+    
+        }
 
 
  

@@ -335,16 +335,15 @@ public class InvoiceController implements Initializable {
                 new EventHandler<TableColumn.CellEditEvent<InvoiceDetailsDo, Double>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<InvoiceDetailsDo, Double> t) {
-                        InvoiceDetailsDo data = (InvoiceDetailsDo) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        InvoiceDetailsDo data = (InvoiceDetailsDo) 
+                                t.getTableView().getItems().get(t.getTablePosition().getRow());
                         data.setQuantity(t.getNewValue());
-                        InvoiceDetails det = invoiceService.getInvoiceDetailsById(data.getInvoiceDetailsId());
-
+                        InvoiceDetails det = invoiceService.
+                                getInvoiceDetailsById(data.getInvoiceDetailsId());
                         det.setQuantity(data.getQuantity());
                         det.setTotal(det.getQuantity() * det.getItemDetails().getRetailBillingPrice());
-
                         invoiceService.invoiceDetailsSave(det);
                         fillInvoiceDataTable();
-
                     }
                 });
         itemName.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");

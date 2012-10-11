@@ -185,8 +185,8 @@ public class ItemDetailsDo {
         return actualPrice.get();
     }
 
-    public void setActualPrice(SimpleDoubleProperty actualPrice) {
-        this.actualPrice = actualPrice;
+    public void setActualPrice(Double actualPrice) {
+        this.actualPrice.set(actualPrice);
     }
 
     public Integer getBillingTypeId() {

@@ -31,9 +31,12 @@ import javax.persistence.TemporalType;
 @Table(name = "item_details", catalog = "storedb")
 @NamedQueries({
     @NamedQuery(name = "ItemDetails.findAll", query = "SELECT i FROM ItemDetails i"),
-    @NamedQuery(name = "ItemDetails.findById", query = "SELECT i FROM ItemDetails i where i.idPk=:id"
+    @NamedQuery(name = "ItemDetails.findById", 
+        query = "SELECT i FROM ItemDetails i where i.idPk=:id"
         + " and i.enabled=true"),
     @NamedQuery(name = "ItemDetails.findAllById", query = "SELECT i FROM ItemDetails i where i.idPk=:id"),
+    @NamedQuery(name = "ItemDetails.findByItemId", query = "SELECT i FROM ItemDetails i where i.item.idPk=:id"
+        + " and i.enabled=true"),
     
     
     @NamedQuery(name = "ItemDetails.findByItemIdBillingType", query = "SELECT i FROM ItemDetails i "
@@ -62,7 +65,7 @@ public class ItemDetails implements Serializable{
     private Boolean enabled;
     private static final Logger LOG = Logger.getLogger(ItemDetails.class.getName());
 
-    public ItemDetails(Integer idPk, Users users, Items item, double mrp, double actualPrice, double retailBillingPrice, double wholesaleBillingPrice, double tax, BillingType billingType,  boolean hasfree, Date modifiedDate, Boolean enabled) {
+    public ItemDetails(Integer idPk, Users users, Items item, double mrp, double actualPrice, double retailBillingPrice, double wholesaleBillingPrice, double tax, BillingType billingType, boolean hasfree, Date modifiedDate, Boolean enabled) {
         this.idPk = idPk;
         this.users = users;
         this.item = item;
@@ -72,11 +75,28 @@ public class ItemDetails implements Serializable{
         this.wholesaleBillingPrice = wholesaleBillingPrice;
         this.tax = tax;
         this.billingType = billingType;
-//        this.uom = uom;
         this.hasfree = hasfree;
         this.modifiedDate = modifiedDate;
         this.enabled = enabled;
     }
+
+   
+    
+     public ItemDetails(ItemDetails itemDetails)
+     {
+         this.idPk = itemDetails.idPk;
+        this.users = itemDetails.users;
+        this.item = itemDetails.item;
+        this.mrp = itemDetails.mrp;
+        this.actualPrice = itemDetails.actualPrice;
+        this.retailBillingPrice = itemDetails.retailBillingPrice;
+        this.wholesaleBillingPrice = itemDetails.wholesaleBillingPrice;
+        this.tax = itemDetails.tax;
+        this.billingType = itemDetails.billingType;
+        this.hasfree = itemDetails.hasfree;
+        this.modifiedDate = itemDetails.modifiedDate;
+        this.enabled = itemDetails.enabled;
+     }
 
     @Column(name = "tax", nullable = true, length = 19)
     public double getTax() {
