@@ -177,8 +177,8 @@ public class ItemDetailsDo {
         return mrp.get();
     }
 
-    public void setMrp(SimpleDoubleProperty mrp) {
-        this.mrp = mrp;
+    public void setMrp(Double mrp) {
+        this.mrp.set(mrp);
     }
 
     public Double getActualPrice() {
@@ -249,8 +249,8 @@ public class ItemDetailsDo {
         return retailPrice.get();
     }
 
-    public void setRetailPrice(SimpleDoubleProperty retailPrice) {
-        this.retailPrice = retailPrice;
+    public void setRetailPrice(Double retailPrice) {
+        this.retailPrice.set(retailPrice);
     }
 
     public Double getTax() {

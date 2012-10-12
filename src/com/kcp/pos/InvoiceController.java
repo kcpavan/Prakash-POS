@@ -397,12 +397,6 @@ public class InvoiceController implements Initializable {
         itemTotalAmountCol.setCellValueFactory(
                 new PropertyValueFactory<InvoiceDetailsDo, Double>("total"));
 
-
-
-
-
-
-
         fillInvoiceDataTable();
     }
 

@@ -109,7 +109,7 @@ public class MainController implements Initializable
     @FXML
     private TableColumn<ItemDo, String> itemBarcodeCol;
     @FXML
-    private TableColumn<ItemDo, Double> itemMRP;
+    private TableColumn<ItemDetailsDo, Double> itemMRP;
     @FXML
     private TableColumn<ItemDo, Double> itemWeightCol;
     @FXML
@@ -324,14 +324,14 @@ public class MainController implements Initializable
                     public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
                         ItemDetailsDo data = (ItemDetailsDo) 
                                 t.getTableView().getItems().get(t.getTablePosition().getRow());
-                        data.setActualPrice(t.getNewValue());
+                        data.setRetailPrice(t.getNewValue());
                         
                         ItemDetails det = itemService.
                                 getItemDetailsById(data.getIdPk());
                         
                         ItemDetails itemDetails=new ItemDetails(det);
 
-                        itemDetails.setRetailBillingPrice(data.getRetailBillingPrice());
+                        itemDetails.setRetailBillingPrice(data.getRetailPrice());
                         itemDetails.setEnabled(true);
 
                         itemService.itemDetailsSave(itemDetails);
@@ -339,6 +339,35 @@ public class MainController implements Initializable
                     }
                 });
         
+        
+        Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryMrp =
+                new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
+                    public TableCell call(TableColumn p) {
+                        return new ItemDoubleEditingCell();
+                    }
+                };
+        
+        itemMRP.setCellFactory(cellFactoryMrp);
+        itemMRP.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
+                        ItemDetailsDo data = (ItemDetailsDo) 
+                                t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        data.setMrp(t.getNewValue());
+                        
+                        ItemDetails det = itemService.
+                                getItemDetailsById(data.getIdPk());
+                        
+                        ItemDetails itemDetails=new ItemDetails(det);
+
+                        itemDetails.setMrp(data.getMrp());
+                        itemDetails.setEnabled(true);
+
+                        itemService.itemDetailsSave(itemDetails);
+                        fillDataTable();
+                    }
+                });
         
         
         indexProperty().addListener(new ChangeListener() {
@@ -396,7 +425,7 @@ public class MainController implements Initializable
         itemNameCol.setCellValueFactory(
                 new PropertyValueFactory<ItemDo, String>("itemName"));
         itemMRP.setCellValueFactory(
-                new PropertyValueFactory<ItemDo, Double>("mrp"));
+                new PropertyValueFactory<ItemDetailsDo, Double>("mrp"));
         itemWeightCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("weight"));
         itemWeightUnitCol.setCellValueFactory(new PropertyValueFactory<ItemDo, String>("weightUnit"));
         itemActualPriceCol.setCellValueFactory
