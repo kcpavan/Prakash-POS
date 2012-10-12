@@ -56,7 +56,7 @@ public class ItemService {
     }
     
     public void itemDetailsSave(ItemDetails itemDetails){
-        itemDetailsDao.disableItemDetails(itemDetails.getIdPk());
+        itemDetailsDao.disableItemDetails(itemDetails.getItem().getIdPk());
         itemDetailsDao.persist(itemDetails);
     }
     
@@ -106,6 +106,11 @@ public class ItemService {
          
     }
      
+    public ItemDetails getItemDetailsById(Integer id)
+    {
+         return itemDetailsDao.findById(id) ;
+         
+    }
     
     public Boolean getAllItemDetailsByItemId(Integer id)
     {

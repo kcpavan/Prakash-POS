@@ -96,6 +96,29 @@ class ItemDetailsDaoImpl implements ItemDetailsDao{
 	
         }
         
+        
+        public ItemDetails  findById(Integer id) 
+        {
+          
+		log.debug("getting Items instance with id: " + id);
+		try {
+                    Query instance = entityManager.createNamedQuery("ItemDetails.findById")
+                                .setParameter("id", id);
+			log.debug("get successful");
+			List<ItemDetails> elementList =new ArrayList<ItemDetails>();
+                        elementList = instance.getResultList();
+                        return elementList.isEmpty() ? null : elementList.get(0);
+                         //return elementList;
+                        
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	
+        }
+        
+        
+        
          public List<ItemDetails>  findAllByItemId(Integer id) {
              
              log.debug("getting Items instance with id: " + id);
@@ -131,6 +154,7 @@ class ItemDetailsDaoImpl implements ItemDetailsDao{
 		}
 	}
         
+        @Transactional
         public Boolean disableItemDetails(Integer itemId)
         {
             	log.debug("getting Items instance with id: " + itemId);
@@ -138,7 +162,8 @@ class ItemDetailsDaoImpl implements ItemDetailsDao{
                     Query instance = entityManager.createNamedQuery("ItemDetails.setDisabled")
                                 .setParameter("id", itemId);
 			log.debug("get successful");
-                        instance.getSingleResult();
+                       // instance.getSingleResult();
+                        instance.executeUpdate();
                         
                        // return elementList.isEmpty() ? null : elementList.get(0).getBillingPrice();
                          return true;

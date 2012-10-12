@@ -117,9 +117,9 @@ public class MainController implements Initializable
     @FXML
     private TableColumn<ItemDetailsDo, Double> itemActualPriceCol;
     @FXML
-    private TableColumn<ItemDetailsDo, Double> itemRetailBillingPriceCol;
+    private TableColumn<ItemDetailsDo, Double> itemRetailPriceCol;
     @FXML
-    private TableColumn<ItemDetailsDo, Double> itemWholesaleBillingPriceCol;
+    private TableColumn<ItemDetailsDo, Double> itemWholesalePriceCol;
     
     @FXML
     private TableColumn<ItemDetailsDo, Double> taxCol;
@@ -284,7 +284,7 @@ public class MainController implements Initializable
         Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactory =
                 new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
                     public TableCell call(TableColumn p) {
-                        return new ItemEditingCell();
+                        return new ItemDoubleEditingCell();
                     }
                 };
 
@@ -298,7 +298,7 @@ public class MainController implements Initializable
                         data.setActualPrice(t.getNewValue());
                         
                         ItemDetails det = itemService.
-                                getItemDetailsByItemId(data.getItemId());
+                                getItemDetailsById(data.getIdPk());
                         
                         ItemDetails itemDetails=new ItemDetails(det);
 
@@ -309,6 +309,37 @@ public class MainController implements Initializable
                         fillDataTable();
                     }
                 });
+   
+        Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryRetail =
+                new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
+                    public TableCell call(TableColumn p) {
+                        return new ItemDoubleEditingCell();
+                    }
+                };
+        
+        itemRetailPriceCol.setCellFactory(cellFactoryRetail);
+        itemRetailPriceCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
+                        ItemDetailsDo data = (ItemDetailsDo) 
+                                t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        data.setActualPrice(t.getNewValue());
+                        
+                        ItemDetails det = itemService.
+                                getItemDetailsById(data.getIdPk());
+                        
+                        ItemDetails itemDetails=new ItemDetails(det);
+
+                        itemDetails.setRetailBillingPrice(data.getRetailBillingPrice());
+                        itemDetails.setEnabled(true);
+
+                        itemService.itemDetailsSave(itemDetails);
+                        fillDataTable();
+                    }
+                });
+        
+        
         
         indexProperty().addListener(new ChangeListener() {
  
@@ -370,8 +401,8 @@ public class MainController implements Initializable
         itemWeightUnitCol.setCellValueFactory(new PropertyValueFactory<ItemDo, String>("weightUnit"));
         itemActualPriceCol.setCellValueFactory
                 (new PropertyValueFactory<ItemDetailsDo, Double>("actualPrice"));
-        itemRetailBillingPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("retailBillingPrice"));
-        itemWholesaleBillingPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("wholesaleBillingPrice"));
+        itemRetailPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("retailBillingPrice"));
+        itemWholesalePriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("wholesaleBillingPrice"));
         taxCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("tax"));
         itemHasGiftCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("hasGift"));
         itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
@@ -530,11 +561,11 @@ public class MainController implements Initializable
 
 
 
-class ItemEditingCell extends TableCell<ItemDetailsDo, Double> {
+class ItemDoubleEditingCell extends TableCell<ItemDetailsDo, Double> {
 
     private TextField textField;
 
-    public ItemEditingCell() {
+    public ItemDoubleEditingCell() {
     }
 
     @Override

@@ -61,8 +61,8 @@
                             <TableColumn prefWidth="75.0" text="Weight" fx:id="itemWeightCol" />
                             <TableColumn prefWidth="75.0" text="Weight Unit" fx:id="itemWeightUnitCol" />
                             <TableColumn prefWidth="75.0" text="Actual Price" fx:id="itemActualPriceCol" />
-                            <TableColumn prefWidth="75.0" text="Retail Price" fx:id="itemRetailBillingPriceCol" />
-                            <TableColumn prefWidth="75.0" text="Wholesale Price" fx:id="itemWholesaleBillingPriceCol" />
+                            <TableColumn prefWidth="75.0" text="Retail Price" fx:id="itemRetailPriceCol" />
+                            <TableColumn prefWidth="75.0" text="Wholesale Price" fx:id="itemWholesalePriceCol" />
                             <TableColumn prefWidth="75.0" text="Has Gift" fx:id="itemHasGiftCol" />
                             <TableColumn prefWidth="75.0" text="Tax" fx:id="taxCol" />
                             <TableColumn prefWidth="75.0" text="Column X" />

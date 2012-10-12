@@ -18,10 +18,12 @@ public interface ItemDetailsDao {
     public void persist(ItemDetails transientInstance); 
     public com.kcp.pos.modal.ItemDetails findByItemIdBillingType(Integer id,Integer type) ;
     public ItemDetails  findByItemId(Integer id) ;
+    public ItemDetails  findById(Integer id) ;
     public List<ItemDetails>  findAllByItemId(Integer id) ;
     
     public Double findBillingPriceByItemId(Integer id) ;
     public Boolean disableItemDetails(Integer itemId);
+    
     
     
 

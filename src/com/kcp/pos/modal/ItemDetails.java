@@ -32,8 +32,7 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(name = "ItemDetails.findAll", query = "SELECT i FROM ItemDetails i"),
     @NamedQuery(name = "ItemDetails.findById", 
-        query = "SELECT i FROM ItemDetails i where i.idPk=:id"
-        + " and i.enabled=true"),
+        query = "SELECT i FROM ItemDetails i where i.idPk=:id"),
     @NamedQuery(name = "ItemDetails.findAllById", query = "SELECT i FROM ItemDetails i where i.idPk=:id"),
     @NamedQuery(name = "ItemDetails.findByItemId", query = "SELECT i FROM ItemDetails i where i.item.idPk=:id"
         + " and i.enabled=true"),
