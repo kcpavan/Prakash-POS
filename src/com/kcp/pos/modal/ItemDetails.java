@@ -51,6 +51,9 @@ public class ItemDetails implements Serializable{
     private Integer idPk;
     private Users users;
     private Items item;
+    private double weight;
+    private UOM uom;
+
     private double mrp;
     private double actualPrice;
     
@@ -98,6 +101,7 @@ public class ItemDetails implements Serializable{
         this.hasfree = itemDetails.hasfree;
         this.modifiedDate = itemDetails.modifiedDate;
         this.enabled = itemDetails.enabled;
+        this.uom=itemDetails.uom;
      }
 
     @Column(name = "tax", nullable = true, length = 19)
@@ -197,7 +201,7 @@ public class ItemDetails implements Serializable{
 
     
     @Column(name = "enabled", nullable = false)
-    public Boolean getEnabled() {
+    public Boolean isEnabled() {
         return enabled;
     }
 
@@ -242,6 +246,23 @@ public class ItemDetails implements Serializable{
         this.hasfree = hasfree;
     }
 
+     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "uom_id_fk")
+    public UOM getUom() {
+        return this.uom;
+    }
+
+    public void setUom(UOM uom) {
+        this.uom = uom;
+    }
     
+     @Column(name = "weight", nullable = false, precision = 22, scale = 0)
+    public double getWeight() {
+        return this.weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
     
 }

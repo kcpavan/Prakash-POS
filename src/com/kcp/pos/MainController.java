@@ -111,7 +111,7 @@ public class MainController implements Initializable
     @FXML
     private TableColumn<ItemDetailsDo, Double> itemMRP;
     @FXML
-    private TableColumn<ItemDo, Double> itemWeightCol;
+    private TableColumn<ItemDetailsDo, Double> itemWeightCol;
     @FXML
     private TableColumn<ItemDo, String> itemWeightUnitCol;
     @FXML
@@ -209,8 +209,11 @@ public class MainController implements Initializable
 
         ItemDetails itemDetails = new ItemDetails();
 
+         UOMService uOMService=(UOMService) ApplicationMain.springContext.getBean("UOMService");
+         
+        itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
         itemDetails.setMrp(Double.valueOf(itemMrp.getText()));
-        item.setWeight(Double.valueOf(itemWeight.getText()));
+        itemDetails.setWeight(Double.valueOf(itemWeight.getText()));
         itemDetails.setActualPrice(Double.valueOf(actualPrice.getText()));
         itemDetails.setHasfree(Boolean.valueOf(hasGift.getText()));
         commonDao comDao = new commonDaoImpl();
@@ -233,7 +236,7 @@ public class MainController implements Initializable
         itemCategoryService.getItemCategoryByName((String) selectedItem);
 
         
-        UOMService uOMService=(UOMService) ApplicationMain.springContext.getBean("UOMService");
+       
         
        
         item.setModifiedDate(new Date());
@@ -253,7 +256,7 @@ public class MainController implements Initializable
       
         System.out.println("UOM:"+uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()).getUomDesc());
        //itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
-       item.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
+        itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
         for (UOMDo uOMDo : uOMService.getAllUOM()) {
             System.out.println("size:"+uOMService.getAllUOM().size());
             uom.getItems().add(uOMDo.getUomDesc());
@@ -272,6 +275,15 @@ public class MainController implements Initializable
         itemService.itemDetailsSave(itemDetails);
         label.setText("Item Saved");
         animateMessage();
+        itemDetailsList=new ArrayList<ItemDetailsDo>();
+        
+          for (Items data : itemService.getAllItems()) {
+              
+           // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
+                System.out.println("itemId:"+data.getIdPk());
+                itemDetailsList.add(itemService.getItemDetailsDoByItemId(data.getIdPk()));
+         }
+          
         fillDataTable();
         clearForm();
         System.out.println("saved");
@@ -281,24 +293,28 @@ public class MainController implements Initializable
     public void initialize(URL url, ResourceBundle rb) {
         
         dataTable.setEditable(true);
-        Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactory =
+        Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryActual =
                 new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
                     public TableCell call(TableColumn p) {
-                        return new ItemDoubleEditingCell();
+                        return new EditingCellDouble();
                     }
                 };
 
-        itemActualPriceCol.setCellFactory(cellFactory);
+        itemActualPriceCol.setCellFactory(cellFactoryActual);
         itemActualPriceCol.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
-                        ItemDetailsDo data = (ItemDetailsDo) 
+                        System.out.println("edit actual price");
+                        ItemDetailsDo record = (ItemDetailsDo) 
                                 t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        
+                        ItemDetailsDo data=itemService.getItemDetailsDoByItemId(record.getItemId());
                         data.setActualPrice(t.getNewValue());
                         
                         ItemDetails det = itemService.
-                                getItemDetailsById(data.getIdPk());
+                                getItemDetailsByItemId(data.getItemId());
+                        
                         
                         ItemDetails itemDetails=new ItemDetails(det);
 
@@ -313,7 +329,7 @@ public class MainController implements Initializable
         Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryRetail =
                 new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
                     public TableCell call(TableColumn p) {
-                        return new ItemDoubleEditingCell();
+                        return new EditingCellDouble();
                     }
                 };
         
@@ -322,12 +338,15 @@ public class MainController implements Initializable
                 new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
-                        ItemDetailsDo data = (ItemDetailsDo) 
+                        ItemDetailsDo record = (ItemDetailsDo) 
                                 t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        
+                        ItemDetailsDo data=itemService.getItemDetailsDoByItemId(record.getItemId());
                         data.setRetailPrice(t.getNewValue());
                         
                         ItemDetails det = itemService.
-                                getItemDetailsById(data.getIdPk());
+                                getItemDetailsByItemId(data.getItemId());
+                        
                         
                         ItemDetails itemDetails=new ItemDetails(det);
 
@@ -343,7 +362,7 @@ public class MainController implements Initializable
         Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryMrp =
                 new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
                     public TableCell call(TableColumn p) {
-                        return new ItemDoubleEditingCell();
+                        return new EditingCellDouble();
                     }
                 };
         
@@ -352,16 +371,120 @@ public class MainController implements Initializable
                 new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
-                        ItemDetailsDo data = (ItemDetailsDo) 
+                        System.out.println("edit mrp");
+                        ItemDetailsDo record = (ItemDetailsDo) 
                                 t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        
+                        ItemDetailsDo data=itemService.getItemDetailsDoByItemId(record.getItemId());
+                        
                         data.setMrp(t.getNewValue());
                         
                         ItemDetails det = itemService.
-                                getItemDetailsById(data.getIdPk());
+                                getItemDetailsByItemId(data.getItemId());
+                        
                         
                         ItemDetails itemDetails=new ItemDetails(det);
 
                         itemDetails.setMrp(data.getMrp());
+                        itemDetails.setEnabled(true);
+
+                        itemService.itemDetailsSave(itemDetails);
+                        fillDataTable();
+                    }
+                });
+        
+        
+        Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryWholeSale =
+                new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
+                    public TableCell call(TableColumn p) {
+                        return new EditingCellDouble();
+                    }
+                };
+        
+        itemWholesalePriceCol.setCellFactory(cellFactoryWholeSale);
+        itemWholesalePriceCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
+                        System.out.println("edit wholesale");
+                        ItemDetailsDo record = (ItemDetailsDo) 
+                                t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        ItemDetailsDo data=itemService.getItemDetailsDoByItemId(record.getItemId());
+                        data.setWholesalePrice(t.getNewValue());
+                        
+                        ItemDetails det = itemService.
+                                getItemDetailsByItemId(data.getItemId());
+                        
+                        
+                        ItemDetails itemDetails=new ItemDetails(det);
+
+                        itemDetails.setMrp(data.getMrp());
+                        itemDetails.setEnabled(true);
+
+                        itemService.itemDetailsSave(itemDetails);
+                        fillDataTable();
+                    }
+                });
+        
+        
+        
+        Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryWeight =
+                new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
+                    public TableCell call(TableColumn p) {
+                        return new EditingCellDouble();
+                    }
+                };
+        
+        itemWeightCol.setCellFactory(cellFactoryWeight);
+        itemWeightCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
+                        System.out.println("edit wholesale");
+                        ItemDetailsDo record = (ItemDetailsDo) 
+                                t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        ItemDetailsDo data=itemService.getItemDetailsDoByItemId(record.getItemId());
+                        data.setWeight(t.getNewValue());
+                        
+                        ItemDetails det = itemService.
+                                getItemDetailsByItemId(data.getItemId());
+                        
+                        
+                        ItemDetails itemDetails=new ItemDetails(det);
+
+                        itemDetails.setWeight(data.getWeight());
+                        itemDetails.setEnabled(true);
+
+                        itemService.itemDetailsSave(itemDetails);
+                        fillDataTable();
+                    }
+                });
+        
+        
+        Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryTax =
+                new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
+                    public TableCell call(TableColumn p) {
+                        return new EditingCellDouble();
+                    }
+                };
+        
+        taxCol.setCellFactory(cellFactoryTax);
+        taxCol.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
+                        System.out.println("edit wholesale");
+                        ItemDetailsDo record = (ItemDetailsDo) 
+                                t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        ItemDetailsDo data=itemService.getItemDetailsDoByItemId(record.getItemId());
+                        data.setTax(t.getNewValue());
+                        
+                        ItemDetails det = itemService.
+                                getItemDetailsByItemId(data.getItemId());
+                        
+                        ItemDetails itemDetails=new ItemDetails(det);
+
+                        itemDetails.setTax(data.getTax());
                         itemDetails.setEnabled(true);
 
                         itemService.itemDetailsSave(itemDetails);
@@ -426,7 +549,7 @@ public class MainController implements Initializable
                 new PropertyValueFactory<ItemDo, String>("itemName"));
         itemMRP.setCellValueFactory(
                 new PropertyValueFactory<ItemDetailsDo, Double>("mrp"));
-        itemWeightCol.setCellValueFactory(new PropertyValueFactory<ItemDo, Double>("weight"));
+        itemWeightCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("weight"));
         itemWeightUnitCol.setCellValueFactory(new PropertyValueFactory<ItemDo, String>("weightUnit"));
         itemActualPriceCol.setCellValueFactory
                 (new PropertyValueFactory<ItemDetailsDo, Double>("actualPrice"));
@@ -435,6 +558,11 @@ public class MainController implements Initializable
         taxCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("tax"));
         itemHasGiftCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("hasGift"));
         itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
+        
+        System.out.println("Get all items..");
+        
+        itemDetailsList=new ArrayList<ItemDetailsDo>();
+        
          for (Items item : itemService.getAllItems()) {
            // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
                 System.out.println("itemId:"+item.getIdPk());
@@ -494,6 +622,9 @@ public class MainController implements Initializable
        
         dataTableData.setAll(itemDetailsList);
     }
+   
+    
+    
     
      @FXML
     private void addItem(ActionEvent event) {
@@ -526,45 +657,31 @@ public class MainController implements Initializable
      @FXML
      public void gotoBarcode(KeyEvent e)
      {
-         
-          
-          
-         //System.out.println("In barcode");
-          
          if(e.getCode()==KeyCode.ENTER)
          {
-             //System.out.println("Enter key pressed");
             itemBarcode.requestFocus();
          }
      }
      
      
-             @FXML
+     @FXML
      public void OpenInvoice(ActionEvent e)
      {
-         
-         
-          
           application.gotoInvoice();
-         //System.out.println("In barcode");
-          
-        
      }
      
-     
-             @FXML
-     public void openMain(ActionEvent e)
+     @FXML
+     public void openPurchase(ActionEvent e)
      {
-         
-         
-          
-          application.gotoInvoice();
-         //System.out.println("In barcode");
-          
-        
+          application.gotoPurchase();
      }
              
     
+    @FXML
+    public void openMain(ActionEvent e) {
+        application.gotoMain();
+    }
+     
     @FXML
     private void searchAction(ActionEvent event) {
          
@@ -589,12 +706,12 @@ public class MainController implements Initializable
 }
 
 
-
-class ItemDoubleEditingCell extends TableCell<ItemDetailsDo, Double> {
+/*
+class EditingCellActualPrice extends TableCell<ItemDetailsDo, Double> {
 
     private TextField textField;
 
-    public ItemDoubleEditingCell() {
+    public EditingCellActualPrice() {
     }
 
     @Override
@@ -670,6 +787,93 @@ class ItemDoubleEditingCell extends TableCell<ItemDetailsDo, Double> {
         return getItem() == null ? "" : getItem().toString();
     }
     
+    
+    
+        }*/
+
+
+class EditingCellDouble extends TableCell<ItemDetailsDo, Double> {
+
+    private TextField textField;
+
+    public EditingCellDouble() {
+    }
+
+    @Override
+    public void startEdit() {
+        super.startEdit();
+
+        if (textField == null) {
+            createTextField();
+        }
+
+        setGraphic(textField);
+        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        textField.selectAll();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                textField.requestFocus();
+            }
+        });
+    }
+
+    @Override
+    public void cancelEdit() {
+        super.cancelEdit();
+
+        setText(String.valueOf(getItem()));
+        setContentDisplay(ContentDisplay.TEXT_ONLY);
+    }
+
+    @Override
+    public void updateItem(Double item, boolean empty) {
+        super.updateItem(item, empty);
+
+        System.out.println("UpdateItem:" + item);
+
+        if (empty) {
+            setText(null);
+            setGraphic(null);
+        } else {
+            if (isEditing()) {
+                if (textField != null) {
+                    textField.setText(getString());
+                }
+                setGraphic(textField);
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            } else {
+                setText(getString());
+                setContentDisplay(ContentDisplay.TEXT_ONLY);
+            }
+        }
+    }
+
+    private void createTextField() {
+        System.out.println("createTextField() start");
+        textField = new TextField(getString());
+        textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+        textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent t) {
+                if (t.getCode() == KeyCode.ENTER) {
+
+//                      InvoiceDetailsDo data = (InvoiceDetailsDo) t.getTableView().getItems().get(event.getTablePosition().getRow());
+                    commitEdit(Double.parseDouble(textField.getText()));
+                    //commitEdit(textField.getText());
+                } else if (t.getCode() == KeyCode.ESCAPE) {
+                    cancelEdit();
+                }
+            }
+        });
+    }
+
+    private String getString() {
+        return getItem() == null ? "" : getItem().toString();
+    }
+    
+   
+
     
     
         }

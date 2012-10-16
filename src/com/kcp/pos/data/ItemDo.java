@@ -31,7 +31,7 @@ public class ItemDo {
         this.itemName.set(items.getItemName());
         this.barcode.set(items.getBarcode());
 //        this.mrp.set(items.getMrp());
-        this.weight.set(items.getWeight());
+//        this.weight.set(items.getWeight());
         //this.uom.set(items.getUom());
         //this.uom.set(items.getUom().getUomDesc());
        // this.actualPrice.set(items.getActualPrice());

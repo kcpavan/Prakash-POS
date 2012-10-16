@@ -15,6 +15,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javax.persistence.Column;
 
 /**
  *
@@ -41,14 +42,15 @@ public class ItemDetailsDo {
     private SimpleDoubleProperty retailBillingPrice = new SimpleDoubleProperty();
     private SimpleDoubleProperty wholesaleBillingPrice = new SimpleDoubleProperty();
     private SimpleIntegerProperty billingTypeId = new SimpleIntegerProperty();
+    private SimpleBooleanProperty enabled =  new SimpleBooleanProperty();
 
     public ItemDetailsDo(ItemDetails itemDetails) {
         this.idPk.set(itemDetails.getIdPk());
         this.itemName.set(itemDetails.getItem().getItemName());
         this.barcode.set(itemDetails.getItem().getBarcode());
 //        this.mrp.set(items.getMrp());
-        this.weight.set(itemDetails.getItem().getWeight());
-        this.uom.set(itemDetails.getItem().getUom().getUomDesc());
+        this.weight.set(itemDetails.getWeight());
+        this.uom.set(itemDetails.getUom().getUomDesc());
         this.itemId.set(itemDetails.getItem().getIdPk());
         /*this.startRange.set(itemDetails.getStartRange());
          this.endRange.set(itemDetails.getEndRange());*/
@@ -58,6 +60,7 @@ public class ItemDetailsDo {
         this.mrp.set(itemDetails.getMrp());
         this.actualPrice.set(itemDetails.getActualPrice());
         this.hasFree.set(itemDetails.isHasfree());
+        this.enabled.set(itemDetails.isEnabled());
         
         
 
@@ -213,16 +216,16 @@ public class ItemDetailsDo {
         return weight.get();
     }
 
-    public void setWeight(SimpleDoubleProperty weight) {
-        this.weight = weight;
+    public void setWeight(Double weight) {
+        this.weight.set(weight);
     }
 
     public String getWeightUnit() {
         return uom.get();
     }
 
-    public void setUom(SimpleStringProperty uom) {
-        this.uom = uom;
+    public void setUom(String uom) {
+        this.uom.set(uom);
     }
 
     public Integer getIdPk() {
@@ -241,8 +244,8 @@ public class ItemDetailsDo {
         return wholesalePrice.get();
     }
 
-    public void setWholesalePrice(SimpleDoubleProperty wholesalePrice) {
-        this.wholesalePrice = wholesalePrice;
+    public void setWholesalePrice(Double wholesalePrice) {
+        this.wholesalePrice.set(wholesalePrice);
     }
 
     public Double getRetailPrice() {
@@ -257,8 +260,8 @@ public class ItemDetailsDo {
         return tax.get();
     }
 
-    public void setTax(SimpleDoubleProperty tax) {
-        this.tax = tax;
+    public void setTax(Double tax) {
+        this.tax.set(tax);
     }
 
     public Boolean getHasFree() {
@@ -269,6 +272,6 @@ public class ItemDetailsDo {
         this.hasFree = hasFree;
     }
     
-    
+   
     
 }

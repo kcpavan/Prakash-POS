@@ -10,7 +10,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="main_window" prefHeight="771.0" prefWidth="1037.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.kcp.pos.PurchaseController">
   <children>
-    <SplitPane dividerPositions="0.5604681404421327, 0.988296488946684" focusTraversable="true" orientation="VERTICAL" prefHeight="771.0" prefWidth="928.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-109.0" AnchorPane.topAnchor="0.0">
+    <SplitPane dividerPositions="0.5006501950585176, 0.9713914174252276" focusTraversable="true" orientation="VERTICAL" prefHeight="771.0" prefWidth="928.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-109.0" AnchorPane.topAnchor="0.0">
       <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="371.0" prefWidth="718.0">
           <children>
@@ -25,7 +25,7 @@
                 <Label font="$x1" text="Barcode" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                 <Label font="$x1" text="MRP" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                 <Label font="$x1" text="Basic Rate" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                <TextField id="itemBarcode" fx:id="barcode" prefHeight="26.0" prefWidth="231.0" promptText="Barcode" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField id="itemBarcode" fx:id="barcode" onKeyReleased="#handleBarcodeAction" prefHeight="26.0" prefWidth="231.0" promptText="Barcode" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <TextField id="itemMrp" fx:id="mrp" prefHeight="26.0" prefWidth="231.0" promptText="M.R.P" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <TextField id="itemWeight" fx:id="basicRate" prefHeight="26.0" prefWidth="231.0" promptText="Basic Rate" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                 <ChoiceBox fx:id="itemName" GridPane.columnIndex="1" GridPane.rowIndex="0">
@@ -60,7 +60,7 @@
               </rowConstraints>
             </GridPane>
             <Label fx:id="label" layoutX="17.0" layoutY="399.0" minHeight="16.0" minWidth="69.0" />
-            <Label alignment="CENTER" contentDisplay="CENTER" font="$x2" graphicTextGap="8.0" layoutX="250.0" layoutY="14.0" prefWidth="69.0" text="Purchase" />
+            <Label alignment="CENTER" contentDisplay="CENTER" font="$x2" graphicTextGap="8.0" layoutX="250.0" layoutY="26.0" prefWidth="69.0" text="Purchase" />
             <Label fx:id="invoiceNumber" layoutX="366.0" layoutY="14.0" prefHeight="22.0" prefWidth="71.0" />
             <Label fx:id="invoiceNumber" layoutX="335.0" layoutY="17.0" prefWidth="69.0" />
             <Label font="$x2" layoutX="386.0" layoutY="30.0" prefHeight="26.0" prefWidth="92.0" text="Quantity" />
@@ -97,6 +97,31 @@
             </GridPane>
             <Label fx:id="unitsPerCase" font="$x2" layoutX="604.0" layoutY="70.0" prefHeight="22.0" prefWidth="105.0" text="Units Per Case" />
             <TextField layoutX="726.0" layoutY="69.0" prefWidth="77.0" />
+            <MenuBar layoutX="-1.0" prefHeight="26.0" prefWidth="713.0">
+              <menus>
+                <Menu mnemonicParsing="false" onAction="#openMain" text="Master">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Add Item" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Invoice">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Invoice Details" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Purchase">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#openPurchase" text="Add Purchase" />
+                    <MenuItem mnemonicParsing="false" text="Details" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="285.0" prefWidth="1144.0">

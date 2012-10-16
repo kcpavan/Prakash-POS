@@ -380,6 +380,22 @@ public class PurchaseController implements Initializable {
         this.application = aThis;
     }
     
+     @FXML
+     public void OpenInvoice(ActionEvent e)
+     {
+          application.gotoInvoice();
+     }
      
+     @FXML
+     public void openPurchase(ActionEvent e)
+     {
+          application.gotoPurchase();
+     }
+             
+    
+    @FXML
+    public void openMain(ActionEvent e) {
+        application.gotoMain();
+    }
     
 }

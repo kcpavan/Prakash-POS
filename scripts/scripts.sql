@@ -44,9 +44,9 @@ create table storedb.items
 item_name varchar(250) not null,
 barcode varchar(250) not null,
 category_id_fk int null,
-uom_id_fk integer not null,
-/*mrp double not null,*/
-weight double not null,
+/*uom_id_fk integer not null,
+mrp double not null,
+weight double not null,*/
 
 /*weight_unit varchar(50)  null,
 actual_price double not null,
@@ -72,6 +72,8 @@ drop table if exists storedb.item_details;
 create table storedb.item_details
 (id_pk integer primary key not null auto_increment,
 item_id_fk integer not null,
+uom_id_fk integer not null,
+weight double not null,
 mrp double not null,
 actual_price double not null,
 start_range integer  null,

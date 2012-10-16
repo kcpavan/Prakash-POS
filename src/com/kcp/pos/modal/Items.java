@@ -35,9 +35,7 @@ public class Items implements java.io.Serializable {
     private String itemName;
     private String barcode;
     //private double mrp;
-    private double weight;
-    private UOM uom;
-
+    
     
     
     private Date modifiedDate;
@@ -106,14 +104,7 @@ public class Items implements java.io.Serializable {
      public void setMrp(double mrp) {
      this.mrp = mrp;
      }*/
-    @Column(name = "weight", nullable = false, precision = 22, scale = 0)
-    public double getWeight() {
-        return this.weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
+    
 
     
 
@@ -174,13 +165,5 @@ public class Items implements java.io.Serializable {
         this.invoiceDetailses = invoiceDetailses;
     }*/
 
-     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "uom_id_fk")
-    public UOM getUom() {
-        return this.uom;
-    }
-
-    public void setUom(UOM uom) {
-        this.uom = uom;
-    }
+    
 }

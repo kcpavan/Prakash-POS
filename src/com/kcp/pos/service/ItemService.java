@@ -87,7 +87,8 @@ public class ItemService {
     public ItemDetailsDo getItemDetailsDoByItemId(Integer Id)
     {
         
-        return(new ItemDetailsDo(itemDetailsDao.findByItemIdBillingType(Id,1)));
+        //return(new ItemDetailsDo(itemDetailsDao.findByItemIdBillingType(Id,1)));
+        return(new ItemDetailsDo(itemDetailsDao.findByItemId(Id)));
     }
     
     /*public List<ItemDetailsDo> getItemDetailsListByItemId(Integer id)

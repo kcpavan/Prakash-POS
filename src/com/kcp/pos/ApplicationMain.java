@@ -126,7 +126,18 @@ public class ApplicationMain extends Application {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-        
+      
+          void gotoPurchase() {
+        try {
+            
+            PurchaseController
+                    purchase=(PurchaseController)replaceSceneContent("Purchase.fxml");
+            purchase.setApp(this);
+          
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
         
         void gotoItem()
         {
