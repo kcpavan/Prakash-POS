@@ -418,7 +418,7 @@ public class MainController implements Initializable
                         
                         ItemDetails itemDetails=new ItemDetails(det);
 
-                        itemDetails.setMrp(data.getMrp());
+                        itemDetails.setWholesaleBillingPrice(data.getWholesalePrice());
                         itemDetails.setEnabled(true);
 
                         itemService.itemDetailsSave(itemDetails);

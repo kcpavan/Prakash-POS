@@ -102,6 +102,7 @@ public class ItemDetails implements Serializable{
         this.modifiedDate = itemDetails.modifiedDate;
         this.enabled = itemDetails.enabled;
         this.uom=itemDetails.uom;
+        this.weight=itemDetails.weight;
      }
 
     @Column(name = "tax", nullable = true, length = 19)
