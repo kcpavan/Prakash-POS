@@ -63,14 +63,12 @@ import org.springframework.stereotype.Component;
  * @author pavankumar
  */
 @Component
-public class MainController implements Initializable  
-{
+public class MainController implements Initializable {
 
     @FXML
     private Label label;
     @FXML
     private Label outputLabel;
-    
     @FXML
     private TextField itemName;
     @FXML
@@ -97,7 +95,6 @@ public class MainController implements Initializable
     private TextField tax;
     @FXML
     private TextField searchCriteria;
-    
     @FXML
     private TextField add;
     @FXML
@@ -120,21 +117,15 @@ public class MainController implements Initializable
     private TableColumn<ItemDetailsDo, Double> itemRetailPriceCol;
     @FXML
     private TableColumn<ItemDetailsDo, Double> itemWholesalePriceCol;
-    
     @FXML
     private TableColumn<ItemDetailsDo, Double> taxCol;
-    
     @FXML
     private TableColumn<ItemDetailsDo, Double> itemHasGiftCol;
- 
     @FXML
     private TabPane tabPane;
-    
     @FXML
     private Tab itemDetails_tab;
-    
-    List<ItemDetailsDo> itemDetailsList=new ArrayList<ItemDetailsDo>();
-    
+    List<ItemDetailsDo> itemDetailsList = new ArrayList<ItemDetailsDo>();
     @Autowired
     private ItemService itemService;
 
@@ -155,42 +146,118 @@ public class MainController implements Initializable
     public void setItemCategoryService(ItemCategoryService itemCategoryService) {
         this.itemCategoryService = itemCategoryService;
     }
-
-    
     private IntegerProperty index = new SimpleIntegerProperty();
- 
- 
+
     public final double getIndex() {
         return index.get();
     }
- 
-    
+
     public final void setIndex(Integer value) {
         index.set(value);
     }
- 
-    
+
     public IntegerProperty indexProperty() {
         return index;
     }
-    
-    
-    
-   
-    
-        
-    
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-        itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
 
+    public Boolean validate() {
         if (KCPUtils.isNullString(itemName.getText())) {
             label.setText("Please enter item name");
             animateMessage();
             fillDataTable();
             System.out.println("reenter item");
-            return;
+            return true;
         }
+        
+        if (KCPUtils.isNullString(itemBarcode.getText())) {
+            label.setText("Please enter itemBarcode ");
+            animateMessage();
+            fillDataTable();
+            System.out.println("reEnter item");
+            return true;
+        }
+        
+        String selectedItem = (String) category.getSelectionModel().getSelectedItem();
+
+        if (KCPUtils.isNullString(selectedItem)) {
+            label.setText("Please select category");
+            animateMessage();
+            fillDataTable();
+            System.out.println("reenter item");
+            return true;
+        }
+        
+        if (KCPUtils.isNullString(itemMrp.getText())) {
+            label.setText("Please enter MRP");
+            animateMessage();
+            fillDataTable();
+            System.out.println("reenter item");
+            return true;
+        }
+        
+        Double rPrice=null,wPrice=null,aPrice=null;
+        
+        if (KCPUtils.isNullString(actualPrice.getText())) {
+            label.setText("Please enter actualPrice");
+            animateMessage();
+            fillDataTable();
+            System.out.println("reenter item");
+            return true;
+        }
+        else
+        {
+            aPrice=Double.parseDouble(actualPrice.getText());
+        }
+        
+        if (KCPUtils.isNullString(retailPrice.getText())) {
+            label.setText("Please enter retailPrice");
+            animateMessage();
+            fillDataTable();
+            System.out.println("reenter item");
+            return true;
+        }
+        else
+        {
+            rPrice=Double.parseDouble(retailPrice.getText());
+        }
+        
+         if (KCPUtils.isNullString(wholesalePrice.getText())) {
+            label.setText("Please enter retailPrice");
+            animateMessage();
+            fillDataTable();
+            System.out.println("reenter item");
+            return true;
+        }
+         else
+         {
+             wPrice=Double.parseDouble(wholesalePrice.getText());
+         }
+
+         if(rPrice<aPrice)
+         {
+             label.setText("Retail price cannot be less than actual price"); 
+             return true;
+         }
+         
+         if(wPrice<aPrice)
+         {
+            label.setText("Wholesale price cannot be less than actual price"); 
+            return true;
+         }
+        
+         return false;
+
+    }
+
+    @FXML
+    private void handleButtonAction(ActionEvent event) {
+
+        if(!validate())
+        {
+            System.out.println("Validated!!");  
+        
+        itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
+
         for (Items item : itemService.getAllItems()) {
             if (item.getItemName().equalsIgnoreCase(itemName.getText())) {
                 label.setText("Item already exists");
@@ -202,15 +269,14 @@ public class MainController implements Initializable
 
         }
 
-
         Items item = new Items();
         item.setItemName(itemName.getText());
         item.setBarcode(itemBarcode.getText());
 
         ItemDetails itemDetails = new ItemDetails();
 
-         UOMService uOMService=(UOMService) ApplicationMain.springContext.getBean("UOMService");
-         
+        UOMService uOMService = (UOMService) ApplicationMain.springContext.getBean("UOMService");
+
         itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
         itemDetails.setMrp(Double.valueOf(itemMrp.getText()));
         itemDetails.setWeight(Double.valueOf(itemWeight.getText()));
@@ -235,33 +301,33 @@ public class MainController implements Initializable
         itemCategoryService = (ItemCategoryService) ApplicationMain.springContext.getBean("itemCategoryService");
         itemCategoryService.getItemCategoryByName((String) selectedItem);
 
-        
-       
-        
-       
+
+
+
+
         item.setModifiedDate(new Date());
         // Object selectedItem = category.getSelectionModel().getSelectedItem();
         System.out.println("selectedItem:" + selectedItem);
         ItemCategoryDao itemCategoryDao = (ItemCategoryDao) ApplicationMain.springContext.getBean("itemCategoryDaoImpl");
         item.setItemCategory(itemCategoryDao.findByName(selectedItem.toString()));
 
-        
+
         UserDao userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
         item.setUsers(userDao.findById(1));
 
         BillingTypeDao billingTypeDao = (BillingTypeDao) ApplicationMain.springContext.getBean("billingTypeDaoImpl");
 
         itemDetails.setBillingType(billingTypeDao.findByName("retail"));
-        
-      
-        System.out.println("UOM:"+uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()).getUomDesc());
-       //itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
+
+
+        System.out.println("UOM:" + uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()).getUomDesc());
+        //itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
         itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
         for (UOMDo uOMDo : uOMService.getAllUOM()) {
-            System.out.println("size:"+uOMService.getAllUOM().size());
+            System.out.println("size:" + uOMService.getAllUOM().size());
             uom.getItems().add(uOMDo.getUomDesc());
         }
-        
+
         itemDetails.setRetailBillingPrice(Double.valueOf(retailPrice.getText()));
         itemDetails.setWholesaleBillingPrice(Double.valueOf(wholesalePrice.getText()));
         itemDetails.setModifiedDate(new Date());
@@ -275,23 +341,24 @@ public class MainController implements Initializable
         itemService.itemDetailsSave(itemDetails);
         label.setText("Item Saved");
         animateMessage();
-        itemDetailsList=new ArrayList<ItemDetailsDo>();
-        
-          for (Items data : itemService.getAllItems()) {
-              
-           // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
-                System.out.println("itemId:"+data.getIdPk());
-                itemDetailsList.add(itemService.getItemDetailsDoByItemId(data.getIdPk()));
-         }
-          
+        itemDetailsList = new ArrayList<ItemDetailsDo>();
+
+        for (Items data : itemService.getAllItems()) {
+
+            // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
+            System.out.println("itemId:" + data.getIdPk());
+            itemDetailsList.add(itemService.getItemDetailsDoByItemId(data.getIdPk()));
+        }
+
         fillDataTable();
         clearForm();
         System.out.println("saved");
     }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         dataTable.setEditable(true);
         Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryActual =
                 new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
@@ -306,17 +373,15 @@ public class MainController implements Initializable
                     @Override
                     public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
                         System.out.println("edit actual price");
-                        ItemDetailsDo record = (ItemDetailsDo) 
-                                t.getTableView().getItems().get(t.getTablePosition().getRow());
-                        
-                        ItemDetailsDo data=itemService.getItemDetailsDoByItemId(record.getItemId());
+                        ItemDetailsDo record = (ItemDetailsDo) t.getTableView().getItems().get(t.getTablePosition().getRow());
+
+                        ItemDetailsDo data = itemService.getItemDetailsDoByItemId(record.getItemId());
                         data.setActualPrice(t.getNewValue());
-                        
-                        ItemDetails det = itemService.
-                                getItemDetailsByItemId(data.getItemId());
-                        
-                        
-                        ItemDetails itemDetails=new ItemDetails(det);
+
+                        ItemDetails det = itemService.getItemDetailsByItemId(data.getItemId());
+
+
+                        ItemDetails itemDetails = new ItemDetails(det);
 
                         itemDetails.setActualPrice(data.getActualPrice());
                         itemDetails.setEnabled(true);
@@ -325,30 +390,28 @@ public class MainController implements Initializable
                         fillDataTable();
                     }
                 });
-   
+
         Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryRetail =
                 new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
                     public TableCell call(TableColumn p) {
                         return new EditingCellDouble();
                     }
                 };
-        
+
         itemRetailPriceCol.setCellFactory(cellFactoryRetail);
         itemRetailPriceCol.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
-                        ItemDetailsDo record = (ItemDetailsDo) 
-                                t.getTableView().getItems().get(t.getTablePosition().getRow());
-                        
-                        ItemDetailsDo data=itemService.getItemDetailsDoByItemId(record.getItemId());
+                        ItemDetailsDo record = (ItemDetailsDo) t.getTableView().getItems().get(t.getTablePosition().getRow());
+
+                        ItemDetailsDo data = itemService.getItemDetailsDoByItemId(record.getItemId());
                         data.setRetailPrice(t.getNewValue());
-                        
-                        ItemDetails det = itemService.
-                                getItemDetailsByItemId(data.getItemId());
-                        
-                        
-                        ItemDetails itemDetails=new ItemDetails(det);
+
+                        ItemDetails det = itemService.getItemDetailsByItemId(data.getItemId());
+
+
+                        ItemDetails itemDetails = new ItemDetails(det);
 
                         itemDetails.setRetailBillingPrice(data.getRetailPrice());
                         itemDetails.setEnabled(true);
@@ -357,33 +420,31 @@ public class MainController implements Initializable
                         fillDataTable();
                     }
                 });
-        
-        
+
+
         Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryMrp =
                 new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
                     public TableCell call(TableColumn p) {
                         return new EditingCellDouble();
                     }
                 };
-        
+
         itemMRP.setCellFactory(cellFactoryMrp);
         itemMRP.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
                         System.out.println("edit mrp");
-                        ItemDetailsDo record = (ItemDetailsDo) 
-                                t.getTableView().getItems().get(t.getTablePosition().getRow());
-                        
-                        ItemDetailsDo data=itemService.getItemDetailsDoByItemId(record.getItemId());
-                        
+                        ItemDetailsDo record = (ItemDetailsDo) t.getTableView().getItems().get(t.getTablePosition().getRow());
+
+                        ItemDetailsDo data = itemService.getItemDetailsDoByItemId(record.getItemId());
+
                         data.setMrp(t.getNewValue());
-                        
-                        ItemDetails det = itemService.
-                                getItemDetailsByItemId(data.getItemId());
-                        
-                        
-                        ItemDetails itemDetails=new ItemDetails(det);
+
+                        ItemDetails det = itemService.getItemDetailsByItemId(data.getItemId());
+
+
+                        ItemDetails itemDetails = new ItemDetails(det);
 
                         itemDetails.setMrp(data.getMrp());
                         itemDetails.setEnabled(true);
@@ -392,31 +453,29 @@ public class MainController implements Initializable
                         fillDataTable();
                     }
                 });
-        
-        
+
+
         Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryWholeSale =
                 new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
                     public TableCell call(TableColumn p) {
                         return new EditingCellDouble();
                     }
                 };
-        
+
         itemWholesalePriceCol.setCellFactory(cellFactoryWholeSale);
         itemWholesalePriceCol.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
                         System.out.println("edit wholesale");
-                        ItemDetailsDo record = (ItemDetailsDo) 
-                                t.getTableView().getItems().get(t.getTablePosition().getRow());
-                        ItemDetailsDo data=itemService.getItemDetailsDoByItemId(record.getItemId());
+                        ItemDetailsDo record = (ItemDetailsDo) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        ItemDetailsDo data = itemService.getItemDetailsDoByItemId(record.getItemId());
                         data.setWholesalePrice(t.getNewValue());
-                        
-                        ItemDetails det = itemService.
-                                getItemDetailsByItemId(data.getItemId());
-                        
-                        
-                        ItemDetails itemDetails=new ItemDetails(det);
+
+                        ItemDetails det = itemService.getItemDetailsByItemId(data.getItemId());
+
+
+                        ItemDetails itemDetails = new ItemDetails(det);
 
                         itemDetails.setWholesaleBillingPrice(data.getWholesalePrice());
                         itemDetails.setEnabled(true);
@@ -425,32 +484,30 @@ public class MainController implements Initializable
                         fillDataTable();
                     }
                 });
-        
-        
-        
+
+
+
         Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryWeight =
                 new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
                     public TableCell call(TableColumn p) {
                         return new EditingCellDouble();
                     }
                 };
-        
+
         itemWeightCol.setCellFactory(cellFactoryWeight);
         itemWeightCol.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
                         System.out.println("edit wholesale");
-                        ItemDetailsDo record = (ItemDetailsDo) 
-                                t.getTableView().getItems().get(t.getTablePosition().getRow());
-                        ItemDetailsDo data=itemService.getItemDetailsDoByItemId(record.getItemId());
+                        ItemDetailsDo record = (ItemDetailsDo) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        ItemDetailsDo data = itemService.getItemDetailsDoByItemId(record.getItemId());
                         data.setWeight(t.getNewValue());
-                        
-                        ItemDetails det = itemService.
-                                getItemDetailsByItemId(data.getItemId());
-                        
-                        
-                        ItemDetails itemDetails=new ItemDetails(det);
+
+                        ItemDetails det = itemService.getItemDetailsByItemId(data.getItemId());
+
+
+                        ItemDetails itemDetails = new ItemDetails(det);
 
                         itemDetails.setWeight(data.getWeight());
                         itemDetails.setEnabled(true);
@@ -459,30 +516,28 @@ public class MainController implements Initializable
                         fillDataTable();
                     }
                 });
-        
-        
+
+
         Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryTax =
                 new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
                     public TableCell call(TableColumn p) {
                         return new EditingCellDouble();
                     }
                 };
-        
+
         taxCol.setCellFactory(cellFactoryTax);
         taxCol.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
                     @Override
                     public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
                         System.out.println("edit wholesale");
-                        ItemDetailsDo record = (ItemDetailsDo) 
-                                t.getTableView().getItems().get(t.getTablePosition().getRow());
-                        ItemDetailsDo data=itemService.getItemDetailsDoByItemId(record.getItemId());
+                        ItemDetailsDo record = (ItemDetailsDo) t.getTableView().getItems().get(t.getTablePosition().getRow());
+                        ItemDetailsDo data = itemService.getItemDetailsDoByItemId(record.getItemId());
                         data.setTax(t.getNewValue());
-                        
-                        ItemDetails det = itemService.
-                                getItemDetailsByItemId(data.getItemId());
-                        
-                        ItemDetails itemDetails=new ItemDetails(det);
+
+                        ItemDetails det = itemService.getItemDetailsByItemId(data.getItemId());
+
+                        ItemDetails itemDetails = new ItemDetails(det);
 
                         itemDetails.setTax(data.getTax());
                         itemDetails.setEnabled(true);
@@ -491,29 +546,27 @@ public class MainController implements Initializable
                         fillDataTable();
                     }
                 });
-        
-        
+
+
         indexProperty().addListener(new ChangeListener() {
- 
             @Override
             public void changed(ObservableValue o, Object oldVal,
                     Object newVal) {
                 System.out.println("Index has changed!");
             }
         });
-        
-        
+
+
         dataTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
- 
             @Override
             public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
                 ItemDetailsDo item = (ItemDetailsDo) newValue;
                 setIndex(dataTableData.indexOf(newValue));
- 
+
                 System.out.println("OK");
             }
         });
- 
+
         uom.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
         //uom.getItems().addAll("choose", "mg", "cg", "dg", "g", "kg");
         category.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
@@ -521,27 +574,27 @@ public class MainController implements Initializable
         ItemCategoryService itemCategoryService =
                 (ItemCategoryService) ApplicationMain.springContext.getBean("itemCategoryService");
         List<ItemCategoryDo> itemCategoryList = itemCategoryService.getAllItems();
-        
-        
+
+
 
         for (ItemCategoryDo item : itemCategoryList) {
 
             category.getItems().add(item.getItemName());
         }
 
-       
-        
-         UOMService uOMService =
+
+
+        UOMService uOMService =
                 (UOMService) ApplicationMain.springContext.getBean("UOMService");
-        
+
         for (UOMDo uOMDo : uOMService.getAllUOM()) {
-            System.out.println("size:"+uOMService.getAllUOM().size());
+            System.out.println("size:" + uOMService.getAllUOM().size());
             uom.getItems().add(uOMDo.getUomDesc());
         }
-        
-        
-        
-        
+
+
+
+
         dataTable.setItems(dataTableData);
         itemBarcodeCol.setCellValueFactory(
                 new PropertyValueFactory<ItemDo, String>("barcode"));
@@ -551,29 +604,27 @@ public class MainController implements Initializable
                 new PropertyValueFactory<ItemDetailsDo, Double>("mrp"));
         itemWeightCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("weight"));
         itemWeightUnitCol.setCellValueFactory(new PropertyValueFactory<ItemDo, String>("weightUnit"));
-        itemActualPriceCol.setCellValueFactory
-                (new PropertyValueFactory<ItemDetailsDo, Double>("actualPrice"));
+        itemActualPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("actualPrice"));
         itemRetailPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("retailBillingPrice"));
         itemWholesalePriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("wholesaleBillingPrice"));
         taxCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("tax"));
         itemHasGiftCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("hasGift"));
         itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
-        
+
         System.out.println("Get all items..");
-        
-        itemDetailsList=new ArrayList<ItemDetailsDo>();
-        
-         for (Items item : itemService.getAllItems()) {
-           // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
-                System.out.println("itemId:"+item.getIdPk());
-                itemDetailsList.add(itemService.getItemDetailsDoByItemId(item.getIdPk()));
-         }
+
+        itemDetailsList = new ArrayList<ItemDetailsDo>();
+
+        for (Items item : itemService.getAllItems()) {
+            // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
+            System.out.println("itemId:" + item.getIdPk());
+            itemDetailsList.add(itemService.getItemDetailsDoByItemId(item.getIdPk()));
+        }
         fillDataTable();
-        
-        
+
+
     }
 
-    
     private void clearForm() {
         itemName.clear();
         itemBarcode.clear();
@@ -600,92 +651,78 @@ public class MainController implements Initializable
         ft.play();
     }
 
-    
-   /* private void fillDataTable() {
-        if (itemService == null) {
-            itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
-        }
-        List<ItemDetailsDo> itemDetailsDoList = new ArrayList<ItemDetailsDo>();
-        List<Items> items = itemService.getAllItems();
-        for (Items item : itemService.getAllItems()) {
-           // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
-                System.out.println("itemId:"+item.getIdPk());
-                itemDetailsDoList.add(itemService.getItemDetailsByItemId(item.getIdPk()));
+    /* private void fillDataTable() {
+     if (itemService == null) {
+     itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
+     }
+     List<ItemDetailsDo> itemDetailsDoList = new ArrayList<ItemDetailsDo>();
+     List<Items> items = itemService.getAllItems();
+     for (Items item : itemService.getAllItems()) {
+     // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
+     System.out.println("itemId:"+item.getIdPk());
+     itemDetailsDoList.add(itemService.getItemDetailsByItemId(item.getIdPk()));
                 
             
 
-        }
-        dataTableData.setAll(itemDetailsDoList);
-    }*/
-    
+     }
+     dataTableData.setAll(itemDetailsDoList);
+     }*/
     private void fillDataTable() {
-       
+
         dataTableData.setAll(itemDetailsList);
     }
-   
-    
-    
-    
-     @FXML
+
+    @FXML
     private void addItem(ActionEvent event) {
-  
-            tabPane.getSelectionModel().select(itemDetails_tab);
-         //itemDetails_tab
-       
-            
-            
-        }
-     
-     
+
+        tabPane.getSelectionModel().select(itemDetails_tab);
+        //itemDetails_tab
+
+
+
+    }
+
     @FXML
     private void deleteItem(ActionEvent event) {
-  
-           if(itemService.getAllItemDetailsByItemId(dataTableData.get(index.get()).getItemId()))
-           {
-               outputLabel.setText("Item already invoiced");
-               return;
-           }
-           
-           dataTableData.remove(index.get());
-           dataTable.getSelectionModel().clearSelection();
-       
- 
-            
+
+        if (itemService.getAllItemDetailsByItemId(dataTableData.get(index.get()).getItemId())) {
+            outputLabel.setText("Item already invoiced");
+            return;
         }
-     
-     
-     @FXML
-     public void gotoBarcode(KeyEvent e)
-     {
-         if(e.getCode()==KeyCode.ENTER)
-         {
+
+        dataTableData.remove(index.get());
+        dataTable.getSelectionModel().clearSelection();
+
+
+
+    }
+
+    @FXML
+    public void gotoBarcode(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
             itemBarcode.requestFocus();
-         }
-     }
-     
-     
-     @FXML
-     public void OpenInvoice(ActionEvent e)
-     {
-          application.gotoInvoice();
-     }
-     
-     @FXML
-     public void openPurchase(ActionEvent e)
-     {
-          application.gotoPurchase();
-     }
-             
-    
+        }
+    }
+
+    @FXML
+    public void OpenInvoice(ActionEvent e) {
+        application.gotoInvoice();
+    }
+
+    @FXML
+    public void openPurchase(ActionEvent e) {
+        application.gotoPurchase();
+    }
+
     @FXML
     public void openMain(ActionEvent e) {
         application.gotoMain();
     }
-     
+
     @FXML
     private void searchAction(ActionEvent event) {
-         
-          itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
+
+        itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
 
         if (KCPUtils.isNullString(searchCriteria.getText())) {
             label.setText("Please enter product name");
@@ -694,104 +731,101 @@ public class MainController implements Initializable
             System.out.println("reenter item");
             return;
         }
-        
-        
-        itemDetailsList=itemService.getItemsByCriteria(searchCriteria.getText());
-        
-        
+
+
+        itemDetailsList = itemService.getItemsByCriteria(searchCriteria.getText());
+
+
         fillDataTable();
-        
-     }
-             
+
+    }
 }
 
 
 /*
-class EditingCellActualPrice extends TableCell<ItemDetailsDo, Double> {
+ class EditingCellActualPrice extends TableCell<ItemDetailsDo, Double> {
 
-    private TextField textField;
+ private TextField textField;
 
-    public EditingCellActualPrice() {
-    }
+ public EditingCellActualPrice() {
+ }
 
-    @Override
-    public void startEdit() {
-        super.startEdit();
+ @Override
+ public void startEdit() {
+ super.startEdit();
 
-        if (textField == null) {
-            createTextField();
-        }
+ if (textField == null) {
+ createTextField();
+ }
 
-        setGraphic(textField);
-        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        textField.selectAll();
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                textField.requestFocus();
-            }
-        });
-    }
+ setGraphic(textField);
+ setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+ textField.selectAll();
+ Platform.runLater(new Runnable() {
+ @Override
+ public void run() {
+ textField.requestFocus();
+ }
+ });
+ }
 
-    @Override
-    public void cancelEdit() {
-        super.cancelEdit();
+ @Override
+ public void cancelEdit() {
+ super.cancelEdit();
 
-        setText(String.valueOf(getItem()));
-        setContentDisplay(ContentDisplay.TEXT_ONLY);
-    }
+ setText(String.valueOf(getItem()));
+ setContentDisplay(ContentDisplay.TEXT_ONLY);
+ }
 
-    @Override
-    public void updateItem(Double item, boolean empty) {
-        super.updateItem(item, empty);
+ @Override
+ public void updateItem(Double item, boolean empty) {
+ super.updateItem(item, empty);
 
-        System.out.println("UpdateItem:" + item);
+ System.out.println("UpdateItem:" + item);
 
-        if (empty) {
-            setText(null);
-            setGraphic(null);
-        } else {
-            if (isEditing()) {
-                if (textField != null) {
-                    textField.setText(getString());
-                }
-                setGraphic(textField);
-                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-            } else {
-                setText(getString());
-                setContentDisplay(ContentDisplay.TEXT_ONLY);
-            }
-        }
-    }
+ if (empty) {
+ setText(null);
+ setGraphic(null);
+ } else {
+ if (isEditing()) {
+ if (textField != null) {
+ textField.setText(getString());
+ }
+ setGraphic(textField);
+ setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+ } else {
+ setText(getString());
+ setContentDisplay(ContentDisplay.TEXT_ONLY);
+ }
+ }
+ }
 
-    private void createTextField() {
-        System.out.println("createTextField() start");
-        textField = new TextField(getString());
-        textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
-        textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent t) {
-                if (t.getCode() == KeyCode.ENTER) {
+ private void createTextField() {
+ System.out.println("createTextField() start");
+ textField = new TextField(getString());
+ textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+ textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+ @Override
+ public void handle(KeyEvent t) {
+ if (t.getCode() == KeyCode.ENTER) {
 
-//                      InvoiceDetailsDo data = (InvoiceDetailsDo) t.getTableView().getItems().get(event.getTablePosition().getRow());
-                    commitEdit(Double.parseDouble(textField.getText()));
-                    //commitEdit(textField.getText());
-                } else if (t.getCode() == KeyCode.ESCAPE) {
-                    cancelEdit();
-                }
-            }
-        });
-    }
+ //                      InvoiceDetailsDo data = (InvoiceDetailsDo) t.getTableView().getItems().get(event.getTablePosition().getRow());
+ commitEdit(Double.parseDouble(textField.getText()));
+ //commitEdit(textField.getText());
+ } else if (t.getCode() == KeyCode.ESCAPE) {
+ cancelEdit();
+ }
+ }
+ });
+ }
 
-    private String getString() {
-        return getItem() == null ? "" : getItem().toString();
-    }
+ private String getString() {
+ return getItem() == null ? "" : getItem().toString();
+ }
     
     
     
-        }*/
-
-
+ }*/
 class EditingCellDouble extends TableCell<ItemDetailsDo, Double> {
 
     private TextField textField;
@@ -871,12 +905,4 @@ class EditingCellDouble extends TableCell<ItemDetailsDo, Double> {
     private String getString() {
         return getItem() == null ? "" : getItem().toString();
     }
-    
-   
-
-    
-    
-        }
-
-
- 
+}
