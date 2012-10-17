@@ -33,6 +33,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Invoice">
                   <items>
+                    <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Add" />
                     <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Invoice Details" />
                   </items>
                 </Menu>

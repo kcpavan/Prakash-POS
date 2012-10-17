@@ -41,7 +41,7 @@ insert into storedb.uom(uom_desc) values('kg'),('gm'),('pkt'),('box'),('case'),(
 drop table if exists storedb.items;
 create table storedb.items 
 (id_pk integer primary key not null auto_increment,
-item_name varchar(250) not null,
+item_name varchar(250) unique not null,
 barcode varchar(250) not null,
 category_id_fk int null,
 /*uom_id_fk integer not null,
@@ -83,6 +83,7 @@ wholesale_billing_price double not null,
 billing_type_id_fk int not null,
 hasfree boolean  null,
 tax double null,
+margin double not null,
 enabled boolean not null,
 modified_by int not null,
 modified_date timestamp,
@@ -239,8 +240,10 @@ create table storedb.invoice_details
 (id_pk integer primary key not null auto_increment,
 invoice_id_fk integer not null,
 /*item_id_fk integer not null,*/
+
 itemdetails_id_fk integer not null,
 quantity double not null,
+margin double not null,
 total double not null,
 CONSTRAINT fk_invoicedet_invoice_id
 	FOREIGN KEY(`invoice_id_fk`) 

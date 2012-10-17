@@ -33,17 +33,21 @@ public class InvoiceDetails implements java.io.Serializable {
     //private BillingPrice billingPrice;
     private Double quantity;
     private double total;
-
+    private Double margin;
+    
     public InvoiceDetails() {
     }
 
-    public InvoiceDetails(Invoice invoice, Items items, Double quantity,
-            double total) {
+    public InvoiceDetails(Integer idPk, Invoice invoice, ItemDetails itemDetails, Double quantity, double total, Double margin) {
+        this.idPk = idPk;
         this.invoice = invoice;
-        //this.items = items;
+        this.itemDetails = itemDetails;
         this.quantity = quantity;
         this.total = total;
+        this.margin = margin;
     }
+
+   
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -116,4 +120,15 @@ public class InvoiceDetails implements java.io.Serializable {
     public void setTotal(double total) {
         this.total = total;
     }
+
+    @Column(name = "margin", nullable = false, precision = 22, scale = 0)
+    public Double getMargin() {
+        return margin;
+    }
+
+    public void setMargin(Double margin) {
+        this.margin = margin;
+    }
+    
+    
 }

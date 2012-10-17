@@ -43,6 +43,7 @@ public class ItemDetailsDo {
     private SimpleDoubleProperty wholesaleBillingPrice = new SimpleDoubleProperty();
     private SimpleIntegerProperty billingTypeId = new SimpleIntegerProperty();
     private SimpleBooleanProperty enabled =  new SimpleBooleanProperty();
+    private SimpleDoubleProperty margin = new SimpleDoubleProperty();
 
     public ItemDetailsDo(ItemDetails itemDetails) {
         this.idPk.set(itemDetails.getIdPk());
@@ -61,7 +62,7 @@ public class ItemDetailsDo {
         this.actualPrice.set(itemDetails.getActualPrice());
         this.hasFree.set(itemDetails.isHasfree());
         this.enabled.set(itemDetails.isEnabled());
-        
+        this.margin.set(itemDetails.getMargin());
         
 
 
@@ -270,6 +271,14 @@ public class ItemDetailsDo {
 
     public void setHasFree(SimpleBooleanProperty hasFree) {
         this.hasFree = hasFree;
+    }
+
+    public Double getMargin() {
+        return margin.get();
+    }
+
+    public void setMargin(Double margin) {
+        this.margin.set(margin);
     }
     
    

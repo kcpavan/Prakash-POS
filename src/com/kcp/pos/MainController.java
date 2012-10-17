@@ -282,6 +282,7 @@ public class MainController implements Initializable {
         itemDetails.setWeight(Double.valueOf(itemWeight.getText()));
         itemDetails.setActualPrice(Double.valueOf(actualPrice.getText()));
         itemDetails.setHasfree(Boolean.valueOf(hasGift.getText()));
+        
         commonDao comDao = new commonDaoImpl();
         /*List list = comDao.getLookUpValues(
          ItemCategory.class, "typeDesc");
@@ -330,6 +331,7 @@ public class MainController implements Initializable {
 
         itemDetails.setRetailBillingPrice(Double.valueOf(retailPrice.getText()));
         itemDetails.setWholesaleBillingPrice(Double.valueOf(wholesalePrice.getText()));
+        itemDetails.setMargin(itemDetails.getWholesaleBillingPrice()-itemDetails.getActualPrice());
         itemDetails.setModifiedDate(new Date());
         itemDetails.setUsers(userDao.findById(1));
         itemDetails.setEnabled(Boolean.TRUE);

@@ -100,7 +100,7 @@
             </MenuBar>
             <AnchorPane layoutX="1.0" layoutY="350.0" minHeight="0.0" minWidth="0.0" prefHeight="411.0" prefWidth="698.0">
               <children>
-                <TabPane prefHeight="407.0" prefWidth="698.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-32.0">
+                <TabPane fx:id="tabPane" prefHeight="407.0" prefWidth="698.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-32.0">
                   <tabs>
                     <Tab fx:id="items_tab" text="Items">
                       <content>
@@ -123,7 +123,7 @@
                         </AnchorPane>
                       </content>
                     </Tab>
-                    <Tab text="Stocks">
+                    <Tab fx:id="invoiceDetails_tab" text="Stocks">
                       <content>
                         <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                       </content>

@@ -60,6 +60,7 @@ public class ItemDetails implements Serializable{
     private double retailBillingPrice;
     private double wholesaleBillingPrice;
     private double tax;
+    private double margin;
     
     private BillingType billingType;
    // private UOM uom;
@@ -70,21 +71,25 @@ public class ItemDetails implements Serializable{
     private Boolean enabled;
     private static final Logger LOG = Logger.getLogger(ItemDetails.class.getName());
 
-    public ItemDetails(Integer idPk, Users users, Items item, double mrp, double actualPrice, double retailBillingPrice, double wholesaleBillingPrice, double tax, BillingType billingType, boolean hasfree, Date modifiedDate, Boolean enabled) {
+    public ItemDetails(Integer idPk, Users users, Items item, double weight, UOM uom, double mrp, double actualPrice, double retailBillingPrice, double wholesaleBillingPrice, double tax, double margin, BillingType billingType, boolean hasfree, Date modifiedDate, Boolean enabled) {
         this.idPk = idPk;
         this.users = users;
         this.item = item;
+        this.weight = weight;
+        this.uom = uom;
         this.mrp = mrp;
         this.actualPrice = actualPrice;
         this.retailBillingPrice = retailBillingPrice;
         this.wholesaleBillingPrice = wholesaleBillingPrice;
         this.tax = tax;
+        this.margin = margin;
         this.billingType = billingType;
         this.hasfree = hasfree;
         this.modifiedDate = modifiedDate;
         this.enabled = enabled;
     }
 
+  
    
     
      public ItemDetails(ItemDetails itemDetails)
@@ -103,6 +108,7 @@ public class ItemDetails implements Serializable{
         this.enabled = itemDetails.enabled;
         this.uom=itemDetails.uom;
         this.weight=itemDetails.weight;
+        this.margin=itemDetails.margin;
      }
 
     @Column(name = "tax", nullable = true, length = 19)
@@ -257,7 +263,7 @@ public class ItemDetails implements Serializable{
         this.uom = uom;
     }
     
-     @Column(name = "weight", nullable = false, precision = 22, scale = 0)
+    @Column(name = "weight", nullable = false, precision = 22, scale = 0)
     public double getWeight() {
         return this.weight;
     }
@@ -265,5 +271,15 @@ public class ItemDetails implements Serializable{
     public void setWeight(double weight) {
         this.weight = weight;
     }
+    
+    @Column(name = "margin", nullable = false, precision = 22, scale = 0)
+    public double getMargin() {
+        return margin;
+    }
+
+    public void setMargin(double margin) {
+        this.margin = margin;
+    }
+   
     
 }

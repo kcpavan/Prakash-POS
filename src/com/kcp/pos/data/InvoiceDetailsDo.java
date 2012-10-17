@@ -27,6 +27,7 @@ public class InvoiceDetailsDo {
     private SimpleDoubleProperty billingPrice=new SimpleDoubleProperty();
     private SimpleDoubleProperty quantity = new SimpleDoubleProperty();
     private SimpleDoubleProperty total = new SimpleDoubleProperty();
+    private SimpleDoubleProperty margin = new SimpleDoubleProperty();
     
      public InvoiceDetailsDo(InvoiceDetails invoiceDetails) {
        //this.itemName.set(invoiceDetails.getItems().getItemName());
@@ -38,7 +39,7 @@ public class InvoiceDetailsDo {
        this.billingPrice.set(invoiceDetails.getItemDetails().getRetailBillingPrice());
        this.quantity.set(invoiceDetails.getQuantity());
        this.total.set(invoiceDetails.getTotal());
-       
+       this.margin.set(invoiceDetails.getMargin());
     }
      
     public InvoiceDetailsDo getInvoceDo(InvoiceDetails invoiceDetails)
@@ -49,6 +50,7 @@ public class InvoiceDetailsDo {
        this.billingPrice.set(invoiceDetails.getItemDetails().getRetailBillingPrice());
        this.quantity.set(invoiceDetails.getQuantity());
        this.total.set(invoiceDetails.getTotal());
+       this.margin.set(invoiceDetails.getMargin());
        return this;
      }
 
@@ -155,6 +157,14 @@ public class InvoiceDetailsDo {
 
     public void setQuantity(SimpleDoubleProperty quantity) {
         this.quantity = quantity;
+    }
+
+    public Double getMargin() {
+        return margin.get();
+    }
+
+    public void setMargin(Double margin) {
+        this.margin.set(margin);
     }
 
     

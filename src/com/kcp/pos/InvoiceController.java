@@ -48,7 +48,9 @@ import javafx.util.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -118,6 +120,26 @@ public class InvoiceController implements Initializable {
     private List<Items> itemList = new ArrayList<Items>();
     private Map<String, ItemDo> itemMap = new HashMap<String, ItemDo>();
     private Invoice invoice;
+
+    
+     private IntegerProperty index = new SimpleIntegerProperty();
+
+    @FXML
+    private TabPane tabPane;
+    @FXML
+    private Tab invoiceDetails_tab;
+    
+    public final double getIndex() {
+        return index.get();
+    }
+
+    public final void setIndex(Integer value) {
+        index.set(value);
+    }
+
+    public IntegerProperty indexProperty() {
+        return index;
+    }
 
     public Invoice getInvoice() {
         return invoice;
@@ -306,7 +328,8 @@ public class InvoiceController implements Initializable {
 
 
 
-
+        invoiceDetails.setMargin(invoiceDetails.getItemDetails().getMargin()
+                *invoiceDetails.getQuantity());
 
         invoiceService.invoiceDetailsSave(invoiceDetails);
 
@@ -323,6 +346,28 @@ public class InvoiceController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         dataTable.setEditable(true);
+        
+        indexProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue o, Object oldVal,
+                    Object newVal) {
+                System.out.println("Index has changed!");
+            }
+        });
+
+
+        dataTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+                InvoiceDetailsDo item = (InvoiceDetailsDo) newValue;
+                setIndex(dataTableData.indexOf(newValue));
+                tabPane.getSelectionModel().select(invoiceDetails_tab);
+
+                System.out.println("OK");
+            }
+        });
+
+        
         Callback<TableColumn<InvoiceDetailsDo, Double>, TableCell<InvoiceDetailsDo, Double>> cellFactory =
                 new Callback<TableColumn<InvoiceDetailsDo, Double>, TableCell<InvoiceDetailsDo, Double>>() {
                     public TableCell call(TableColumn p) {
