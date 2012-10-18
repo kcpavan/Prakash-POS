@@ -66,12 +66,15 @@ public class ItemDetails implements Serializable{
    // private UOM uom;
     //private double actualPrice;
     //private double sellingPrice;
-    private boolean hasfree;
+    //private String hasfree;
+    private Boolean hasfree;
     private Date modifiedDate;
     private Boolean enabled;
     private static final Logger LOG = Logger.getLogger(ItemDetails.class.getName());
 
-    public ItemDetails(Integer idPk, Users users, Items item, double weight, UOM uom, double mrp, double actualPrice, double retailBillingPrice, double wholesaleBillingPrice, double tax, double margin, BillingType billingType, boolean hasfree, Date modifiedDate, Boolean enabled) {
+    public ItemDetails(Integer idPk, Users users, Items item, double weight, UOM uom, double mrp,
+            double actualPrice, double retailBillingPrice, double wholesaleBillingPrice, double tax,
+            double margin, BillingType billingType, Boolean hasfree, Date modifiedDate, Boolean enabled) {
         this.idPk = idPk;
         this.users = users;
         this.item = item;
@@ -244,15 +247,24 @@ public class ItemDetails implements Serializable{
         this.uom = uom;
     }*/
     
-     @Column(name = "hasfree", nullable = true)
-    public boolean isHasfree() {
+    /* @Column(name = "hasfree", nullable = true)
+    public String getHasfree() {
         return this.hasfree;
     }
 
-    public void setHasfree(boolean hasfree) {
+    public void setHasfree(String hasfree) {
         this.hasfree = hasfree;
+    }*/
+
+    @Column(name = "hasfree", nullable = true)
+    public Boolean getHasfree() {
+        return this.hasfree;
     }
 
+    public void setHasfree(Boolean hasfree) {
+        this.hasfree = hasfree;
+    }
+    
      @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "uom_id_fk")
     public UOM getUom() {

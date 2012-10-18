@@ -33,8 +33,8 @@ public class ItemDetailsDo {
     //private SimpleDoubleProperty sellingPrice=new SimpleDoubleProperty();
     private SimpleDoubleProperty wholesalePrice = new SimpleDoubleProperty();
     private SimpleDoubleProperty tax = new SimpleDoubleProperty();
+    //private SimpleStringProperty hasFree = new SimpleStringProperty();
     private SimpleBooleanProperty hasFree = new SimpleBooleanProperty();
-    
     private SimpleDoubleProperty retailPrice = new SimpleDoubleProperty();
     private SimpleIntegerProperty itemId = new SimpleIntegerProperty();
     private SimpleIntegerProperty startRange = new SimpleIntegerProperty();
@@ -60,7 +60,7 @@ public class ItemDetailsDo {
         this.tax.set(itemDetails.getTax());
         this.mrp.set(itemDetails.getMrp());
         this.actualPrice.set(itemDetails.getActualPrice());
-        this.hasFree.set(itemDetails.isHasfree());
+        this.hasFree.set(itemDetails.getHasfree());
         this.enabled.set(itemDetails.isEnabled());
         this.margin.set(itemDetails.getMargin());
         
@@ -265,12 +265,20 @@ public class ItemDetailsDo {
         this.tax.set(tax);
     }
 
+   /* public String getHasFree() {
+        return hasFree.get();
+    }
+
+    public void setHasFree(String hasFree) {
+        this.hasFree.set(hasFree);
+    }*/
+    
     public Boolean getHasFree() {
         return hasFree.get();
     }
 
-    public void setHasFree(SimpleBooleanProperty hasFree) {
-        this.hasFree = hasFree;
+    public void setHasFree(Boolean hasFree) {
+        this.hasFree.set(hasFree);
     }
 
     public Double getMargin() {

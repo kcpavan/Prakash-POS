@@ -120,7 +120,7 @@ public class MainController implements Initializable {
     @FXML
     private TableColumn<ItemDetailsDo, Double> taxCol;
     @FXML
-    private TableColumn<ItemDetailsDo, Double> itemHasGiftCol;
+    private TableColumn<ItemDetailsDo, String> itemHasGiftCol;
     @FXML
     private TabPane tabPane;
     @FXML
@@ -168,7 +168,7 @@ public class MainController implements Initializable {
             System.out.println("reenter item");
             return true;
         }
-        
+
         if (KCPUtils.isNullString(itemBarcode.getText())) {
             label.setText("Please enter itemBarcode ");
             animateMessage();
@@ -176,7 +176,7 @@ public class MainController implements Initializable {
             System.out.println("reEnter item");
             return true;
         }
-        
+
         String selectedItem = (String) category.getSelectionModel().getSelectedItem();
 
         if (KCPUtils.isNullString(selectedItem)) {
@@ -186,7 +186,7 @@ public class MainController implements Initializable {
             System.out.println("reenter item");
             return true;
         }
-        
+
         if (KCPUtils.isNullString(itemMrp.getText())) {
             label.setText("Please enter MRP");
             animateMessage();
@@ -194,168 +194,169 @@ public class MainController implements Initializable {
             System.out.println("reenter item");
             return true;
         }
-        
-        Double rPrice=null,wPrice=null,aPrice=null;
-        
+
+        Double rPrice = null, wPrice = null, aPrice = null;
+
         if (KCPUtils.isNullString(actualPrice.getText())) {
             label.setText("Please enter actualPrice");
             animateMessage();
             fillDataTable();
             System.out.println("reenter item");
             return true;
+        } else {
+            aPrice = Double.parseDouble(actualPrice.getText());
         }
-        else
-        {
-            aPrice=Double.parseDouble(actualPrice.getText());
-        }
-        
+
         if (KCPUtils.isNullString(retailPrice.getText())) {
             label.setText("Please enter retailPrice");
             animateMessage();
             fillDataTable();
             System.out.println("reenter item");
             return true;
+        } else {
+            rPrice = Double.parseDouble(retailPrice.getText());
         }
-        else
-        {
-            rPrice=Double.parseDouble(retailPrice.getText());
-        }
-        
-         if (KCPUtils.isNullString(wholesalePrice.getText())) {
+
+        if (KCPUtils.isNullString(wholesalePrice.getText())) {
             label.setText("Please enter retailPrice");
             animateMessage();
             fillDataTable();
             System.out.println("reenter item");
             return true;
+        } else {
+            wPrice = Double.parseDouble(wholesalePrice.getText());
         }
-         else
-         {
-             wPrice=Double.parseDouble(wholesalePrice.getText());
-         }
 
-         if(rPrice<aPrice)
-         {
-             label.setText("Retail price cannot be less than actual price"); 
-             return true;
-         }
-         
-         if(wPrice<aPrice)
-         {
-            label.setText("Wholesale price cannot be less than actual price"); 
+        if (rPrice < aPrice) {
+            label.setText("Retail price cannot be less than actual price");
             return true;
-         }
-        
-         return false;
+        }
+
+        if (wPrice < aPrice) {
+            label.setText("Wholesale price cannot be less than actual price");
+            return true;
+        }
+
+        return false;
 
     }
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
 
-        if(!validate())
-        {
-            System.out.println("Validated!!");  
-        
-        itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
+        if (!validate()) {
+            System.out.println("Validated!!");
 
-        for (Items item : itemService.getAllItems()) {
-            if (item.getItemName().equalsIgnoreCase(itemName.getText())) {
-                label.setText("Item already exists");
+            itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
+
+            for (Items item : itemService.getAllItems()) {
+                if (item.getItemName().equalsIgnoreCase(itemName.getText())) {
+                    label.setText("Item already exists");
+                    animateMessage();
+                    fillDataTable();
+                    System.out.println("reenter item");
+                    return;
+                }
+
+            }
+
+            Items item = new Items();
+            item.setItemName(itemName.getText());
+            item.setBarcode(itemBarcode.getText());
+
+            ItemDetails itemDetails = new ItemDetails();
+
+            UOMService uOMService = (UOMService) ApplicationMain.springContext.getBean("UOMService");
+
+            itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
+            itemDetails.setMrp(Double.valueOf(itemMrp.getText()));
+            itemDetails.setWeight(Double.valueOf(itemWeight.getText()));
+            itemDetails.setActualPrice(Double.valueOf(actualPrice.getText()));
+            
+            itemDetails.setHasfree(Boolean.valueOf(hasGift.isSelected()));
+            /*if (Boolean.valueOf(hasGift.getText())) {
+                itemDetails.setHasfree("Yes");
+            } else {
+                itemDetails.setHasfree("No");
+            }
+            itemDetails.setHasfree(String.valueOf(hasGift.getText()));*/
+            itemDetails.setTax(Double.valueOf(tax.getText()));
+
+            System.out.println("hasfree:" + hasGift.isSelected());
+
+            commonDao comDao = new commonDaoImpl();
+            /*List list = comDao.getLookUpValues(
+             ItemCategory.class, "typeDesc");
+             if (!KCPUtils.isNullList(list)) {
+             for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+             ItemCategory obj = (ItemCategory) iterator.next();
+             }*/
+            String selectedItem = (String) category.getSelectionModel().getSelectedItem();
+
+            if (KCPUtils.isNullString(selectedItem)) {
+                label.setText("Please select item");
                 animateMessage();
                 fillDataTable();
                 System.out.println("reenter item");
                 return;
             }
+            itemCategoryService = (ItemCategoryService) ApplicationMain.springContext.getBean("itemCategoryService");
+            itemCategoryService.getItemCategoryByName((String) selectedItem);
 
-        }
 
-        Items item = new Items();
-        item.setItemName(itemName.getText());
-        item.setBarcode(itemBarcode.getText());
 
-        ItemDetails itemDetails = new ItemDetails();
 
-        UOMService uOMService = (UOMService) ApplicationMain.springContext.getBean("UOMService");
 
-        itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
-        itemDetails.setMrp(Double.valueOf(itemMrp.getText()));
-        itemDetails.setWeight(Double.valueOf(itemWeight.getText()));
-        itemDetails.setActualPrice(Double.valueOf(actualPrice.getText()));
-        itemDetails.setHasfree(Boolean.valueOf(hasGift.getText()));
-        
-        commonDao comDao = new commonDaoImpl();
-        /*List list = comDao.getLookUpValues(
-         ItemCategory.class, "typeDesc");
-         if (!KCPUtils.isNullList(list)) {
-         for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-         ItemCategory obj = (ItemCategory) iterator.next();
-         }*/
-        String selectedItem = (String) category.getSelectionModel().getSelectedItem();
+            item.setModifiedDate(new Date());
+            // Object selectedItem = category.getSelectionModel().getSelectedItem();
+            System.out.println("selectedItem:" + selectedItem);
+            ItemCategoryDao itemCategoryDao = (ItemCategoryDao) ApplicationMain.springContext.getBean("itemCategoryDaoImpl");
+            item.setItemCategory(itemCategoryDao.findByName(selectedItem.toString()));
 
-        if (KCPUtils.isNullString(selectedItem)) {
-            label.setText("Please select item");
+
+            UserDao userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
+            item.setUsers(userDao.findById(1));
+
+            BillingTypeDao billingTypeDao = (BillingTypeDao) ApplicationMain.springContext.getBean("billingTypeDaoImpl");
+
+            itemDetails.setBillingType(billingTypeDao.findByName("retail"));
+
+
+            System.out.println("UOM:" + uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()).getUomDesc());
+            //itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
+            itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
+            for (UOMDo uOMDo : uOMService.getAllUOM()) {
+                System.out.println("size:" + uOMService.getAllUOM().size());
+                uom.getItems().add(uOMDo.getUomDesc());
+            }
+
+            itemDetails.setRetailBillingPrice(Double.valueOf(retailPrice.getText()));
+            itemDetails.setWholesaleBillingPrice(Double.valueOf(wholesalePrice.getText()));
+            itemDetails.setMargin(itemDetails.getWholesaleBillingPrice() - itemDetails.getActualPrice());
+            itemDetails.setModifiedDate(new Date());
+            itemDetails.setUsers(userDao.findById(1));
+            itemDetails.setEnabled(Boolean.TRUE);
+            itemService.itemSave(item);
+
+            itemDetails.setItem(item);
+
+
+            itemService.itemDetailsSave(itemDetails);
+            label.setText("Item Saved");
             animateMessage();
+            itemDetailsList = new ArrayList<ItemDetailsDo>();
+
+            for (Items data : itemService.getAllItems()) {
+
+                // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
+                System.out.println("itemId:" + data.getIdPk());
+                itemDetailsList.add(itemService.getItemDetailsDoByItemId(data.getIdPk()));
+            }
+
             fillDataTable();
-            System.out.println("reenter item");
-            return;
+            clearForm();
+            System.out.println("saved");
         }
-        itemCategoryService = (ItemCategoryService) ApplicationMain.springContext.getBean("itemCategoryService");
-        itemCategoryService.getItemCategoryByName((String) selectedItem);
-
-
-
-
-
-        item.setModifiedDate(new Date());
-        // Object selectedItem = category.getSelectionModel().getSelectedItem();
-        System.out.println("selectedItem:" + selectedItem);
-        ItemCategoryDao itemCategoryDao = (ItemCategoryDao) ApplicationMain.springContext.getBean("itemCategoryDaoImpl");
-        item.setItemCategory(itemCategoryDao.findByName(selectedItem.toString()));
-
-
-        UserDao userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
-        item.setUsers(userDao.findById(1));
-
-        BillingTypeDao billingTypeDao = (BillingTypeDao) ApplicationMain.springContext.getBean("billingTypeDaoImpl");
-
-        itemDetails.setBillingType(billingTypeDao.findByName("retail"));
-
-
-        System.out.println("UOM:" + uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()).getUomDesc());
-        //itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
-        itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
-        for (UOMDo uOMDo : uOMService.getAllUOM()) {
-            System.out.println("size:" + uOMService.getAllUOM().size());
-            uom.getItems().add(uOMDo.getUomDesc());
-        }
-
-        itemDetails.setRetailBillingPrice(Double.valueOf(retailPrice.getText()));
-        itemDetails.setWholesaleBillingPrice(Double.valueOf(wholesalePrice.getText()));
-        itemDetails.setMargin(itemDetails.getWholesaleBillingPrice()-itemDetails.getActualPrice());
-        itemDetails.setModifiedDate(new Date());
-        itemDetails.setUsers(userDao.findById(1));
-        itemDetails.setEnabled(Boolean.TRUE);
-        itemService.itemSave(item);
-
-        itemDetails.setItem(item);
-
-
-        itemService.itemDetailsSave(itemDetails);
-        label.setText("Item Saved");
-        animateMessage();
-        itemDetailsList = new ArrayList<ItemDetailsDo>();
-
-        for (Items data : itemService.getAllItems()) {
-
-            // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
-            System.out.println("itemId:" + data.getIdPk());
-            itemDetailsList.add(itemService.getItemDetailsDoByItemId(data.getIdPk()));
-        }
-
-        fillDataTable();
-        clearForm();
-        System.out.println("saved");
-    }
     }
 
     @Override
@@ -610,7 +611,7 @@ public class MainController implements Initializable {
         itemRetailPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("retailBillingPrice"));
         itemWholesalePriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("wholesaleBillingPrice"));
         taxCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("tax"));
-        itemHasGiftCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("hasGift"));
+        itemHasGiftCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, String>("hasFree"));
         itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
 
         System.out.println("Get all items..");
@@ -635,6 +636,7 @@ public class MainController implements Initializable {
         actualPrice.clear();
         retailPrice.clear();
         wholesalePrice.clear();
+        
         tax.clear();
         outputLabel.setText("");
 
