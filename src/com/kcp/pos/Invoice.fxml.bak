@@ -123,7 +123,7 @@
                         </AnchorPane>
                       </content>
                     </Tab>
-                    <Tab text="Stocks">
+                    <Tab fx:id="invoiceDetails_tab" text="Stocks">
                       <content>
                         <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                       </content>
@@ -132,6 +132,15 @@
                 </TabPane>
               </children>
             </AnchorPane>
+            <ComboBox fx:id="combo" layoutX="83.0" layoutY="37.0">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="Item 1" />
+                  <String fx:value="Item 2" />
+                  <String fx:value="Item 3" />
+                </FXCollections>
+              </items>
+            </ComboBox>
           </children>
         </AnchorPane>
         <TextField prefWidth="200.0" />

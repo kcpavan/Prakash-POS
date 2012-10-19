@@ -39,6 +39,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ContentDisplay;
@@ -128,7 +129,10 @@ public class MainController implements Initializable {
     List<ItemDetailsDo> itemDetailsList = new ArrayList<ItemDetailsDo>();
     @Autowired
     private ItemService itemService;
-
+    
+    @FXML
+    private Button button;
+    
     public ItemService getItemService() {
         return itemService;
     }
@@ -701,17 +705,19 @@ public class MainController implements Initializable {
 
     }
 
-    @FXML
-    public void gotoBarcode(KeyEvent e) {
-        if (e.getCode() == KeyCode.ENTER) {
-            itemBarcode.requestFocus();
-        }
-    }
+    
 
     @FXML
     public void OpenInvoice(ActionEvent e) {
         application.gotoInvoice();
     }
+    
+    
+    @FXML
+    public void openInvoiceDetails(ActionEvent e) {
+        application.gotoInvoiceDetails();
+    }
+    
 
     @FXML
     public void openPurchase(ActionEvent e) {
@@ -742,6 +748,89 @@ public class MainController implements Initializable {
 
         fillDataTable();
 
+    }
+    
+    @FXML
+    public void gotoBarcode(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            itemBarcode.requestFocus();
+        }
+    }
+    
+    @FXML
+    public void gotoMrp(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            itemMrp.requestFocus();
+        }
+    }
+    
+    
+    @FXML
+    public void gotoWeight(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            itemWeight.requestFocus();
+        }
+    }
+    
+    
+    @FXML
+    public void gotoUom(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            uom.requestFocus();
+        }
+    }
+    
+    
+    @FXML
+    public void gotoActualPrice(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            actualPrice.requestFocus();
+        }
+    }
+    
+    @FXML
+    public void gotoCategory(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            category.requestFocus();
+        }
+    }
+    
+    @FXML
+    public void gotoHasGift(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            hasGift.requestFocus();
+        }
+    }
+    
+    
+    @FXML
+    public void gotoRetail(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            retailPrice.requestFocus();
+        }
+    }
+    
+    @FXML
+    public void gotoWholesale(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            wholesalePrice.requestFocus();
+        }
+    }
+    
+    @FXML
+    public void gotoTax(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            tax.requestFocus();
+        }
+    }
+    
+    
+    
+    @FXML
+    public void gotoSave(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            button.requestFocus();
+        }
     }
 }
 

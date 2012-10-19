@@ -8,34 +8,42 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="main_window" prefHeight="771.0" prefWidth="700.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.kcp.pos.InvoiceController">
+<AnchorPane id="AnchorPane" fx:id="main_window" prefHeight="771.0" prefWidth="700.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.kcp.pos.InvoiceDetailsController">
   <children>
     <SplitPane dividerPositions="0.9713914174252276" focusTraversable="true" orientation="VERTICAL" prefHeight="700.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="329.0" prefWidth="698.0">
           <children>
-            <Label fx:id="label" layoutX="14.0" layoutY="299.0" minHeight="16.0" minWidth="69.0" />
             <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="8.0" layoutX="297.0" layoutY="51.0" prefWidth="69.0" text="Invoice">
               <font>
                 <Font size="16.0" fx:id="x2" />
               </font>
             </Label>
-            <Label fx:id="invoiceNumber" layoutX="366.0" layoutY="14.0" prefHeight="22.0" prefWidth="71.0" />
-            <Label fx:id="invoiceNumber" layoutX="335.0" layoutY="17.0" prefWidth="69.0" />
             <AnchorPane layoutX="1.0" layoutY="350.0" minHeight="0.0" minWidth="0.0" prefHeight="411.0" prefWidth="698.0">
               <children>
-                <TabPane prefHeight="541.0" prefWidth="679.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="119.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="-249.0">
+                <TabPane fx:id="tabPane" prefHeight="541.0" prefWidth="679.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="119.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="-249.0">
                   <tabs>
-                    <Tab fx:id="items_tab" text="Items">
+                    <Tab fx:id="invoiceTab" text="Invoice">
                       <content>
-                        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane id="AnchorPane" prefHeight="510.0" prefWidth="679.0">
+                          <children>
+                            <TableView prefHeight="510.0" prefWidth="679.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <columns>
+                                <TableColumn prefWidth="75.0" text="Invoice No." fx:id="invoiceNumber" />
+                                <TableColumn prefWidth="75.0" text="Total Items" fx:id="totalQuantity" />
+                                <TableColumn prefWidth="75.0" text="Total Amount" fx:id="totalAmount" />
+                                <TableColumn prefWidth="75.0" text="Modified By" fx:id="modifiedBy" />
+                              </columns>
+                            </TableView>
+                          </children>
+                        </AnchorPane>
                       </content>
                     </Tab>
-                    <Tab fx:id="invoiceDetails_tab" text="Stocks">
+                    <Tab fx:id="invoiceDetails_tab" text="Invoice Details">
                       <content>
                         <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                           <children>
-                            <TableView fx:id="dataTable" editable="true" prefHeight="347.0" prefWidth="829.0" AnchorPane.bottomAnchor="163.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="-152.0" AnchorPane.topAnchor="0.0">
+                            <TableView id="dataTable" editable="true" prefHeight="510.0" prefWidth="679.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                               <columns>
                                 <TableColumn prefWidth="75.0" text="Name" fx:id="itemNameCol" />
                                 <TableColumn prefWidth="75.0" text="BarCode" fx:id="itemBarcodeCol" />

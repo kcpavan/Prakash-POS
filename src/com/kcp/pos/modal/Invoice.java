@@ -12,6 +12,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -19,6 +21,11 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "invoice", catalog = "storedb")
+       @NamedQueries({
+    @NamedQuery(name = "Invoice.findAll", query = "SELECT i FROM Invoice i")
+        })
+
+
 public class Invoice implements java.io.Serializable {
 
 	private Integer idPk;
@@ -59,7 +66,7 @@ public class Invoice implements java.io.Serializable {
 		this.idPk = idPk;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "modified_by", nullable = false)
 	public Users getUsers() {
 		return this.users;
@@ -97,7 +104,7 @@ public class Invoice implements java.io.Serializable {
 		this.modifiedDate = modifiedDate;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "invoice")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "invoice")
 	public Set<InvoiceDetails> getInvoiceDetailses() {
 		return this.invoiceDetailses;
 	}

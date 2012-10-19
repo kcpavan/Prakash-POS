@@ -32,24 +32,22 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author kcpavan
  */
 public class ApplicationMain extends Application {
-    
-    public  static ApplicationContext springContext = null;
 
-   /* public ApplicationContext getSpringContext() {
-        return springContext;
-    }
+    public static ApplicationContext springContext = null;
 
-    public void setSpringContext(ApplicationContext springContext) {
-        this.springContext = springContext;
-    }
-    */
-    
+    /* public ApplicationContext getSpringContext() {
+     return springContext;
+     }
+
+     public void setSpringContext(ApplicationContext springContext) {
+     this.springContext = springContext;
+     }
+     */
     private Stage stage;
     private Users loggedUser;
     private final double MINIMUM_WINDOW_WIDTH = 390.0;
     private final double MINIMUM_WINDOW_HEIGHT = 500.0;
 
-    
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
@@ -58,8 +56,8 @@ public class ApplicationMain extends Application {
         stage.setMinWidth(MINIMUM_WINDOW_WIDTH);
         stage.setMinHeight(MINIMUM_WINDOW_HEIGHT);
         gotoLogin();
-       
-       // gotoMain();
+
+        // gotoMain();
         stage.show();
     }
 
@@ -74,21 +72,21 @@ public class ApplicationMain extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
     private Initializable replaceSceneContent(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
-        
-        
-        
+
+
+
         Parent root = (Parent) loader.load();
-        
+
         Scene scene = new Scene(root, 800, 600);
-        
+
         stage.setScene(scene);
         stage.sizeToScene();
         return (Initializable) loader.getController();
     }
-    
+
     private void gotoLogin() {
         try {
             LoginController login = (LoginController) replaceSceneContent("Login.fxml");
@@ -97,138 +95,145 @@ public class ApplicationMain extends Application {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-        void gotoMain() {
+
+    void gotoMain() {
         try {
             MainController main = (MainController) replaceSceneContent("Main.fxml");
-             main.setApp(this);
+            main.setApp(this);
             /*InvoiceController invoice=(InvoiceController)replaceSceneContent("Invoice.fxml");
-            invoice.setApp(this);*/
+             invoice.setApp(this);*/
             /*PurchaseController purchase=(PurchaseController)replaceSceneContent("Purchase.fxml");
-            purchase.setApp(this);*/
-           /* StocksController stocks=(StocksController)replaceSceneContent("Stocks.fxml");
-            stocks.setApp(this);*/
+             purchase.setApp(this);*/
+            /* StocksController stocks=(StocksController)replaceSceneContent("Stocks.fxml");
+             stocks.setApp(this);*/
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-       
-        void gotoInvoice() {
+
+    void gotoInvoice() {
         try {
-            
-            InvoiceController invoice=(InvoiceController)replaceSceneContent("Invoice.fxml");
+
+            InvoiceController invoice = (InvoiceController) replaceSceneContent("Invoice.fxml");
             invoice.setApp(this);
             /*PurchaseController purchase=(PurchaseController)replaceSceneContent("Purchase.fxml");
-            purchase.setApp(this);*/
-           /* StocksController stocks=(StocksController)replaceSceneContent("Stocks.fxml");
-            stocks.setApp(this);*/
+             purchase.setApp(this);*/
+            /* StocksController stocks=(StocksController)replaceSceneContent("Stocks.fxml");
+             stocks.setApp(this);*/
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-      
-          void gotoPurchase() {
+
+    void gotoInvoiceDetails() {
         try {
-            
-            PurchaseController
-                    purchase=(PurchaseController)replaceSceneContent("Purchase.fxml");
+
+            InvoiceDetailsController invoice = (InvoiceDetailsController) replaceSceneContent("InvoiceDetails.fxml");
+            invoice.setApp(this);
+
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    void gotoPurchase() {
+        try {
+
+            PurchaseController purchase = (PurchaseController) replaceSceneContent("Purchase.fxml");
             purchase.setApp(this);
-          
+
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-        
-        void gotoItem()
-        {
-             try {
-            
-            InvoiceController invoice=(InvoiceController)replaceSceneContent("Invoice.fxml");
+
+    void gotoItem() {
+        try {
+
+            InvoiceController invoice = (InvoiceController) replaceSceneContent("Invoice.fxml");
             invoice.setApp(this);
-            
+
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        }
-        
-        
-       private Initializable replaceHomeSceneContent(String fxml) throws Exception {
+    }
+
+    private Initializable replaceHomeSceneContent(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
-        
-        
-    /*    MenuBar menuBar = new MenuBar();
+
+
+        /*    MenuBar menuBar = new MenuBar();
  
-      Menu menu1 = new Menu("Menu");
+         Menu menu1 = new Menu("Menu");
      
-      MenuItem menuItemA = new MenuItem("Item A");
-      menuItemA.setAccelerator(KeyCombination.keyCombination("Ctrl+A"));
-      menuItemA.setOnAction(new EventHandler<ActionEvent>() {
-          @Override public void handle(ActionEvent e) {
-              System.out.println("Item A Clicked");
-          }
-      });
+         MenuItem menuItemA = new MenuItem("Item A");
+         menuItemA.setAccelerator(KeyCombination.keyCombination("Ctrl+A"));
+         menuItemA.setOnAction(new EventHandler<ActionEvent>() {
+         @Override public void handle(ActionEvent e) {
+         System.out.println("Item A Clicked");
+         }
+         });
      
-      MenuItem menuItemB = new MenuItem("Item B");
-      menuItemB.setAccelerator(KeyCombination.keyCombination("Ctrl+B"));
-      menuItemB.setOnAction(new EventHandler<ActionEvent>() {
-          @Override public void handle(ActionEvent e) {
-              System.out.println("Item B Clicked");
-          }
-      });
+         MenuItem menuItemB = new MenuItem("Item B");
+         menuItemB.setAccelerator(KeyCombination.keyCombination("Ctrl+B"));
+         menuItemB.setOnAction(new EventHandler<ActionEvent>() {
+         @Override public void handle(ActionEvent e) {
+         System.out.println("Item B Clicked");
+         }
+         });
      
-      MenuItem menuItemC = new MenuItem("Item C");
-      menuItemC.setAccelerator(KeyCombination.keyCombination("Ctrl+C"));
-      menuItemC.setOnAction(new EventHandler<ActionEvent>() {
-          @Override public void handle(ActionEvent e) {
-              System.out.println("Item C Clicked");
-          }
-      });
+         MenuItem menuItemC = new MenuItem("Item C");
+         menuItemC.setAccelerator(KeyCombination.keyCombination("Ctrl+C"));
+         menuItemC.setOnAction(new EventHandler<ActionEvent>() {
+         @Override public void handle(ActionEvent e) {
+         System.out.println("Item C Clicked");
+         }
+         });
  
-      menu1.getItems().add(menuItemA);
-      menu1.getItems().add(menuItemB);
-      menu1.getItems().add(menuItemC);
-      menuBar.getMenus().add(menu1);
+         menu1.getItems().add(menuItemA);
+         menu1.getItems().add(menuItemB);
+         menu1.getItems().add(menuItemC);
+         menuBar.getMenus().add(menu1);
  
-      menuBar.prefWidthProperty().bind(stage.widthProperty());
+         menuBar.prefWidthProperty().bind(stage.widthProperty());
       
-        final Group rootGroup = new Group();
-      final Scene scene = new Scene(rootGroup, 800, 400, Color.WHEAT);
+         final Group rootGroup = new Group();
+         final Scene scene = new Scene(rootGroup, 800, 400, Color.WHEAT);
       
-      rootGroup.getChildren().add(menuBar);
-      stage.setScene(scene);
-      stage.show();
+         rootGroup.getChildren().add(menuBar);
+         stage.setScene(scene);
+         stage.show();
         
        
         
-        root.get.add(menuBar);
-      primaryStage.setScene(scene);
-      primaryStage.show();
-      */
-      
-         Parent root = (Parent) loader.load();
-          Scene scene = new Scene(root, 800, 600);
+         root.get.add(menuBar);
+         primaryStage.setScene(scene);
+         primaryStage.show();
+         */
+
+        Parent root = (Parent) loader.load();
+        Scene scene = new Scene(root, 800, 600);
         stage.setScene(scene);
         stage.sizeToScene();
         return (Initializable) loader.getController();
     }
-   
+
     public Users getLoggedUser() {
         return loggedUser;
     }
 
-
     boolean userLogging(String userId, String password) {
         if (Authenticator.validate(userId, password)) {
-           // UserDao userDao = (UserDao) springContext.getBean("userDaoImpl");
-           // loggedUser = userDao.findById(1);
+            // UserDao userDao = (UserDao) springContext.getBean("userDaoImpl");
+            // loggedUser = userDao.findById(1);
             gotoMain();
             return true;
         } else {
             return false;
         }
     }
-    
-    void userLogout(){
+
+    void userLogout() {
         loggedUser = null;
         gotoLogin();
     }

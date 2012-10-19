@@ -80,4 +80,12 @@ public class InvoiceService {
          return invoiceDetailsDao.findByItemId(itemId);
      }
      
+     
+       public List<InvoiceDo> getAllInvoiceDo(){
+   List<InvoiceDo> invoiceDos = new ArrayList<InvoiceDo>();
+        for (Invoice invoice : invoiceDao.findByAll()) {
+           invoiceDos.add(new InvoiceDo(invoice)); 
+        }
+    return invoiceDos;
+    }
 }

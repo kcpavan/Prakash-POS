@@ -34,7 +34,7 @@
                 <Menu mnemonicParsing="false" text="Invoice">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Add" />
-                    <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Invoice Details" />
+                    <MenuItem mnemonicParsing="false" onAction="#openInvoiceDetails" text="Invoice Details" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Purchase">
@@ -100,10 +100,10 @@
                             <Label font="$x1" text="UOM" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                             <Label font="$x1" text="Actual Price" GridPane.columnIndex="0" GridPane.rowIndex="5" />
                             <TextField fx:id="itemName" onKeyReleased="#gotoBarcode" prefHeight="26.0" prefWidth="168.0" promptText="Name" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                            <TextField fx:id="itemBarcode" prefHeight="26.0" prefWidth="231.0" promptText="Barcode" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                            <TextField fx:id="itemMrp" prefHeight="26.0" prefWidth="231.0" promptText="M.R.P" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                            <TextField fx:id="itemWeight" prefHeight="26.0" prefWidth="231.0" promptText="Weight" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                            <ChoiceBox id="weightUnit" fx:id="uom" onInputMethodTextChanged="#handleButtonAction" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                            <TextField fx:id="itemBarcode" onKeyPressed="#gotoMrp" prefHeight="26.0" prefWidth="231.0" promptText="Barcode" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                            <TextField fx:id="itemMrp" onKeyPressed="#gotoWeight" prefHeight="26.0" prefWidth="231.0" promptText="M.R.P" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                            <TextField fx:id="itemWeight" onKeyPressed="#gotoUom" prefHeight="26.0" prefWidth="231.0" promptText="Weight" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                            <ChoiceBox id="weightUnit" fx:id="uom" onInputMethodTextChanged="#handleButtonAction" onKeyPressed="#gotoActualPrice" GridPane.columnIndex="1" GridPane.rowIndex="4">
                               <items>
                                 <FXCollections fx:factory="observableArrayList">
                                   <String fx:value="Item 1" />
@@ -112,7 +112,7 @@
                                 </FXCollections>
                               </items>
                             </ChoiceBox>
-                            <TextField fx:id="actualPrice" prefHeight="25.999900000002526" prefWidth="231.0" promptText="Actual Price" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                            <TextField fx:id="actualPrice" onKeyPressed="#gotoCategory" prefHeight="25.999900000002526" prefWidth="231.0" promptText="Actual Price" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                             <Label font="$x1" text="Category" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                             <Label font="$x1" text="Has Gift Item" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                             <Label prefWidth="163.0" text="Selling Price" GridPane.columnIndex="2" GridPane.rowIndex="2">
@@ -123,7 +123,7 @@
                             <Label font="$x1" text="Retail" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                             <Label font="$x1" text="wholesale" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                             <Label font="$x2" prefHeight="22.0" prefWidth="54.0" text="Tax" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                            <ChoiceBox id="weightUnit" fx:id="category" onInputMethodTextChanged="#handleButtonAction" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                            <ChoiceBox id="weightUnit" fx:id="category" onInputMethodTextChanged="#handleButtonAction" onKeyPressed="#gotoHasGift" GridPane.columnIndex="3" GridPane.rowIndex="0">
                               <items>
                                 <FXCollections fx:factory="observableArrayList">
                                   <String fx:value="Item 1" />
@@ -132,10 +132,10 @@
                                 </FXCollections>
                               </items>
                             </ChoiceBox>
-                            <CheckBox fx:id="hasGift" mnemonicParsing="false" text="Yes" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                            <TextField id="sellingPrice" fx:id="retailPrice" prefHeight="26.0" prefWidth="190.0" promptText="Billing Price" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                            <TextField id="sellingPrice" fx:id="wholesalePrice" prefHeight="26.0" prefWidth="190.0" promptText="Billing Price" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                            <TextField fx:id="tax" prefWidth="149.0" promptText="Tax%" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                            <CheckBox fx:id="hasGift" mnemonicParsing="false" onKeyPressed="#gotoRetail" text="Yes" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                            <TextField id="sellingPrice" fx:id="retailPrice" onKeyPressed="#gotoWholesale" prefHeight="26.0" prefWidth="190.0" promptText="Billing Price" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                            <TextField id="sellingPrice" fx:id="wholesalePrice" onKeyPressed="#gotoTax" prefHeight="26.0" prefWidth="190.0" promptText="Billing Price" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                            <TextField fx:id="tax" onKeyPressed="#gotoSave" prefWidth="149.0" promptText="Tax%" GridPane.columnIndex="3" GridPane.rowIndex="5" />
                           </children>
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="164.0" minWidth="10.0" prefWidth="83.0" />

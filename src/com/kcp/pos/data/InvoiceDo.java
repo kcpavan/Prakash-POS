@@ -11,6 +11,7 @@ import java.util.Set;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 
 /**
@@ -20,32 +21,55 @@ import javafx.beans.property.SimpleIntegerProperty;
 public class InvoiceDo {
     
     
-	
-	private SimpleIntegerProperty totalItems;
-	private SimpleDoubleProperty totalAmount;
+	private SimpleIntegerProperty invoiceNumber=new SimpleIntegerProperty();
+	private SimpleIntegerProperty totalQuantity=new  SimpleIntegerProperty();
+	private SimpleDoubleProperty totalAmount=new SimpleDoubleProperty();
+        private SimpleStringProperty modifiedBy=new SimpleStringProperty();
         private Set<InvoiceDetails> invoiceDetailses = new HashSet<InvoiceDetails>(0);
 
-    public Integer getTotalItems() {
-        return totalItems.get();
+    public Integer getTotalQuantity() {
+        return totalQuantity.get();
     }
 
-    public void setTotalItems(SimpleIntegerProperty totalItems) {
-        this.totalItems = totalItems;
+    public void setTotalQuantity(Integer totalQuantity) {
+        this.totalQuantity.set(totalQuantity);
     }
 
     public Double getTotalAmount() {
         return totalAmount.get();
     }
 
-    public void setTotalAmount(SimpleDoubleProperty totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount.set(totalAmount);
     }
+
+    public Integer getInvoiceNumber() {
+        return invoiceNumber.get();
+    }
+
+    public void setInvoiceNumber(Integer invoiceNumber) {
+        this.invoiceNumber.set(invoiceNumber);
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy.get();
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy.set(modifiedBy);
+    }
+
+   
         
+    
+    
         
 	public InvoiceDo(Invoice invoice)
         {
             this.totalAmount.set(invoice.getTotalAmount());
-            this.totalItems.set(invoice.getTotalItems());
+            this.totalQuantity.set(invoice.getTotalItems());
+            this.invoiceNumber.set(invoice.getIdPk());
+            this.modifiedBy.set(invoice.getUsers().getFirstName()+" "+invoice.getUsers().getLastName());
             
         }
 	

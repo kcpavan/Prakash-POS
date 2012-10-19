@@ -75,5 +75,17 @@ public class InvoiceDaoImpl implements InvoiceDao{
 			throw re;
 		}
 	}
+     
+     public List<Invoice> findByAll() {
+		try {
+			Query instance = entityManager.createNamedQuery("Invoice.findAll");
+			log.debug("get successful");
+			return instance.getResultList();
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
+        
     
 }
