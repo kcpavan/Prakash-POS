@@ -90,6 +90,11 @@ public class InvoiceDetailsController implements Initializable {
     @FXML
     public TableView<InvoiceDo> dataTable;
     private final ObservableList<InvoiceDo> dataTableData = FXCollections.observableArrayList();
+    
+    @FXML
+    public TableView<InvoiceDetailsDo> detailsDataTable;
+    private final ObservableList<InvoiceDetailsDo> detailsdataTableData = FXCollections.observableArrayList();
+    
     @FXML
     private TableColumn<InvoiceDo, Integer> invoiceNumber;
     
@@ -121,6 +126,21 @@ public class InvoiceDetailsController implements Initializable {
     private Tab invoiceTab;
     @FXML
     private Tab invoiceDetails_tab;
+    
+    
+    @FXML
+    private TableColumn<InvoiceDetailsDo, String> itemNameCol;
+    @FXML
+    private TableColumn<InvoiceDetailsDo, String> itemBarcodeCol;
+    @FXML
+    private TableColumn<InvoiceDetailsDo, Double> itemMRPCol;
+    @FXML
+    private TableColumn<InvoiceDetailsDo, Double> itemBillingPriceCol;
+    @FXML
+    private TableColumn<InvoiceDetailsDo, Double> itemQuantityCol;
+    @FXML
+    private TableColumn<InvoiceDetailsDo, Double> itemTotalAmountCol;
+    
     
     public final double getIndex() {
         return index.get();
@@ -175,10 +195,14 @@ public class InvoiceDetailsController implements Initializable {
         dataTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
-                InvoiceDetailsDo item = (InvoiceDetailsDo) newValue;
+                InvoiceDo invoiceDo = (InvoiceDo) newValue;
                 setIndex(dataTableData.indexOf(newValue));
                 tabPane.getSelectionModel().select(invoiceDetails_tab);
 
+                invoiceDetailsDoList = invoiceService.
+                                getInvoiceDetailsDoListById(invoiceDo.getInvoiceNumber());
+                detailsDataTable.setItems(detailsdataTableData);
+                fillInvoiceDetailsDataTable();
                 System.out.println("OK");
             }
         });
@@ -207,7 +231,22 @@ public class InvoiceDetailsController implements Initializable {
         modifiedBy.setCellValueFactory(
                 new PropertyValueFactory<InvoiceDo, String>("modifiedBy"));
 
+     
         
+        
+        itemNameCol.setCellValueFactory(
+                new PropertyValueFactory<InvoiceDetailsDo, String>("itemName"));
+        itemBarcodeCol.setCellValueFactory(
+                new PropertyValueFactory<InvoiceDetailsDo, String>("barcode"));
+        itemMRPCol.setCellValueFactory(
+                new PropertyValueFactory<InvoiceDetailsDo, Double>("mrp"));
+        itemBillingPriceCol.setCellValueFactory(
+                new PropertyValueFactory<InvoiceDetailsDo, Double>("billingPrice"));
+        itemQuantityCol.setCellValueFactory(
+                new PropertyValueFactory<InvoiceDetailsDo, Double>("quantity"));
+        itemTotalAmountCol.setCellValueFactory(
+                new PropertyValueFactory<InvoiceDetailsDo, Double>("total"));
+
 
         fillInvoiceDataTable();
     }
@@ -228,11 +267,13 @@ public class InvoiceDetailsController implements Initializable {
         dataTableData.setAll(invoiceDoList);
     }
 
-   
-    public void deleteInvoiceItem() {
-        //invoiceDao.deleteInvoiceItem(invoiceId, itemId);
-        //invoiceDao.deleteInvoiceItem(1,1);
+   private void fillInvoiceDetailsDataTable() {
+        if(invoiceDetailsDoList!=null)
+            System.out.println("size:"+invoiceDetailsDoList.size());
+        detailsdataTableData.setAll(invoiceDetailsDoList);
     }
+
+    
     private ApplicationMain application;
 
     void setApp(ApplicationMain aThis) {
@@ -242,24 +283,17 @@ public class InvoiceDetailsController implements Initializable {
 
     @FXML
     public void openMain(ActionEvent e) {
-
-
-
         application.gotoMain();
-        //System.out.println("In barcode");
-
-
     }
 
     @FXML
     public void OpenInvoice(ActionEvent e) {
-
-
-
         application.gotoInvoice();
-        //System.out.println("In barcode");
-
-
+    }
+    
+    @FXML
+    public void openInvoiceDetails(ActionEvent e) {
+        application.gotoInvoiceDetails();
     }
 }
 

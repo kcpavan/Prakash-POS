@@ -76,6 +76,21 @@ public class InvoiceDaoImpl implements InvoiceDao{
 		}
 	}
      
+      @Transactional
+	public void merge(Invoice transientInstance) {
+		log.debug("persisting Invoice instance");
+		try {
+                        
+			//entityManager.persist(transientInstance);
+                        entityManager.merge(transientInstance);
+                        entityManager.flush();
+			log.debug("persist successful");
+		} catch (RuntimeException re) {
+			log.error("persist failed", re);
+			throw re;
+		}
+	}
+     
      public List<Invoice> findByAll() {
 		try {
 			Query instance = entityManager.createNamedQuery("Invoice.findAll");

@@ -27,7 +27,7 @@
                       <content>
                         <AnchorPane id="AnchorPane" prefHeight="510.0" prefWidth="679.0">
                           <children>
-                            <TableView prefHeight="510.0" prefWidth="679.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <TableView fx:id="dataTable" prefHeight="510.0" prefWidth="679.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                               <columns>
                                 <TableColumn prefWidth="75.0" text="Invoice No." fx:id="invoiceNumber" />
                                 <TableColumn prefWidth="75.0" text="Total Items" fx:id="totalQuantity" />
@@ -43,7 +43,7 @@
                       <content>
                         <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                           <children>
-                            <TableView id="dataTable" editable="true" prefHeight="510.0" prefWidth="679.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <TableView id="dataTable" fx:id="detailsDataTable" editable="true" prefHeight="510.0" prefWidth="679.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                               <columns>
                                 <TableColumn prefWidth="75.0" text="Name" fx:id="itemNameCol" />
                                 <TableColumn prefWidth="75.0" text="BarCode" fx:id="itemBarcodeCol" />
@@ -71,6 +71,7 @@
                 <Menu mnemonicParsing="false" text="Invoice">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Invoice Details" />
+                    <MenuItem mnemonicParsing="false" onAction="#openInvoiceDetails" text="Invoice Details" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">

@@ -16,6 +16,7 @@ import java.util.List;
 public interface InvoiceDao {
     
      public void persist(Invoice transientInstance); 
+     public void merge(Invoice transientInstance); 
      public InvoiceDetails findById(Integer id) ;
      public List<InvoiceDetails> findListById(Integer id) ;
       public List<Invoice> findByAll() ;

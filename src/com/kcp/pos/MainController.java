@@ -125,6 +125,9 @@ public class MainController implements Initializable {
     @FXML
     private TabPane tabPane;
     @FXML
+    private Tab items_tab;
+    
+    @FXML
     private Tab itemDetails_tab;
     List<ItemDetailsDo> itemDetailsList = new ArrayList<ItemDetailsDo>();
     @Autowired
@@ -745,6 +748,7 @@ public class MainController implements Initializable {
 
         itemDetailsList = itemService.getItemsByCriteria(searchCriteria.getText());
 
+        tabPane.getSelectionModel().select(items_tab);
 
         fillDataTable();
 
