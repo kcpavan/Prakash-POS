@@ -9,11 +9,13 @@ import com.kcp.pos.dao.InvoiceDetailsDao;
 import com.kcp.pos.dao.StocksDao;
 import com.kcp.pos.data.InvoiceDetailsDo;
 import com.kcp.pos.data.InvoiceDo;
+import com.kcp.pos.data.StocksDo;
 import com.kcp.pos.modal.Invoice;
 import com.kcp.pos.modal.InvoiceDetails;
 import com.kcp.pos.modal.PurchaseDetails;
 import com.kcp.pos.modal.Stocks;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,5 +48,16 @@ public class StocksService {
       return stocksDao.findByAll();
   }       
     
+  public List<StocksDo> getStocksListByDate(Date date)
+  {
+      List<StocksDo> stocks=new ArrayList<StocksDo>();
+      for(Stocks stock:stocksDao.findByDate(date))
+      {
+          System.out.println("idPk:"+stock.getIdPk());
+          System.out.println("date:"+stock.getModifiedDate());
+          stocks.add(new StocksDo(stock));
+      }
+      return stocks;
+  }
     
 }

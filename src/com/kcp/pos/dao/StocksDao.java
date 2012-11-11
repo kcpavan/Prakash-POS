@@ -6,6 +6,7 @@ package com.kcp.pos.dao;
 
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.modal.Stocks;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ public interface StocksDao {
     public Stocks findByName(String itemName) ;
     public Stocks findById(Integer id) ;
     public Stocks findByItemId(Integer itemId);
+    public List<Stocks> findByDate(Date date);
   		
     
 }

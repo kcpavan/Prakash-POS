@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import java.net.*?>
 <?import java.util.*?>
 <?import javafx.collections.*?>
 <?import javafx.scene.*?>
@@ -12,49 +13,53 @@
   <children>
     <SplitPane dividerPositions="0.5000000929368179" focusTraversable="true" orientation="VERTICAL" prefHeight="539.9999000000025" prefWidth="930.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="209.0" prefWidth="928.0">
+        <AnchorPane id="" prefHeight="225.0" prefWidth="928.0">
           <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="8.0" layoutX="250.0" layoutY="14.0" prefWidth="69.0" text="Stocks">
-              <font>
-                <Font size="16.0" fx:id="x2" />
-              </font>
-            </Label>
-            <MenuBar layoutX="2.0" layoutY="2.0" prefWidth="698.0">
-                  <menus>
-                    <Menu mnemonicParsing="false" onAction="#openMain" text="Master">
-                      <items>
-                        <MenuItem mnemonicParsing="false" text="Add Item" />
-                      </items>
-                    </Menu>
-                    <Menu mnemonicParsing="false" text="Invoice">
-                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Add" />
-                        <MenuItem mnemonicParsing="false" onAction="#openInvoiceDetails" text="Invoice Details" />
-                      </items>
-                    </Menu>
-                    <Menu mnemonicParsing="false" text="Purchase">
-                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#openPurchase" text="Add" />
-                        <MenuItem mnemonicParsing="false" onAction="#openPurchaseDetails" text="Details" />
-                      </items>
-                    </Menu>
-                    <Menu mnemonicParsing="false" text="Stocks">
-                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#openStocks" text="Details" />
-                      </items>
-                    </Menu>
-                    <Menu mnemonicParsing="false" text="Help">
-                      <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
-                      </items>
-                    </Menu>
-                  </menus>
-                </MenuBar>
+            <SplitPane dividerPositions="0.26136363636363635" focusTraversable="true" minHeight="-Infinity" orientation="VERTICAL" prefHeight="266.0" prefWidth="928.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <items>
+                <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="0.0" prefHeight="66.0" prefWidth="926.0">
+                  <children>
+                    <MenuBar prefHeight="33.0" prefWidth="926.0" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                      <menus>
+                        <Menu mnemonicParsing="false" onAction="#openMain" text="Master">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Add Item" />
+                          </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Invoice">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Add" />
+                            <MenuItem mnemonicParsing="false" onAction="#openInvoiceDetails" text="Invoice Details" />
+                          </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Purchase">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#openPurchase" text="Add" />
+                            <MenuItem mnemonicParsing="false" onAction="#openPurchaseDetails" text="Details" />
+                          </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Stocks">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#openStocks" text="Details" />
+                          </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Help">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="About" />
+                          </items>
+                        </Menu>
+                      </menus>
+                    </MenuBar>
+                  </children>
+                </AnchorPane>
+                <AnchorPane fx:id="anchorPane" prefHeight="200.0" prefWidth="200.0" />
+              </items>
+            </SplitPane>
           </children>
         </AnchorPane>
-        <AnchorPane prefHeight="341.0" prefWidth="928.0">
+        <AnchorPane id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="209.0" prefWidth="928.0">
           <children>
-            <TableView fx:id="dataTable" prefHeight="266.0" prefWidth="928.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TableView fx:id="dataTable" prefHeight="263.0" prefWidth="928.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <columns>
                 <TableColumn prefWidth="75.0" text="Name" fx:id="itemNameCol" />
                 <TableColumn prefWidth="75.0" text="BarCode" fx:id="itemBarcodeCol" />
@@ -70,4 +75,7 @@
       </items>
     </SplitPane>
   </children>
+  <stylesheets>
+    <URL value="@style/simple_calendar.css" />
+  </stylesheets>
 </AnchorPane>

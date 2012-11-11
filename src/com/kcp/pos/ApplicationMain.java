@@ -8,21 +8,31 @@ import com.kcp.pos.dao.UserDao;
 import com.kcp.pos.modal.Users;
 import com.kcp.pos.security.Authenticator;
 import com.sun.javaws.Main;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -102,6 +112,8 @@ public class ApplicationMain extends Application {
         return (Initializable) loader.getController();
     }
 
+     
+    
     private void gotoLogin() {
         try {
             LoginController login = (LoginController) replaceSceneContent("Login.fxml");
@@ -164,10 +176,8 @@ public class ApplicationMain extends Application {
 
     void gotoPurchaseDetails() {
         try {
-
             PurchaseDetailsController purchase = (PurchaseDetailsController) replaceSceneContent("PurchaseDetails.fxml");
             purchase.setApp(this);
-
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }

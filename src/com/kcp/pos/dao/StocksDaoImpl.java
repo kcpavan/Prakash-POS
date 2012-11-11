@@ -7,7 +7,11 @@ package com.kcp.pos.dao;
 import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.modal.Stocks;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -18,7 +22,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 /**
  *
  * @author Prakash
@@ -28,8 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class StocksDaoImpl implements StocksDao{
     
     private static final Log log = LogFactory.getLog(StocksDaoImpl.class);
-
-	
 	private EntityManager entityManager;
         @PersistenceContext
         public void setEntityManager(EntityManager entityManager) {
@@ -112,11 +113,42 @@ public class StocksDaoImpl implements StocksDao{
 		}
 	}
         
+        public List<Stocks> findByDate(Date date)
+        {
+            Query instance=null;
+            try {
+                System.out.println("selected date is:"+date);
+                Calendar c15DaysAgo = Calendar.getInstance(); // 15 days ago
+                String pattern = "yyyy-MM-dd HH:mm:ss";
+                SimpleDateFormat format = new SimpleDateFormat(pattern);
+                Date start_date = format.parse(date + " 00:00:00");
+                Date end_date = format.parse(date + " 23:59:59");
+                //2012-11-11 23:49:38
+                new Date(date+" 00:00:00");
+                
+                instance = entityManager.
+                                createNamedQuery("Stocks.findByDate")
+                               // .setParameter("date", date+"%");
+                                .setParameter("start_date", start_date)
+                                .setParameter("end_date", end_date);
+                        
+			log.debug("get successful");
+			
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+            catch(ParseException p)
+            {
+                p.printStackTrace();
+            }
+            return instance.getResultList();
+        }
+        
          public Stocks findByItemId(Integer itemId)
          {
            log.debug("getting Stocks instance with id: " + itemId);
 		try {
-                    //Stocks stocks=null;
 			Query instance = entityManager.
                                 createNamedQuery("Stocks.findByItemId")
                                 .setParameter("itemId", itemId);
@@ -140,7 +172,6 @@ public class StocksDaoImpl implements StocksDao{
                             {
                                 System.out.println("NoResultException  exception!!!");
                             }
-                            
                             return stocks;
                         }*/
 		} catch (RuntimeException re) {
@@ -148,5 +179,4 @@ public class StocksDaoImpl implements StocksDao{
 			throw re;
 		}  
          }
-    
 }

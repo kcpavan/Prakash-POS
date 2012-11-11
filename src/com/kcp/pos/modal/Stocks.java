@@ -1,6 +1,5 @@
 package com.kcp.pos.modal;
 
-
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,15 +14,19 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 @Entity
 @Table(name = "stocks", catalog = "storedb")
 @NamedQueries({
     @NamedQuery(name = "Stocks.findByItemId", 
         query = "SELECT i FROM Stocks i where"
         + " i.itemDetails.item.idPk=:itemId"),
-      @NamedQuery(name = "Stocks.findAll", query = "SELECT i FROM Stocks i")
-        
+      @NamedQuery(name = "Stocks.findAll", query = "SELECT i FROM Stocks i"),
+      @NamedQuery(name = "Stocks.findByDate", query = "SELECT i FROM Stocks i "
+       // + " where i.modifiedDate BETWEEN :start_date AND :end_date")
+        + " where i.modifiedDate like :date")        
         })
+
 public class Stocks implements java.io.Serializable {
 
 	private Integer idPk;
@@ -39,7 +42,8 @@ public class Stocks implements java.io.Serializable {
 	public Stocks() {
 	}
 
-    public Stocks(Integer idPk, Items items, ItemDetails itemDetails, Users users, Double unitQuantity, Integer caseQuantity, Integer unitsPerCase, String quantityUnit, Date modifiedDate) {
+    public Stocks(Integer idPk, Items items, ItemDetails itemDetails, Users users, Double unitQuantity, Integer caseQuantity, 
+            Integer unitsPerCase, String quantityUnit, Date modifiedDate) {
         this.idPk = idPk;
         this.items = items;
         this.itemDetails = itemDetails;
@@ -50,13 +54,6 @@ public class Stocks implements java.io.Serializable {
         this.quantityUnit = quantityUnit;
         this.modifiedDate = modifiedDate;
     }
-        
-        
-        
-
-
-   
-  
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -78,8 +75,6 @@ public class Stocks implements java.io.Serializable {
 	public void setUsers(Users users) {
 		this.users = users;
 	}
-
-	
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "modified_date", nullable = false, length = 19)
@@ -137,7 +132,4 @@ public class Stocks implements java.io.Serializable {
     public void setUnitsPerCase(Integer unitsPerCase) {
         this.unitsPerCase = unitsPerCase;
     }
-
-    
-
 }

@@ -18,7 +18,10 @@ import com.kcp.pos.service.InvoiceService;
 import com.kcp.pos.service.StocksService;
 import com.kcp.pos.utils.KCPUtils;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -32,12 +35,17 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -49,21 +57,21 @@ public class StocksController implements Initializable{
     
     @FXML
     private Label label;
-    
-   
-    
     @FXML
     private TextField barcode;
     @FXML
     private TextField mrp;
     @FXML
-    
-    
     private TextField caseQuantity;
     @FXML
     private TextField unitsQuantity;
     @FXML
     private TextField freeUnits;
+    @FXML
+    private TextField dateField;
+    
+    @FXML
+    private AnchorPane anchorPane;
     
     @FXML
     public TableView<StocksDo> dataTable;
@@ -84,7 +92,7 @@ public class StocksController implements Initializable{
     @FXML
     private TableColumn<StocksDo, Double> freeUnitsCol;
     
-    private List<Stocks> stocksList = new ArrayList<Stocks>();
+    private List<StocksDo> stocksList = new ArrayList<StocksDo>();
     private List<Items> itemList = new ArrayList<Items>();
     private Map<String, Items> itemMap = new HashMap<String, Items>();
     ItemDao itemDao = new ItemsDaoImpl();
@@ -102,11 +110,11 @@ public class StocksController implements Initializable{
     }
     InvoiceDao invoiceDao = new InvoiceDaoImpl();
 
-    public List<Stocks> getStocksList() {
+    public List<StocksDo> getStocksList() {
         return stocksList;
     }
 
-    public void setStocksList(List<Stocks> stocksList) {
+    public void setStocksList(List<StocksDo> stocksList) {
         this.stocksList = stocksList;
     }
 
@@ -130,6 +138,57 @@ public class StocksController implements Initializable{
                 new PropertyValueFactory<StocksDo, Double>("unitsPerCase"));
         freeUnitsCol.setCellValueFactory(
                 new PropertyValueFactory<StocksDo, Double>("itemFreeUnits"));
+        HBox dateBox = new HBox(15);
+        dateBox.setAlignment(Pos.CENTER);
+        final TextField dateField = new TextField("Select date");
+        dateField.setEditable(false);
+        dateField.setDisable(true);
+        SimpleCalendar simpleCalender = new SimpleCalendar(anchorPane);
+        simpleCalender.dateProperty().addListener(new ChangeListener<Date>() {
+
+        @Override
+	public void changed(ObservableValue<? extends Date> ov,
+            Date oldDate, Date newDate) {
+                dateField.setText((new SimpleDateFormat("dd/MM/yyyy")).
+                        format(newDate));
+                /*
+                 *  System.out.println("selected date is:"+date);
+                Calendar c15DaysAgo = Calendar.getInstance(); // 15 days ago
+                String pattern = "yyyy-MM-dd HH:mm:ss";
+                SimpleDateFormat format = new SimpleDateFormat(pattern);
+                Date start_date = format.parse(date + " 00:00:00");
+                Date end_date = format.parse(date + " 23:59:59");
+                //2012-11-11 23:49:38
+                new Date(date+" 00:00:00");
+                 */
+                System.out.println("actual date is:"+newDate);
+                System.out.println("simple date is:"+new SimpleDateFormat("dd/MM/yyyy").
+                        format(newDate));
+                SimpleDateFormat format;
+                Date date;
+               try
+               {
+                format = new SimpleDateFormat("dd/MM/yyyy");
+                date=format.parse(newDate.toString());
+                   System.out.println("formated date is:"+date);
+               }
+               catch(Exception e)
+               {
+                   e.printStackTrace();
+               }
+                stocksService.getStocksListByDate(
+                        new Date
+                        ((new SimpleDateFormat("dd/MM/yyyy")).
+                        format(newDate)));
+                
+	}
+        });
+        
+        dateBox.getChildren().addAll(dateField, simpleCalender);
+        VBox vbox = new VBox(20);
+        //Label label = new Label("JavaFX 2.0 Simple Calendar Demo");
+        vbox.getChildren().addAll( dateBox);
+        anchorPane.getChildren().add(vbox);
         fillDataTable();
     }
 
@@ -143,8 +202,8 @@ public class StocksController implements Initializable{
 
     private void fillDataTable() {
         stocksService = (StocksService) ApplicationMain.springContext.getBean("stocksService");        
-        List<StocksDo> stocksList = new ArrayList<StocksDo>();
-                for(Stocks stocks:stocksService.getAllStocks())
+       
+        for(Stocks stocks:stocksService.getAllStocks())
                 {
                     System.out.println("size:"+stocksService.getAllStocks().size());
                     stocksList.add(new StocksDo(stocks));
