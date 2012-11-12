@@ -10,34 +10,54 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 @Entity
 @Table(name = "stocks", catalog = "storedb")
+@NamedQueries({
+    @NamedQuery(name = "Stocks.findByItemId", 
+        query = "SELECT i FROM Stocks i where"
+        + " i.itemDetails.item.idPk=:itemId"),
+      @NamedQuery(name = "Stocks.findAll", query = "SELECT i FROM Stocks i")
+        
+        })
 public class Stocks implements java.io.Serializable {
 
 	private Integer idPk;
+        private Items items;
 	private ItemDetails itemDetails;
 	private Users users;
-	private Integer quantity;
+	private Double unitQuantity;
+        private Integer caseQuantity;
+        private Integer unitsPerCase;
 	private String quantityUnit;
 	private Date modifiedDate;
 
 	public Stocks() {
 	}
 
-    public Stocks(Integer idPk, ItemDetails itemDetails, Users users, Integer quantity, String quantityUnit, Date modifiedDate) {
+    public Stocks(Integer idPk, Items items, ItemDetails itemDetails, Users users, Double unitQuantity, Integer caseQuantity, Integer unitsPerCase, String quantityUnit, Date modifiedDate) {
         this.idPk = idPk;
+        this.items = items;
         this.itemDetails = itemDetails;
         this.users = users;
-        this.quantity = quantity;
+        this.unitQuantity = unitQuantity;
+        this.caseQuantity = caseQuantity;
+        this.unitsPerCase = unitsPerCase;
         this.quantityUnit = quantityUnit;
         this.modifiedDate = modifiedDate;
     }
+        
+        
+        
 
-	
+
+   
+  
+
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id_pk", unique = true, nullable = false)
@@ -49,8 +69,6 @@ public class Stocks implements java.io.Serializable {
 		this.idPk = idPk;
 	}
 
-	
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "modified_by", nullable = false)
 	public Users getUsers() {
@@ -61,24 +79,8 @@ public class Stocks implements java.io.Serializable {
 		this.users = users;
 	}
 
-	@Column(name = "quantity", nullable = false)
-	public Integer getQuantity() {
-		return this.quantity;
-	}
-
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
-
-	@Column(name = "quantity_unit", nullable = false, length = 50)
-	public String getQuantityUnit() {
-		return this.quantityUnit;
-	}
-
-	public void setQuantityUnit(String quantityUnit) {
-		this.quantityUnit = quantityUnit;
-	}
-
+	
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "modified_date", nullable = false, length = 19)
 	public Date getModifiedDate() {
@@ -89,8 +91,8 @@ public class Stocks implements java.io.Serializable {
 		this.modifiedDate = modifiedDate;
 	}
 
-        @ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "item_details_id_fk", nullable = false)
+        @ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "itemdetails_id_fk", nullable = false)
 	public ItemDetails getItemDetails() {
         return itemDetails;
     }
@@ -98,7 +100,44 @@ public class Stocks implements java.io.Serializable {
     public void setItemDetails(ItemDetails itemDetails) {
         this.itemDetails = itemDetails;
     }
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "item_id_fk", nullable = false)
+    public Items getItems() {
+        return items;
+    }
+
+    public void setItems(Items items) {
+        this.items = items;
+    }
+
+    @Column(name = "quantity", nullable = false)
+    public Double getUnitQuantity() {
+        return unitQuantity;
+    }
+
+    public void setUnitQuantity(Double unitQuantity) {
+        this.unitQuantity = unitQuantity;
+    }
+
+    @Column(name = "case_quantity", nullable = false)
+    public Integer getCaseQuantity() {
+        return caseQuantity;
+    }
+
+    public void setCaseQuantity(Integer caseQuantity) {
+        this.caseQuantity = caseQuantity;
+    }
         
-        
+    @Column(name = "quantity_per_case", nullable = false)
+    public Integer getUnitsPerCase() {
+        return unitsPerCase;
+    }
+
+    public void setUnitsPerCase(Integer unitsPerCase) {
+        this.unitsPerCase = unitsPerCase;
+    }
+
+    
 
 }

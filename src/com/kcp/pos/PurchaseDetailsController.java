@@ -7,8 +7,10 @@ package com.kcp.pos;
 import com.kcp.pos.dao.DistributorDao;
 import com.kcp.pos.dao.UserDao;
 import com.kcp.pos.data.InvoiceDetailsDo;
+import com.kcp.pos.data.InvoiceDo;
 import com.kcp.pos.data.ItemDo;
 import com.kcp.pos.data.PurchaseDetailsDo;
+import com.kcp.pos.data.PurchaseDo;
 import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.modal.Purchase;
@@ -23,10 +25,15 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.animation.FadeTransition;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -37,6 +44,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -50,7 +59,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author Prakash
  */
-public class PurchaseController implements Initializable {
+public class PurchaseDetailsController implements Initializable {
 
     @FXML
     private Label label;
@@ -89,8 +98,7 @@ public class PurchaseController implements Initializable {
     @FXML
     private TextField netAmount;
     @FXML
-    public TableView<PurchaseDetailsDo> dataTable;
-    private final ObservableList<PurchaseDetailsDo> dataTableData = FXCollections.observableArrayList();
+    public TableView<PurchaseDo> dataTable;
     @FXML
     private TableColumn<PurchaseDetailsDo, String> itemNameCol;
     @FXML
@@ -119,6 +127,28 @@ public class PurchaseController implements Initializable {
     private TableColumn<PurchaseDetailsDo, Double> taxCol;
     @FXML
     private TableColumn<PurchaseDetailsDo, Double> netAmountCol;
+    
+    private final ObservableList<PurchaseDo> dataTableData = FXCollections.observableArrayList();
+    @FXML
+    public TableView<PurchaseDetailsDo> detailsDataTable;
+    private final ObservableList<PurchaseDetailsDo> detailsDataTableData = FXCollections.observableArrayList();
+    
+    
+    @FXML
+    private TableColumn<PurchaseDo, String> purchaseIdCol;
+    @FXML
+    private TableColumn<PurchaseDo, String> purchasedByCol;
+    @FXML
+    private TableColumn<PurchaseDo, Double> purchaseDateCol;
+    @FXML
+    private TableColumn<PurchaseDo, Double> purchaseNetAmountCol;
+    @FXML
+    private TableColumn<PurchaseDo, Double> cdCol;
+    @FXML
+    private TableColumn<PurchaseDo, Double> cdAmountCol;
+    @FXML
+    private TableColumn<PurchaseDo, Double> totalAmountCol;
+    
     private List<PurchaseDetailsDo> purchaseDetails = new ArrayList<PurchaseDetailsDo>();
     private List<ItemDo> itemList = new ArrayList<ItemDo>();
     private Map<String, ItemDo> itemMap = new HashMap<String, ItemDo>();
@@ -146,171 +176,73 @@ public class PurchaseController implements Initializable {
     private PurchaseService purchaseService;
     Purchase purchase = null;
 
+    private IntegerProperty index = new SimpleIntegerProperty();
+
+    
     @FXML
-    private void handleBarcodeAction(ActionEvent event) {
-        System.out.println("handleBarcodeAction() start");
-        mrp.requestFocus();
-        /*Platform.runLater(new Runnable() {
-         @Override
-         public void run() {
-         mrp.requestFocus();
-         }
-         });*/
+    private TabPane tabPane;
+    
+    @FXML
+    private Tab purchase_tab;
+    @FXML
+    private Tab purchaseDetails_tab;
+    
+    public final void setIndex(Integer value) {
+        index.set(value);
     }
 
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-        purchaseService = (PurchaseService) ApplicationMain.springContext.getBean("purchaseService");
-        PurchaseDetails purchaseDetails = new PurchaseDetails();
-        Object selectedItem = itemName.getSelectionModel().getSelectedItem();
-        if (selectedItem == null) {
-            label.setText("Please select item");
-            animateMessage();
-            fillDataTable();
-
-            System.out.println("reEnter item");
-            return;
-        }
-        UserDao userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
-        String purchaseId = purchaseNumber.getText();
-        System.out.println("UI purchase Id:" + purchaseId);
-        DistributorDao distributorDao = (DistributorDao) ApplicationMain.springContext.getBean("distributorDaoImpl");
-
-        if (purchaseId == null || KCPUtils.isNullString(purchaseId) || Integer.parseInt(purchaseId) == 0) {
-            purchase = new Purchase();
-            purchase.setModifiedDate(new Date());
-            purchase.setUsers(userDao.findById(1));
-            purchase.setDistributor(distributorDao.findById(1));
-            purchase.setNetAmount(0.0);
-            purchase.setCd(0.0);
-            purchase.setCdAmount(0.0);
-            purchase.setTotalAmount(0.0);
-
-            purchaseService.purchaseSave(purchase);
-            purchaseNumber.setText(new Integer(purchase.getIdPk()).toString());
-            System.out.println("new purchase number:" + purchaseId);
-        }
-
-        itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
-        Items item = itemService.getItemByName(selectedItem.toString());
-        ItemDetails itemDetails = itemService.getItemDetailsByItemIdBillingType(item.getIdPk(), 1);
-
-        purchaseDetails.setPurchase(purchase);
-        purchaseDetails.setItemDetails(itemDetails);
-        purchaseDetails.setMrp(Double.parseDouble(mrp.getText()));
-        purchaseDetails.setCaseQuantity(Integer.parseInt(caseQuantity.getText()));
-
-        String itemQty = unitsQuantity.getText();
-        if (KCPUtils.isNullString(itemQty)) {
-            label.setText("Please select item quantity");
-            animateMessage();
-            fillDataTable();
-            System.out.println("reenter item");
-            return;
-        }
-
-        purchaseDetails.setUnitsQuantity(Double.parseDouble(unitsQuantity.getText()));
-        purchaseDetails.setCaseQuantity(Integer.parseInt(caseQuantity.getText()));
-        purchaseDetails.setFreeUnits(Integer.parseInt(freeUnits.getText()));
-        purchaseDetails.setBasicRate(Double.parseDouble(basicRate.getText()));
-        purchaseDetails.setGrossAmount(Double.parseDouble(grossAmount.getText()));
-        purchaseDetails.setScheme(Integer.parseInt(scheme.getText()));
-        purchaseDetails.setCd(Double.parseDouble(CD.getText()));
-        purchaseDetails.setTaxPercentage(Double.parseDouble(taxPercentage.getText()));
-        purchaseDetails.setTax(Double.parseDouble(taxAmount.getText()));
-        purchaseDetails.setNetAmount(Double.parseDouble(netAmount.getText()));
-        purchaseDetails.setUnitsPerCase(Integer.parseInt(unitsPerCase.getText()));
-        System.out.println("itemQuantity:" + itemQty);
-
-        purchaseService.purchaseDetailsSave(purchaseDetails);
-
-        purchase.setNetAmount(purchase.getNetAmount() + purchaseDetails.getNetAmount());
-        purchase.setCd(0.0);
-        purchase.setCdAmount(0.0);
-        purchase.setTotalAmount(purchase.getNetAmount() - purchase.getCdAmount());
-        purchaseService.purchaseUpdate(purchase);
-
-        StocksService stocksService;
-        stocksService = (StocksService) ApplicationMain.springContext.getBean("stocksService");
-        Stocks stocks = stocksService.getStocksByItemId(purchaseDetails.getItemDetails().getIdPk());
-        if (stocks == null) {
-
-            stocks = new Stocks();
-            stocks.setItems(itemDetails.getItem());
-            stocks.setItemDetails(itemDetails);
-        }
-        stocks.setItemDetails(purchaseDetails.getItemDetails());
-        userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
-        stocks.setUsers(userDao.findById(1));
-        stocks.setModifiedDate(new Date());
-        stocks.setUnitsPerCase(purchaseDetails.getUnitsPerCase());
-        if (stocks.getUnitQuantity() == null) {
-            stocks.setUnitQuantity(purchaseDetails.getUnitsQuantity());
-        } else {
-            stocks.setUnitQuantity(stocks.getUnitQuantity() + purchaseDetails.getUnitsQuantity());
-        }
-        if (stocks.getCaseQuantity() == null) {
-            stocks.setCaseQuantity(purchaseDetails.getCaseQuantity());
-        } else {
-            stocks.setCaseQuantity(stocks.getCaseQuantity() + purchaseDetails.getCaseQuantity());
-        }
-
-
-        stocksService.saveStocks(stocks);
-
-        Double gAmount = null;
-        Integer totalQuantity = null;
-        if (purchaseDetails.getCaseQuantity() != null) {
-        }
-
-        /*totalQuantity=purchaseDetails.getUnitsQuantity()+(purchaseDetails.getCaseQuantity()==null)?0:
-         (purchaseDetails.getCaseQuantity()*purchaseDetails.getBasicRate());*/
-
-        if (grossAmount.getText() != null) {
-            gAmount = purchaseDetails.getBasicRate() * purchaseDetails.getUnitsQuantity();
-        }
-
-        Double tax = null;
-        if (purchaseDetails.getGrossAmount() != null && purchaseDetails.getTaxPercentage() != null) {
-            tax = (purchaseDetails.getGrossAmount() - purchaseDetails.getCd()) * purchaseDetails.getTaxPercentage();
-        }
-        label.setText("Items Saved");
-        animateMessage();
-        fillDataTable();
-        clearForm();
-        System.out.println("saved");
+    public IntegerProperty indexProperty() {
+        return index;
     }
+   
+    private List<PurchaseDetailsDo> purchaseDetailsDoList = new ArrayList<PurchaseDetailsDo>();
 
+   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("initialize() start");
-        itemName.getItems().removeAll("Items 1", "Items 2", "Items 3", " ");
-
-        itemName.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
-        itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
-        List<ItemDo> itemList = itemService.getAllItemsDo();
-
-        for (ItemDo item : itemList) {
-            itemMap.put(item.getItemName(), item);
-            itemName.getItems().add(item.getItemName());
-        }
-
-        itemName.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        System.out.println("PurchaseDetailsController()");
+        purchaseService = (PurchaseService) ApplicationMain.springContext.getBean("purchaseService");
+        dataTable.setEditable(true);
+        indexProperty().addListener(new ChangeListener() {
             @Override
-            public void changed(ObservableValue<? extends String> selected, String oldItem, String newItem) {
-                ItemDo item = itemMap.get(newItem);
-
-                barcode.setText(item.getBarcode());
-                mrp.setText(new Double(item.getMrp()).toString());
-
+            public void changed(ObservableValue o, Object oldVal,
+                    Object newVal) {
+                System.out.println("Index has changed!");
             }
         });
-
-
-
+        
+        dataTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+                PurchaseDo purchaseDo = (PurchaseDo) newValue;
+                setIndex(dataTableData.indexOf(newValue));
+                tabPane.getSelectionModel().select(purchaseDetails_tab);
+                System.out.println("select purhcase id:"+purchaseDo.getIdPk());
+                purchaseDetailsDoList = purchaseService.
+                                getPurchaseDetails(purchaseDo.getIdPk());
+                detailsDataTable.setItems(detailsDataTableData);
+                fillDetailsDataTable();
+                System.out.println("OK");
+            }
+        });
+       
+        
         dataTable.setItems(dataTableData);
-
-
+        purchaseIdCol.setCellValueFactory(
+                new PropertyValueFactory<PurchaseDo, String>("idPk"));
+        purchasedByCol.setCellValueFactory(
+                new PropertyValueFactory<PurchaseDo, String>("users"));
+        purchaseDateCol.setCellValueFactory(
+                new PropertyValueFactory<PurchaseDo, Double>("modifiedDate"));
+       purchaseNetAmountCol.setCellValueFactory(
+                new PropertyValueFactory<PurchaseDo, Double>("netAmount"));
+       cdCol.setCellValueFactory(
+                new PropertyValueFactory<PurchaseDo, Double>("cd"));
+       cdAmountCol.setCellValueFactory(
+                new PropertyValueFactory<PurchaseDo, Double>("cdAmount"));
+       totalAmountCol.setCellValueFactory(
+                new PropertyValueFactory<PurchaseDo, Double>("totalAmount"));
+       
         itemNameCol.setCellValueFactory(
                 new PropertyValueFactory<PurchaseDetailsDo, String>("itemName"));
 
@@ -343,27 +275,11 @@ public class PurchaseController implements Initializable {
                 new PropertyValueFactory<PurchaseDetailsDo, Double>("netAmount"));
 
 
-
+        
         fillDataTable();
     }
 
-    private void clearForm() {
-
-        barcode.clear();
-        mrp.clear();
-        basicRate.clear();
-        grossAmount.clear();
-        scheme.clear();
-        caseQuantity.clear();
-        unitsQuantity.clear();
-        freeUnits.clear();
-        CD.clear();
-        taxPercentage.clear();
-        taxAmount.clear();
-        netAmount.clear();
-
-
-    }
+    
 
     private void animateMessage() {
         FadeTransition ft = new FadeTransition(Duration.millis(1000), label);
@@ -373,29 +289,21 @@ public class PurchaseController implements Initializable {
     }
 
     private void fillDataTable() {
-
-        List<PurchaseDetailsDo> purchaseDetailsList = null;
-        purchaseNumber.getText();
-        if (!KCPUtils.isNullString(purchaseNumber.getText())) {
-
-
-            purchaseDetailsList = purchaseService.getPurchaseDetails(Integer.parseInt(purchaseNumber.getText()));
-
-
-            dataTableData.setAll(purchaseDetailsList);
-        } else {
-            purchaseDetailsList = new ArrayList<PurchaseDetailsDo>();
-        }
-
-
-
-
-
-
-
-
-        dataTableData.setAll(purchaseDetailsList);
+        List<PurchaseDo> purchaseList = null;
+            purchaseList = purchaseService.getPurchaseList();
+            System.out.println("purchase list size:"+purchaseList.size());
+            for(PurchaseDo p:purchaseList)
+            {
+                System.out.println("net Amount:"+p.getNetAmount());
+            }
+            dataTableData.setAll(purchaseList);
     }
+    
+    private void fillDetailsDataTable() {
+      
+        detailsDataTableData.setAll(purchaseDetailsDoList);
+    }
+    
     private ApplicationMain application;
 
     void setApp(ApplicationMain aThis) {
@@ -409,15 +317,17 @@ public class PurchaseController implements Initializable {
     }
 
     @FXML
-    public void openInvoiceDetails(ActionEvent e) {
-        application.gotoInvoiceDetails();
-    }
-      
-    @FXML
     public void openPurchase(ActionEvent e) {
         application.gotoPurchase();
     }
 
+     @FXML
+    public void openPurchaseDetails(ActionEvent e) {
+        application.gotoPurchaseDetails();
+    }
+
+
+     
     @FXML
     public void openMain(ActionEvent e) {
         application.gotoMain();
@@ -520,14 +430,18 @@ public class PurchaseController implements Initializable {
             button.requestFocus();
         }
     }
+    
+     
 
-    @FXML
-    public void openPurchaseDetails(ActionEvent e) {
-        application.gotoPurchaseDetails();
-    }
-
+    
     @FXML
     public void openStocks(ActionEvent e) {
         application.gotoStocks();
     }
+    
+     @FXML
+    public void openInvoiceDetails(ActionEvent e) {
+        application.gotoInvoiceDetails();
+    }
+    
 }

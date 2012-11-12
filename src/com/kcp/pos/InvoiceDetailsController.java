@@ -180,9 +180,7 @@ public class InvoiceDetailsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         invoiceService = (InvoiceService) ApplicationMain.springContext.getBean("invoiceService");
-        
         dataTable.setEditable(true);
-        
         indexProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue o, Object oldVal,
@@ -190,15 +188,12 @@ public class InvoiceDetailsController implements Initializable {
                 System.out.println("Index has changed!");
             }
         });
-
-
         dataTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
                 InvoiceDo invoiceDo = (InvoiceDo) newValue;
                 setIndex(dataTableData.indexOf(newValue));
                 tabPane.getSelectionModel().select(invoiceDetails_tab);
-
                 invoiceDetailsDoList = invoiceService.
                                 getInvoiceDetailsDoListById(invoiceDo.getInvoiceNumber());
                 detailsDataTable.setItems(detailsdataTableData);
@@ -207,33 +202,16 @@ public class InvoiceDetailsController implements Initializable {
             }
         });
 
-        
-        
-       
         invoiceDoList=invoiceService.getAllInvoiceDo() ;
-            
-     
-        
-
-
         dataTable.setItems(dataTableData);
         invoiceNumber.setCellValueFactory(
                 new PropertyValueFactory<InvoiceDo, Integer>("invoiceNumber"));
-
-        
         totalQuantity.setCellValueFactory(
                 new PropertyValueFactory<InvoiceDo, Integer>("totalQuantity"));
-
-
         totalAmount.setCellValueFactory(
                 new PropertyValueFactory<InvoiceDo, Double>("totalAmount"));
-
         modifiedBy.setCellValueFactory(
                 new PropertyValueFactory<InvoiceDo, String>("modifiedBy"));
-
-     
-        
-        
         itemNameCol.setCellValueFactory(
                 new PropertyValueFactory<InvoiceDetailsDo, String>("itemName"));
         itemBarcodeCol.setCellValueFactory(
@@ -246,8 +224,6 @@ public class InvoiceDetailsController implements Initializable {
                 new PropertyValueFactory<InvoiceDetailsDo, Double>("quantity"));
         itemTotalAmountCol.setCellValueFactory(
                 new PropertyValueFactory<InvoiceDetailsDo, Double>("total"));
-
-
         fillInvoiceDataTable();
     }
 
@@ -281,20 +257,36 @@ public class InvoiceDetailsController implements Initializable {
         this.application = aThis;
     }
 
-    @FXML
-    public void openMain(ActionEvent e) {
-        application.gotoMain();
-    }
-
-    @FXML
+     @FXML
     public void OpenInvoice(ActionEvent e) {
         application.gotoInvoice();
     }
+    
     
     @FXML
     public void openInvoiceDetails(ActionEvent e) {
         application.gotoInvoiceDetails();
     }
+    
+
+    @FXML
+    public void openPurchase(ActionEvent e) {
+        application.gotoPurchase();
+    }
+
+    @FXML
+    public void openPurchaseDetails(ActionEvent e) {
+        application.gotoPurchaseDetails();
+    }
+
+    
+    @FXML
+    public void openStocks(ActionEvent e) {
+        application.gotoStocks();
+    }
+    
+    @FXML
+    public void openMain(ActionEvent e) {
+        application.gotoMain();
+    }
 }
-
-

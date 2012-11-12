@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" fx:id="main_window" prefHeight="771.0" prefWidth="1037.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.kcp.pos.PurchaseDetailsController">
+  <children>
+    <SplitPane dividerPositions="0.16124837451235371" focusTraversable="true" orientation="VERTICAL" prefHeight="771.0" prefWidth="1037.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="-1.0">
+      <items>
+        <AnchorPane id="AnchorPane" prefHeight="349.0" prefWidth="1035.0">
+          <children>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="414.0" prefWidth="1035.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="8.0" layoutX="250.0" layoutY="26.0" prefWidth="69.0" text="Purchase">
+                  <font>
+                    <Font size="16.0" fx:id="x2" />
+                  </font>
+                </Label>
+                <Label id="PurchaseNumber" fx:id="purchaseNumber" layoutX="353.0" layoutY="30.0" prefHeight="22.0" prefWidth="77.0" />
+                <MenuBar layoutX="2.0" layoutY="2.0" prefWidth="698.0">
+                  <menus>
+                    <Menu mnemonicParsing="false" onAction="#openMain" text="Master">
+                      <items>
+                        <MenuItem mnemonicParsing="false" text="Add Item" />
+                      </items>
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="Invoice">
+                      <items>
+                        <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Add" />
+                        <MenuItem mnemonicParsing="false" onAction="#openInvoiceDetails" text="Invoice Details" />
+                      </items>
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="Purchase">
+                      <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openPurchase" text="Add" />
+                        <MenuItem mnemonicParsing="false" onAction="#openPurchaseDetails" text="Details" />
+                      </items>
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="Stocks">
+                      <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openStocks" text="Details" />
+                      </items>
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="Help">
+                      <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                      </items>
+                    </Menu>
+                  </menus>
+                </MenuBar>
+              </children>
+            </AnchorPane>
+          </children>
+        </AnchorPane>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="382.0" prefWidth="1035.0">
+          <children>
+            <TabPane fx:id="tabPane" prefHeight="439.0" prefWidth="1035.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <tabs>
+                <Tab fx:id="purchase_tab" text="Purchase">
+                  <content>
+                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="371.0" prefWidth="923.0">
+                      <children>
+                        <TableView fx:id="dataTable" prefHeight="611.0" prefWidth="1035.0" AnchorPane.bottomAnchor="3.5" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="-3.5">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="Purchase Id" fx:id="purchaseIdCol" />
+                            <TableColumn minWidth="20.0" prefWidth="75.0" text="Purchased By" fx:id="purchasedByCol" />
+                            <TableColumn prefWidth="75.0" text="Purchase Date" fx:id="purchaseDateCol" />
+                            <TableColumn prefWidth="75.0" text="NET Amount" fx:id="purchaseNetAmountCol" />
+                            <TableColumn prefWidth="75.0" text="CD" fx:id="cdCol" />
+                            <TableColumn prefWidth="75.0" text="CD Amount" fx:id="cdAmountCol" />
+                            <TableColumn prefWidth="75.0" text="Total Amount" fx:id="totalAmountCol" />
+                          </columns>
+                        </TableView>
+                        <Label id="Total" fx:id="TotalLabel" font="$x2" layoutX="289.0" layoutY="276.0" prefHeight="26.0" prefWidth="69.00009999999747" text="Total" />
+                        <Label id="Total" fx:id="TotalAmount" layoutX="349.0" layoutY="274.0" prefHeight="28.0" prefWidth="190.0" text="Amount" />
+                      </children>
+                    </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab fx:id="PurchaseDetails_tab" text="Purchase Details">
+                  <content>
+                    <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                      <children>
+                        <TableView id="dataTable" fx:id="detailsDataTable" prefHeight="611.0" prefWidth="1035.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="Name" fx:id="itemNameCol" />
+                            <TableColumn prefWidth="75.0" text="BarCode" fx:id="itemBarcodeCol" />
+                            <TableColumn prefWidth="75.0" text="M.R.P" fx:id="itemMRPCol" />
+                            <TableColumn prefWidth="75.0" text="Quantity Case" fx:id="caseQuantityCol" />
+                            <TableColumn prefWidth="75.0" text="Units Per Case" fx:id="unitsPerCaseCol" />
+                            <TableColumn prefWidth="75.0" text="Quantity Units" fx:id="unitsQuantityCol" />
+                            <TableColumn prefWidth="75.0" text="Free Units" fx:id="freeUnitsCol" />
+                            <TableColumn prefWidth="75.0" text="Basic Rate" fx:id="basicRateCol" />
+                            <TableColumn prefWidth="75.0" text="Gross Amount" fx:id="grossAmountCol" />
+                            <TableColumn prefWidth="75.0" text="Scheme" fx:id="schemeCol" />
+                            <TableColumn prefWidth="75.0" text="CD" fx:id="cDCol" />
+                            <TableColumn prefWidth="75.0" text="Tax%" fx:id="taxPercentageCol" />
+                            <TableColumn prefWidth="75.0" text="Tax" fx:id="taxCol" />
+                            <TableColumn prefWidth="75.0" text="Net Amount" fx:id="netAmountCol" />
+                          </columns>
+                        </TableView>
+                      </children>
+                    </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+          </children>
+        </AnchorPane>
+      </items>
+    </SplitPane>
+  </children>
+</AnchorPane>

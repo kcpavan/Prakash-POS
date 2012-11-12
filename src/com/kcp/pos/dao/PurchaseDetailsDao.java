@@ -15,9 +15,8 @@ public interface PurchaseDetailsDao {
     
     public void persist(PurchaseDetails transientInstance); 
     
-     public List<PurchaseDetails> findListById(Integer id);
+    public List<PurchaseDetails> findListById(Integer id);
      
-   
     
     
     

@@ -710,28 +710,7 @@ public class MainController implements Initializable {
 
     
 
-    @FXML
-    public void OpenInvoice(ActionEvent e) {
-        application.gotoInvoice();
-    }
     
-    
-    @FXML
-    public void openInvoiceDetails(ActionEvent e) {
-        application.gotoInvoiceDetails();
-    }
-    
-
-    @FXML
-    public void openPurchase(ActionEvent e) {
-        application.gotoPurchase();
-    }
-
-    @FXML
-    public void openMain(ActionEvent e) {
-        application.gotoMain();
-    }
-
     @FXML
     private void searchAction(ActionEvent event) {
 
@@ -835,6 +814,41 @@ public class MainController implements Initializable {
         if (e.getCode() == KeyCode.ENTER) {
             button.requestFocus();
         }
+    }
+    
+    
+    
+    @FXML
+    public void OpenInvoice(ActionEvent e) {
+        application.gotoInvoice();
+    }
+    
+    
+    @FXML
+    public void openInvoiceDetails(ActionEvent e) {
+        application.gotoInvoiceDetails();
+    }
+    
+
+    @FXML
+    public void openPurchase(ActionEvent e) {
+        application.gotoPurchase();
+    }
+
+    @FXML
+    public void openPurchaseDetails(ActionEvent e) {
+        application.gotoPurchaseDetails();
+    }
+
+    
+    @FXML
+    public void openStocks(ActionEvent e) {
+        application.gotoStocks();
+    }
+    
+    @FXML
+    public void openMain(ActionEvent e) {
+        application.gotoMain();
     }
 }
 
@@ -1002,4 +1016,8 @@ class EditingCellDouble extends TableCell<ItemDetailsDo, Double> {
     private String getString() {
         return getItem() == null ? "" : getItem().toString();
     }
+    
+    
+
+    
 }

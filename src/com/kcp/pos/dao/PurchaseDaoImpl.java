@@ -6,8 +6,11 @@ package com.kcp.pos.dao;
 
 import com.kcp.pos.modal.Invoice;
 import com.kcp.pos.modal.Purchase;
+import com.kcp.pos.modal.PurchaseDetails;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,5 +47,39 @@ public class PurchaseDaoImpl implements PurchaseDao{
 			throw re;
 		}
 	}
+     
+     
+     @Transactional
+	public void merge(Purchase transientInstance) {
+		log.debug("persisting Invoice instance");
+		try {
+                        
+			entityManager.merge(transientInstance);
+                        entityManager.flush();
+			log.debug("persist successful");
+		} catch (RuntimeException re) {
+			log.error("persist failed", re);
+			throw re;
+		}
+	}
+     
+     
+     
+    public List<Purchase> findByAll()
+    {
+       log.debug("getting All purchase items ");
+		try {
+			Query instance = entityManager.createNamedQuery("Purchase.findByAll");
+                                
+			log.debug("get successful");
+			return instance.getResultList();
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		} 
+    }
+   
+     
+     
     
 }

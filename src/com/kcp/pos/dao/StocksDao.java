@@ -14,10 +14,11 @@ import java.util.List;
  */
 public interface StocksDao {
     
-     public void persist(Stocks transientInstance); 
+    public void persist(Stocks transientInstance); 
     public List<Stocks> findByAll() ;
     public Stocks findByName(String itemName) ;
     public Stocks findById(Integer id) ;
-		
+    public Stocks findByItemId(Integer itemId);
+  		
     
 }

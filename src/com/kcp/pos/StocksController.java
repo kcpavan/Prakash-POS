@@ -14,10 +14,13 @@ import com.kcp.pos.dao.StocksDaoImpl;
 import com.kcp.pos.data.StocksDo;
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.modal.Stocks;
+import com.kcp.pos.service.InvoiceService;
+import com.kcp.pos.service.StocksService;
 import com.kcp.pos.utils.KCPUtils;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -36,6 +39,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -47,8 +51,7 @@ public class StocksController implements Initializable{
     private Label label;
     
    
-    @FXML
-    private ChoiceBox itemName;
+    
     @FXML
     private TextField barcode;
     @FXML
@@ -75,7 +78,9 @@ public class StocksController implements Initializable{
     @FXML
     private TableColumn<StocksDo, Double> caseQuantityCol;
     @FXML
-    private TableColumn<StocksDo, Double> unitsQuantityCol;
+    private TableColumn<StocksDo, Double> quantityPerCase;
+    @FXML
+    private TableColumn<StocksDo, Integer> unitsQuantityCol;
     @FXML
     private TableColumn<StocksDo, Double> freeUnitsCol;
     
@@ -83,6 +88,8 @@ public class StocksController implements Initializable{
     private List<Items> itemList = new ArrayList<Items>();
     private Map<String, Items> itemMap = new HashMap<String, Items>();
     ItemDao itemDao = new ItemsDaoImpl();
+     @Autowired
+    private StocksService stocksService;
 
     public List<Items> getItemList() {
         List<Items> list = itemDao.findByAll();
@@ -105,131 +112,28 @@ public class StocksController implements Initializable{
 
      StocksDao stocksDao = new StocksDaoImpl();
      
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-
-        /*PurchaseDetails purchaseDetails = new PurchaseDetails();
-       
-
-        Object selectedItem = itemName.getSelectionModel().getSelectedItem();
-
-        if (selectedItem == null) {
-            label.setText("Please select item");
-            animateMessage();
-            fillDataTable();
-
-            System.out.println("reEnter item");
-            return;
-        }
-
-        String purchaseId = purchaseNumber.getText();
-
-        if (purchaseId == null || purchaseId.equalsIgnoreCase("")) {
-            purchaseId = new Integer(stocksDao.getStocksList()).toString();
-            purchaseNumber.setText(purchaseId);
-            System.out.println("new purchase number:" + purchaseId);
-        }
-
-        Item item=itemDao.getItemByName(selectedItem.toString());
-        
-        
-        purchaseDetails.setPurchaseId(Integer.parseInt(purchaseId));
-        purchaseDetails.setItemId(item.getItemId());
-        purchaseDetails.setMrp(Double.parseDouble(mrp.getText()));
-        purchaseDetails.setCaseQuantity(Integer.parseInt(caseQuantity.getText()));
-        
-          String itemQty = unitsQuantity.getText();
-         if (KCPUtils.isNullString(itemQty)) {
-            label.setText("Please select item quantity");
-            animateMessage();
-            fillDataTable();
-
-            System.out.println("reenter item");
-            return;
-        }
-        purchaseDetails.setUnitsQuantity(Integer.parseInt(unitsQuantity.getText()));
-        
-        
-         
-        purchaseDetails.setFreeUnits(Integer.parseInt(freeUnits.getText()));
-
-        purchaseDetails.setBasicRate(Double.parseDouble(basicRate.getText()));
-        purchaseDetails.setGrossAmount(Double.parseDouble(grossAmount.getText()));
-        purchaseDetails.setScheme(Integer.parseInt(scheme.getText()));
-        purchaseDetails.setCd(Double.parseDouble(CD.getText()));
-
-        purchaseDetails.setTaxPercentage(Double.parseDouble(taxPercentage.getText()));
-        purchaseDetails.setTax(Double.parseDouble(taxAmount.getText()));
-        purchaseDetails.setNetAmount(Double.parseDouble(netAmount.getText()));
-
-
-      
-
-
-       
-
-
-       
-        System.out.println("itemQuantity:" + itemQty);
-
-      
-        stocksDao.addPurcaseItem(purchaseDetails);
-        
-      
-
-
-
-        label.setText("Item Saved");
-        animateMessage();
-        fillDataTable();
-        clearForm();
-        System.out.println("saved");*/
-   }
-
+   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-
-       
-
-
-        
-       // dataTable.setItems(dataTableData);
-   
-    
-  
-  
- 
-        /*itemNameCol.setCellValueFactory(
-                new PropertyValueFactory<Item, String>("itemName"));
+        dataTable.setItems(dataTableData);
+        itemNameCol.setCellValueFactory(
+                new PropertyValueFactory<StocksDo, String>("itemName"));
         itemBarcodeCol.setCellValueFactory(
-                new PropertyValueFactory<Item, String>("itemBarcode"));
+                new PropertyValueFactory<StocksDo, String>("barcode"));
         itemMRPCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemMrp"));
+                new PropertyValueFactory<StocksDo, Double>("mrp"));
         caseQuantityCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemCaseQuantity"));
+                new PropertyValueFactory<StocksDo, Double>("caseQuantity"));
         unitsQuantityCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemUnitsQuantity"));
+                new PropertyValueFactory<StocksDo, Integer>("unitQuantity"));
+        quantityPerCase.setCellValueFactory(
+                new PropertyValueFactory<StocksDo, Double>("unitsPerCase"));
         freeUnitsCol.setCellValueFactory(
-                new PropertyValueFactory<Item, Double>("itemFreeUnits"));
-  
-
-        fillDataTable();*/
+                new PropertyValueFactory<StocksDo, Double>("itemFreeUnits"));
+        fillDataTable();
     }
 
-    private void clearForm() {
-
-        barcode.clear();
-        mrp.clear();
-        
-        caseQuantity.clear();
-        unitsQuantity.clear();
-        freeUnits.clear();
-        
-
-
-    }
-
+   
     private void animateMessage() {
         FadeTransition ft = new FadeTransition(Duration.millis(1000), label);
         ft.setFromValue(0.0);
@@ -238,15 +142,18 @@ public class StocksController implements Initializable{
     }
 
     private void fillDataTable() {
-      
-       
-                    
-               
-      /*  List<Stocks> stocksList = stocksDao.getStocksList();
-        
-        
-        dataTableData.setAll(stocksList);*/
-                
+        stocksService = (StocksService) ApplicationMain.springContext.getBean("stocksService");        
+        List<StocksDo> stocksList = new ArrayList<StocksDo>();
+                for(Stocks stocks:stocksService.getAllStocks())
+                {
+                    System.out.println("size:"+stocksService.getAllStocks().size());
+                    stocksList.add(new StocksDo(stocks));
+                }
+                for (Iterator<StocksDo> it = stocksList.iterator(); it.hasNext();) {
+            StocksDo stocksDo = it.next();
+                    System.out.println("name:"+stocksDo.getItemName());
+        }
+        dataTableData.setAll(stocksList);
     }
 
     private ApplicationMain application;
@@ -255,7 +162,37 @@ public class StocksController implements Initializable{
         this.application = aThis;
     }
 
+     @FXML
+    public void OpenInvoice(ActionEvent e) {
+        application.gotoInvoice();
+    }
+    
+    
+    @FXML
+    public void openInvoiceDetails(ActionEvent e) {
+        application.gotoInvoiceDetails();
+    }
+    
+
+    @FXML
+    public void openPurchase(ActionEvent e) {
+        application.gotoPurchase();
+    }
+
+    @FXML
+    public void openMain(ActionEvent e) {
+        application.gotoMain();
+    }
  
+     @FXML
+    public void openPurchaseDetails(ActionEvent e) {
+        application.gotoPurchaseDetails();
+    }
+
+    
+    @FXML
+    public void openStocks(ActionEvent e) {
+        application.gotoStocks();
+    }
     
 }
-

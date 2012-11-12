@@ -4,10 +4,13 @@
  */
 package com.kcp.pos.dao;
 
+import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.modal.Stocks;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.apache.commons.logging.Log;
@@ -38,7 +41,7 @@ public class StocksDaoImpl implements StocksDao{
 		log.debug("persisting Stocks instance");
 		try {
                         
-			entityManager.persist(transientInstance);
+			entityManager.merge(transientInstance);
                         entityManager.flush();
 			log.debug("persist successful");
 		} catch (RuntimeException re) {
@@ -109,6 +112,41 @@ public class StocksDaoImpl implements StocksDao{
 		}
 	}
         
-        
+         public Stocks findByItemId(Integer itemId)
+         {
+           log.debug("getting Stocks instance with id: " + itemId);
+		try {
+                    //Stocks stocks=null;
+			Query instance = entityManager.
+                                createNamedQuery("Stocks.findByItemId")
+                                .setParameter("itemId", itemId);
+			log.debug("get successful");
+			 //return instance==null? null : (Stocks)instance.getSingleResult();
+                        //List stocks=(Stocks)instance.getResultList();
+                        List<Stocks> elementList =new ArrayList<Stocks>();
+                        elementList = instance.getResultList();
+                         return elementList.isEmpty() ? null : elementList.get(0);
+                        /*if(instance==null)
+                        {
+                            return null;
+                        }
+                        else
+                        {
+                            try
+                            {
+                             stocks=(Stocks)instance.getResultList();
+                            }
+                            catch(NoResultException  e)
+                            {
+                                System.out.println("NoResultException  exception!!!");
+                            }
+                            
+                            return stocks;
+                        }*/
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}  
+         }
     
 }

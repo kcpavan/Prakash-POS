@@ -68,6 +68,19 @@ public class PurchaseDetailsDaoImpl implements PurchaseDetailsDao{
 		}
 	}
     
+    public List<PurchaseDetails> findByAll()
+    {
+       log.debug("getting All purchase items ");
+		try {
+			Query instance = entityManager.createNamedQuery("PurchaseDetails.findByAll");
+                                
+			log.debug("get successful");
+			return instance.getResultList();
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		} 
+    }
    
     
 }

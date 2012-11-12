@@ -8,6 +8,7 @@ import com.kcp.pos.dao.PurchaseDao;
 import com.kcp.pos.dao.PurchaseDetailsDao;
 import com.kcp.pos.data.InvoiceDetailsDo;
 import com.kcp.pos.data.PurchaseDetailsDo;
+import com.kcp.pos.data.PurchaseDo;
 import com.kcp.pos.modal.Invoice;
 import com.kcp.pos.modal.InvoiceDetails;
 import com.kcp.pos.modal.Purchase;
@@ -37,6 +38,12 @@ public class PurchaseService {
         purchaseDao.persist(purchase);
     }
 
+  public void purchaseUpdate(Purchase purchase){
+        purchaseDao.merge(purchase);
+    }
+       
+
+  
   public void purchaseDetailsSave(PurchaseDetails purchaseDetails){
         purchaseDetailsDao.persist(purchaseDetails);
     }
@@ -70,6 +77,17 @@ public class PurchaseService {
             //invoiceDos.add(invoice);
         }
     return purchaseDos;
+    }
+    
+    
+            
+    public List<PurchaseDo> getPurchaseList()
+    {
+        List<PurchaseDo> purchaseList = new ArrayList<PurchaseDo>();
+       for (Purchase purchase: purchaseDao.findByAll()) {
+           purchaseList.add(new PurchaseDo(purchase)); 
+        }
+    return purchaseList;
     }
     
 }

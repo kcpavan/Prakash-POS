@@ -18,9 +18,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "purchase_details", catalog = "storedb")
 @NamedQueries({
-    @NamedQuery(name = "PurchaseDetails.findAllById", query = "SELECT c FROM PurchaseDetails c WHERE c.purchase.idPk = :id")
-   
+    @NamedQuery(name = "PurchaseDetails.findAllById", query = "SELECT c FROM PurchaseDetails c WHERE c.purchase.idPk = :id"),
     
+
 })
 public class PurchaseDetails implements java.io.Serializable {
 
@@ -28,10 +28,10 @@ public class PurchaseDetails implements java.io.Serializable {
     //private Items items;
     private ItemDetails itemDetails;
     private Purchase purchase;
-    
     private Double mrp;
     private Integer caseQuantity;
-    private Integer unitsQuantity;
+    private Double unitsQuantity;
+    private Integer unitsPerCase;
     private Integer freeUnits;
     private Double basicRate;
     private Double grossAmount;
@@ -44,13 +44,14 @@ public class PurchaseDetails implements java.io.Serializable {
     public PurchaseDetails() {
     }
 
-    public PurchaseDetails(Integer idPk, ItemDetails itemDetails, Purchase purchase, Double mrp, Integer caseQuantity, Integer unitsQuantity, Integer freeUnits, Double basicRate, Double grossAmount, Integer scheme, Double cd, Double taxPercentage, Double tax, Double netAmount) {
+    public PurchaseDetails(Integer idPk, ItemDetails itemDetails, Purchase purchase, Double mrp, Integer caseQuantity, Double unitsQuantity, Integer unitsPerCase, Integer freeUnits, Double basicRate, Double grossAmount, Integer scheme, Double cd, Double taxPercentage, Double tax, Double netAmount) {
         this.idPk = idPk;
         this.itemDetails = itemDetails;
         this.purchase = purchase;
         this.mrp = mrp;
         this.caseQuantity = caseQuantity;
         this.unitsQuantity = unitsQuantity;
+        this.unitsPerCase = unitsPerCase;
         this.freeUnits = freeUnits;
         this.basicRate = basicRate;
         this.grossAmount = grossAmount;
@@ -62,9 +63,8 @@ public class PurchaseDetails implements java.io.Serializable {
     }
 
    
-
     
-
+    
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id_pk", unique = true, nullable = false)
@@ -76,16 +76,6 @@ public class PurchaseDetails implements java.io.Serializable {
         this.idPk = idPk;
     }
 
-    /*@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id_fk", nullable = false)
-    public Items getItems() {
-        return this.items;
-    }
-
-    public void setItems(Items items) {
-        this.items = items;
-    }*/
-    
     
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -116,11 +106,11 @@ public class PurchaseDetails implements java.io.Serializable {
     }
 
     @Column(name = "units_quantity", nullable = false, length = 19)
-    public Integer getUnitsQuantity() {
+    public Double getUnitsQuantity() {
         return unitsQuantity;
     }
 
-    public void setUnitsQuantity(Integer unitsQuantity) {
+    public void setUnitsQuantity(Double unitsQuantity) {
         this.unitsQuantity = unitsQuantity;
     }
 
@@ -205,6 +195,15 @@ public class PurchaseDetails implements java.io.Serializable {
 
     public void setItemDetails(ItemDetails itemDetails) {
         this.itemDetails = itemDetails;
+    }
+
+    @Column(name = "quantity_per_case", nullable = false, length = 19)
+    public Integer getUnitsPerCase() {
+        return unitsPerCase;
+    }
+
+    public void setUnitsPerCase(Integer unitsPerCase) {
+        this.unitsPerCase = unitsPerCase;
     }
 
     

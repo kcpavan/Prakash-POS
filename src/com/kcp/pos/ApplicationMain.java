@@ -92,6 +92,7 @@ public class ApplicationMain extends Application {
         Scene scene = new Scene(root, 800, 600);
 
         stage.setScene(scene);
+        stage.setFullScreen(true);
         stage.setX(bounds.getMinX());
         stage.setY(bounds.getMinY());
         stage.setWidth(bounds.getWidth());
@@ -161,6 +162,28 @@ public class ApplicationMain extends Application {
         }
     }
 
+    void gotoPurchaseDetails() {
+        try {
+
+            PurchaseDetailsController purchase = (PurchaseDetailsController) replaceSceneContent("PurchaseDetails.fxml");
+            purchase.setApp(this);
+
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    void gotoStocks() {
+        try {
+
+            StocksController purchase = (StocksController) replaceSceneContent("Stocks.fxml");
+            purchase.setApp(this);
+
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     void gotoItem() {
         try {
 

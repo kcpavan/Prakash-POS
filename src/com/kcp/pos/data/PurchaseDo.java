@@ -11,6 +11,7 @@ import com.kcp.pos.modal.Users;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -20,14 +21,32 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class PurchaseDo {
     
-    private SimpleIntegerProperty idPk;
-	private SimpleIntegerProperty distributor;
-	private SimpleIntegerProperty users;
-	private SimpleIntegerProperty purchaseNumber;
-	private SimpleStringProperty receivedDate;
-	private SimpleStringProperty modifiedDate;
+    private SimpleIntegerProperty idPk=new SimpleIntegerProperty(); ;
+	private SimpleIntegerProperty distributor=new SimpleIntegerProperty();;
+	private SimpleStringProperty users=new SimpleStringProperty();;
+	private SimpleIntegerProperty purchaseNumber=new SimpleIntegerProperty();;
+	private SimpleStringProperty receivedDate=new SimpleStringProperty();;
+	private SimpleStringProperty modifiedDate=new SimpleStringProperty();
+        private SimpleDoubleProperty netAmount=new SimpleDoubleProperty();
+        private SimpleDoubleProperty cd=new SimpleDoubleProperty();
+        private SimpleDoubleProperty cdAmount=new SimpleDoubleProperty();
+        private SimpleDoubleProperty totalAmount=new SimpleDoubleProperty();
 	private Set<PurchaseDetails> purchaseDetailses = new HashSet<PurchaseDetails>(0);
 
+        public PurchaseDo(Purchase purchase) {
+        this.idPk.set(purchase.getIdPk());
+        this.distributor.set(purchase.getDistributor().getIdPk());
+        this.users.set(purchase.getUsers().getFirstName()+" "+purchase.getUsers().getFirstName());
+        this.purchaseNumber.set(purchase.getPurchaseNumber());
+        this.modifiedDate.set(purchase.getModifiedDate().toString());
+        this.netAmount.set(purchase.getNetAmount());
+        this.cd.set(purchase.getCd());
+        this.cdAmount.set(purchase.getCdAmount());
+        this.totalAmount.set(purchase.getTotalAmount());
+        
+    }
+        
+        
     public Integer getIdPk() {
         return idPk.get();
     }
@@ -44,12 +63,12 @@ public class PurchaseDo {
         this.distributor = distributor;
     }
 
-    public Integer getUsers() {
+    public String getUsers() {
         return users.get();
     }
 
-    public void setUsers(SimpleIntegerProperty users) {
-        this.users = users;
+    public void setUsers(String users) {
+        this.users.set(users);
     }
 
     public Integer getPurchaseNumber() {
@@ -84,18 +103,36 @@ public class PurchaseDo {
         this.purchaseDetailses = purchaseDetailses;
     }
 
-    public PurchaseDo(Purchase purchase) {
-        this.idPk.set(purchase.getIdPk());
-        this.distributor.set(purchase.getDistributor().getIdPk());
-        this.users.set(purchase.getUsers().getIdPk());
-        this.purchaseNumber.set(purchase.getPurchaseNumber());
-      //  this.receivedDate.set(purchase.getReceivedDate().toString());
-        this.modifiedDate.set(purchase.getModifiedDate().toString());
+
+    public Double getNetAmount() {
+        return netAmount.get();
     }
-        
-        
-        
-        
-        
-    
+
+    public void setNetAmount(Double netAmount) {
+        this.netAmount.set(netAmount);
+    }
+
+    public Double getCd() {
+        return cd.get();
+    }
+
+    public void setCd(Double cd) {
+        this.cd.set(cd);
+    }
+
+    public Double getCdAmount() {
+        return cdAmount.get();
+    }
+
+    public void setCdAmount(Double cdAmount) {
+        this.cdAmount.set(cdAmount);
+    }
+
+    public Double getTotalAmount() {
+        return totalAmount.get();
+    }
+
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount.set(totalAmount);
+    }
 }

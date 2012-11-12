@@ -10,11 +10,11 @@
 
 <AnchorPane id="AnchorPane" fx:id="main_window" xmlns:fx="http://javafx.com/fxml" fx:controller="com.kcp.pos.MainController">
   <children>
-    <SplitPane dividerPositions="0.4054441260744986" focusTraversable="true" orientation="VERTICAL" prefHeight="700.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <SplitPane dividerPositions="0.3108882521489971" focusTraversable="true" orientation="VERTICAL" prefHeight="700.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <items>
-        <AnchorPane id="AnchorPane" prefHeight="243.0" prefWidth="698.0">
+        <AnchorPane id="AnchorPane" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="214.0" prefWidth="698.0">
           <children>
-            <AnchorPane layoutX="1.0" layoutY="1.0" minHeight="0.0" minWidth="0.0" prefHeight="204.0" prefWidth="698.0">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="346.0" prefWidth="698.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <children>
                 <Label layoutX="33.0" layoutY="108.0" prefHeight="27.0" prefWidth="54.0" text="Item">
                   <font>
@@ -26,7 +26,7 @@
                 <Button fx:id="Add" layoutX="468.0" layoutY="144.0" mnemonicParsing="false" onAction="#addItem" prefWidth="97.0" text="Add Item" />
                 <Button fx:id="delButton" layoutX="595.0" layoutY="144.0" mnemonicParsing="false" onAction="#deleteItem" text="Delete Item" />
                 <Label fx:id="outputLabel" layoutX="101.0" layoutY="155.0" prefHeight="22.0" prefWidth="166.0" />
-                <MenuBar layoutX="2.0" prefWidth="698.0">
+                <MenuBar layoutX="2.0" layoutY="2.0" prefWidth="698.0">
                   <menus>
                     <Menu mnemonicParsing="false" onAction="#openMain" text="Master">
                       <items>
@@ -41,8 +41,13 @@
                     </Menu>
                     <Menu mnemonicParsing="false" text="Purchase">
                       <items>
-                        <MenuItem mnemonicParsing="false" onAction="#openPurchase" text="Add Purchase" />
-                        <MenuItem mnemonicParsing="false" text="Details" />
+                        <MenuItem mnemonicParsing="false" onAction="#openPurchase" text="Add" />
+                        <MenuItem mnemonicParsing="false" onAction="#openPurchaseDetails" text="Details" />
+                      </items>
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="Stocks">
+                      <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openStocks" text="Details" />
                       </items>
                     </Menu>
                     <Menu mnemonicParsing="false" text="Help">
@@ -56,15 +61,15 @@
             </AnchorPane>
           </children>
         </AnchorPane>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="466.0" prefWidth="698.0">
           <children>
-            <TabPane fx:id="tabPane" prefHeight="346.0" prefWidth="698.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TabPane fx:id="tabPane" prefHeight="346.0000999999975" prefWidth="698.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <tabs>
                 <Tab fx:id="items_tab" text="Items">
                   <content>
                     <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                       <children>
-                        <TableView fx:id="dataTable" prefHeight="317.0" prefWidth="698.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TableView fx:id="dataTable" prefHeight="553.0" prefWidth="698.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
                             <TableColumn prefWidth="75.0" text="Name" fx:id="itemNameCol" />
                             <TableColumn prefWidth="75.0" text="BarCode" fx:id="itemBarcodeCol" />

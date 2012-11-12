@@ -26,7 +26,8 @@ public class PurchaseDetailsDo {
     //private BillingPriceDo billingPrice;
     private SimpleDoubleProperty mrp = new SimpleDoubleProperty();
     private SimpleIntegerProperty caseQuantity = new SimpleIntegerProperty();
-    private SimpleIntegerProperty unitsQuantity = new SimpleIntegerProperty();
+    private SimpleIntegerProperty unitsPerCase = new SimpleIntegerProperty();
+    private SimpleDoubleProperty unitsQuantity = new SimpleDoubleProperty();
     private SimpleIntegerProperty freeUnits = new SimpleIntegerProperty();
     private SimpleDoubleProperty basicRate = new SimpleDoubleProperty();
     private SimpleDoubleProperty grossAmount = new SimpleDoubleProperty();
@@ -48,6 +49,7 @@ public class PurchaseDetailsDo {
         this.purchase.set(purchaseDetails.getPurchase().getPurchaseNumber());
         this.mrp.set(purchaseDetails.getMrp());
         this.caseQuantity.set(purchaseDetails.getCaseQuantity());
+        this.unitsPerCase.set(purchaseDetails.getUnitsPerCase());
         this.unitsQuantity.set(purchaseDetails.getUnitsQuantity());
         this.freeUnits.set(purchaseDetails.getFreeUnits());
         this.basicRate.set(purchaseDetails.getBasicRate());
@@ -86,40 +88,40 @@ public class PurchaseDetailsDo {
         return mrp.get();
     }
 
-    public void setMrp(SimpleDoubleProperty mrp) {
-        this.mrp = mrp;
+    public void setMrp(Double mrp) {
+        this.mrp.set(mrp);
     }
 
     public Integer getCaseQuantity() {
         return caseQuantity.get();
     }
 
-    public void setCaseQuantity(SimpleIntegerProperty caseQuantity) {
-        this.caseQuantity = caseQuantity;
+    public void setCaseQuantity(Integer caseQuantity) {
+        this.caseQuantity.set(caseQuantity);
     }
 
-    public Integer getUnitsQuantity() {
+    public Double getUnitsQuantity() {
         return unitsQuantity.get();
     }
 
-    public void setUnitsQuantity(SimpleIntegerProperty unitsQuantity) {
-        this.unitsQuantity = unitsQuantity;
+    public void setUnitsQuantity(Double unitsQuantity) {
+        this.unitsQuantity.set(unitsQuantity);
     }
 
     public Integer getFreeUnits() {
         return freeUnits.get();
     }
 
-    public void setFreeUnits(SimpleIntegerProperty freeUnits) {
-        this.freeUnits = freeUnits;
+    public void setFreeUnits(Integer freeUnits) {
+        this.freeUnits.set(freeUnits);
     }
 
     public Double getBasicRate() {
         return basicRate.get();
     }
 
-    public void setBasicRate(SimpleDoubleProperty basicRate) {
-        this.basicRate = basicRate;
+    public void setBasicRate(Double basicRate) {
+        this.basicRate.set(basicRate);
     }
 
     public Double getGrossAmount() {
@@ -184,6 +186,22 @@ public class PurchaseDetailsDo {
 
     public void setBarcode(SimpleStringProperty barcode) {
         this.barcode = barcode;
+    }
+
+    public SimpleIntegerProperty getItemDetailsId() {
+        return itemDetailsId;
+    }
+
+    public void setItemDetailsId(SimpleIntegerProperty itemDetailsId) {
+        this.itemDetailsId = itemDetailsId;
+    }
+
+    public Integer getUnitsPerCase() {
+        return unitsPerCase.get();
+    }
+
+    public void setUnitsPerCase(Integer unitsPerCase) {
+        this.unitsPerCase.set(unitsPerCase);
     }
 
     

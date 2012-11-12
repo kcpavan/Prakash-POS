@@ -12,13 +12,21 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+
+
 @Entity
 @Table(name = "purchase", catalog = "storedb")
+@NamedQueries({
+@NamedQuery(name = "Purchase.findByAll", query = "SELECT c FROM Purchase c ")
+})
+
 public class Purchase implements java.io.Serializable {
 
 	private Integer idPk;
@@ -27,22 +35,29 @@ public class Purchase implements java.io.Serializable {
 	private int purchaseNumber;
 	//private Date receivedDate;
 	private Date modifiedDate;
+        private Double netAmount;
+        private Double cd;
+        private Double cdAmount;
+        private Double totalAmount;
+        
 	private Set<PurchaseDetails> purchaseDetailses = new HashSet<PurchaseDetails>(0);
 
 	public Purchase() {
 	}
 
-    public Purchase(Integer idPk, Distributor distributor, Users users, int purchaseNumber, Date modifiedDate) {
+    public Purchase(Integer idPk, Distributor distributor, Users users, int purchaseNumber, Date modifiedDate, Double netAmount, Double cd, Double cdAmount, Double totalAmount) {
         this.idPk = idPk;
         this.distributor = distributor;
         this.users = users;
         this.purchaseNumber = purchaseNumber;
         this.modifiedDate = modifiedDate;
+        this.netAmount = netAmount;
+        this.cd = cd;
+        this.cdAmount = cdAmount;
+        this.totalAmount = totalAmount;
     }
 
-	
 
-	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id_pk", unique = true, nullable = false)
@@ -64,7 +79,7 @@ public class Purchase implements java.io.Serializable {
 		this.distributor = distributor;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "modified_by", nullable = false)
 	public Users getUsers() {
 		return this.users;
@@ -112,4 +127,40 @@ public class Purchase implements java.io.Serializable {
 		this.purchaseDetailses = purchaseDetailses;
 	}
 
+        
+    @Column(name = "net_amount", nullable = false)
+    public Double getNetAmount() {
+        return netAmount;
+    }
+
+    public void setNetAmount(Double netAmount) {
+        this.netAmount = netAmount;
+    }
+
+    @Column(name = "cd", nullable = false)
+    public Double getCd() {
+        return cd;
+    }
+
+    public void setCd(Double cd) {
+        this.cd = cd;
+    }
+
+    @Column(name = "cd_amount", nullable = false)
+    public Double getCdAmount() {
+        return cdAmount;
+    }
+
+    public void setCdAmount(Double cdAmount) {
+        this.cdAmount = cdAmount;
+    }
+
+    @Column(name = "total_amount", nullable = false)
+    public Double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 }
