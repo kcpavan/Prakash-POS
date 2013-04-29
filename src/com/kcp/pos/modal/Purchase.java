@@ -24,7 +24,10 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "purchase", catalog = "storedb")
 @NamedQueries({
-@NamedQuery(name = "Purchase.findByAll", query = "SELECT c FROM Purchase c ")
+@NamedQuery(name = "Purchase.findByAll", query = "SELECT p FROM Purchase p "),
+@NamedQuery(name = "Purchase.findByDate", query = "SELECT p FROM Purchase p "
+        + " where p.modifiedDate BETWEEN :start_date AND :end_date")
+     //   + "where p.modifiedDate =:date")
 })
 
 public class Purchase implements java.io.Serializable {
@@ -33,7 +36,7 @@ public class Purchase implements java.io.Serializable {
 	private Distributor distributor;
 	private Users users;
 	private int purchaseNumber;
-	//private Date receivedDate;
+	private Date receivedDate;
 	private Date modifiedDate;
         private Double netAmount;
         private Double cd;

@@ -25,6 +25,7 @@ public class InvoiceDo {
 	private SimpleIntegerProperty totalQuantity=new  SimpleIntegerProperty();
 	private SimpleDoubleProperty totalAmount=new SimpleDoubleProperty();
         private SimpleStringProperty modifiedBy=new SimpleStringProperty();
+        private SimpleStringProperty modifiedDate=new SimpleStringProperty();
         private Set<InvoiceDetails> invoiceDetailses = new HashSet<InvoiceDetails>(0);
 
     public Integer getTotalQuantity() {
@@ -70,8 +71,17 @@ public class InvoiceDo {
             this.totalQuantity.set(invoice.getTotalItems());
             this.invoiceNumber.set(invoice.getIdPk());
             this.modifiedBy.set(invoice.getUsers().getFirstName()+" "+invoice.getUsers().getLastName());
+            this.modifiedDate.set(invoice.getModifiedDate().toString());
             
         }
+
+    public String getModifiedDate() {
+        return modifiedDate.get();
+    }
+
+    public void setModifiedDate(String modifiedDate) {
+        this.modifiedDate.set(modifiedDate);
+    }
 	
         
         

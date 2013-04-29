@@ -37,14 +37,14 @@ import javafx.stage.Popup;
 public class SimpleCalendar extends VBox{
 
 	private Popup popup;
-	final DatePicker datePicker;
+	final DatePicker_backup datePicker;
 
-    public SimpleCalendar(Popup popup, DatePicker datePicker) {
+    public SimpleCalendar(Popup popup, DatePicker_backup datePicker) {
         this.popup = popup;
         this.datePicker = datePicker;
     }
 
-    public SimpleCalendar(Popup popup, DatePicker datePicker, double d) {
+    public SimpleCalendar(Popup popup, DatePicker_backup datePicker, double d) {
         super(d);
         this.popup = popup;
         this.datePicker = datePicker;
@@ -60,7 +60,7 @@ public class SimpleCalendar extends VBox{
 		popup.setAutoFix(true);
 		popup.setHideOnEscape(true);
 
-		datePicker = new DatePicker();
+		datePicker = new DatePicker_backup();
 		datePicker.dateProperty().addListener(new ChangeListener<Date>() {
 
 			@Override

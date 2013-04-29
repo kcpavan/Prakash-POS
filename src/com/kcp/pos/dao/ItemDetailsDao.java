@@ -21,7 +21,7 @@ public interface ItemDetailsDao {
     public ItemDetails  findById(Integer id) ;
     public List<ItemDetails>  findAllByItemId(Integer id) ;
     
-    public Double findBillingPriceByItemId(Integer id) ;
+   // public Double findBillingPriceByItemId(Integer id) ;
     public Boolean disableItemDetails(Integer itemId);
     
     

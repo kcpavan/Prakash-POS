@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" fx:id="main_window" prefHeight="539.9999000000025" prefWidth="930.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.kcp.pos.StocksController">
+  <children>
+    <SplitPane dividerPositions="0.5000000929368179" focusTraversable="true" orientation="VERTICAL" prefHeight="539.9999000000025" prefWidth="930.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <AnchorPane id="" prefHeight="225.0" prefWidth="928.0">
+          <children>
+            <SplitPane dividerPositions="0.11742424242424243" focusTraversable="true" minHeight="-Infinity" orientation="VERTICAL" prefHeight="266.0" prefWidth="928.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <items>
+                <AnchorPane id="anchorPane" prefHeight="28.0" prefWidth="926.0" />
+                <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" minHeight="-Infinity" minWidth="0.0" prefHeight="230.0" prefWidth="926.0" />
+              </items>
+            </SplitPane>
+            <MenuBar prefHeight="28.0" prefWidth="926.0" AnchorPane.bottomAnchor="238.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0">
+              <menus>
+                <Menu mnemonicParsing="false" onAction="#openMain" text="Master">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Add Item" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Invoice">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Add" />
+                    <MenuItem mnemonicParsing="false" onAction="#openInvoiceDetails" text="Invoice Details" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Purchase">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#openPurchase" text="Add" />
+                    <MenuItem mnemonicParsing="false" onAction="#openPurchaseDetails" text="Details" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Stocks">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#openStocks" text="Details" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+          </children>
+        </AnchorPane>
+        <AnchorPane id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="209.0" prefWidth="928.0">
+          <children>
+            <TableView fx:id="dataTable" prefHeight="263.0" prefWidth="928.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="Name" fx:id="itemNameCol" />
+                <TableColumn prefWidth="75.0" text="BarCode" fx:id="itemBarcodeCol" />
+                <TableColumn prefWidth="75.0" text="M.R.P" fx:id="itemMRPCol" />
+                <TableColumn prefWidth="75.0" text="Units Quantity" fx:id="unitsQuantityCol" />
+                <TableColumn prefWidth="75.0" text="Case Quantity" fx:id="caseQuantityCol" />
+                <TableColumn prefWidth="75.0" text="Quantity Per Case" fx:id="quantityPerCase" />
+                <TableColumn prefWidth="75.0" text="Free Units" fx:id="freeUnitsCol" />
+              </columns>
+            </TableView>
+          </children>
+        </AnchorPane>
+      </items>
+    </SplitPane>
+  </children>
+  <stylesheets>
+    <URL value="@style/simple_calendar.css" />
+  </stylesheets>
+</AnchorPane>

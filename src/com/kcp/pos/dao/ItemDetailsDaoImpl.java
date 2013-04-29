@@ -137,22 +137,22 @@ class ItemDetailsDaoImpl implements ItemDetailsDao{
 		}
              
          }
-        public Double findBillingPriceByItemId(Integer itemId) {
-		log.debug("getting Items instance with id: " + itemId);
-		try {
-                    Query instance = entityManager.createNamedQuery("ItemDetails.findBillingPriceByItemId")
-                                .setParameter("itemId", itemId);
-			log.debug("get successful");
-			List<ItemDetails> elementList =new ArrayList<ItemDetails>();
-                        elementList = instance.getResultList();
-                       // return elementList.isEmpty() ? null : elementList.get(0).getBillingPrice();
-                         return elementList.isEmpty() ? null : elementList.get(0).getRetailBillingPrice();
-                        
-		} catch (RuntimeException re) {
-			log.error("get failed", re);
-			throw re;
-		}
-	}
+//        public Double findBillingPriceByItemId(Integer itemId) {
+//		log.debug("getting Items instance with id: " + itemId);
+//		try {
+//                    Query instance = entityManager.createNamedQuery("ItemDetails.findBillingPriceByItemId")
+//                                .setParameter("itemId", itemId);
+//			log.debug("get successful");
+//			List<ItemDetails> elementList =new ArrayList<ItemDetails>();
+//                        elementList = instance.getResultList();
+//                       // return elementList.isEmpty() ? null : elementList.get(0).getBillingPrice();
+//                         return elementList.isEmpty() ? null : elementList.get(0).getRetailBillingPrice();
+//                        
+//		} catch (RuntimeException re) {
+//			log.error("get failed", re);
+//			throw re;
+//		}
+	//}
         
         @Transactional
         public Boolean disableItemDetails(Integer itemId)

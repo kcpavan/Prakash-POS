@@ -20,29 +20,30 @@ import javax.persistence.NamedQuery;
 @Entity
 @Table(name = "uom", catalog = "storedb")
 @NamedQueries({
-    @NamedQuery(name = "UOM.findAll", query = "SELECT c FROM UOM c"),
-    @NamedQuery(name = "UOM.findByName", query = "SELECT i FROM UOM i where i.uomDesc=:name"),})
-    
+@NamedQuery(name = "UOM.findAll", query = "SELECT c FROM UOM c"),
+@NamedQuery(name = "UOM.findByName", query = "SELECT i FROM UOM i where i.uomDesc=:name")
+        })
+
 public class UOM {
-    
+
     Integer idPk;
     String uomDesc;
     
-    public UOM()
-    {
-        
-    }
-            
+  
 
-    public UOM(Integer idPk, String uomDesc) {
+    public UOM() {
+    }
+
+    public UOM(Integer idPk, String userName) {
         this.idPk = idPk;
-        this.uomDesc = uomDesc;
+        this.uomDesc = userName;
     }
 
-   @Id
-	@GeneratedValue(strategy = IDENTITY)
-	@Column(name = "id_pk", unique = true, nullable = false)
-	 
+    
+    
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id_pk", unique = true, nullable = false)
     public Integer getIdPk() {
         return idPk;
     }
@@ -51,6 +52,8 @@ public class UOM {
         this.idPk = idPk;
     }
 
+   
+    
     @Column(name = "uom_desc", nullable = false, length = 250)
     public String getUomDesc() {
         return uomDesc;
@@ -59,7 +62,7 @@ public class UOM {
     public void setUomDesc(String uomDesc) {
         this.uomDesc = uomDesc;
     }
-    
+
     
     
 }

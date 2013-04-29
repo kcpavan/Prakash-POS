@@ -118,7 +118,7 @@ public class StocksDaoImpl implements StocksDao{
             Query instance=null;
             try {
                 System.out.println("selected date is:"+date);
-                Calendar c15DaysAgo = Calendar.getInstance(); // 15 days ago
+                //Calendar c15DaysAgo = Calendar.getInstance(); // 15 days ago
                 String pattern = "yyyy-MM-dd HH:mm:ss";
                 SimpleDateFormat format = new SimpleDateFormat(pattern);
                 Date start_date = format.parse(date + " 00:00:00");

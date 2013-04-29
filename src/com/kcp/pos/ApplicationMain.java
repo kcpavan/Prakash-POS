@@ -23,6 +23,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Parent;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -156,6 +157,17 @@ public class ApplicationMain extends Application {
         try {
 
             InvoiceDetailsController invoice = (InvoiceDetailsController) replaceSceneContent("InvoiceDetails.fxml");
+            invoice.setApp(this);
+
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    void gotoInvoiceDetailsMisc() {
+        try {
+
+            InvoiceDetailsMiscController invoice = (InvoiceDetailsMiscController) replaceSceneContent("InvoiceDetailsMisc.fxml");
             invoice.setApp(this);
 
         } catch (Exception ex) {

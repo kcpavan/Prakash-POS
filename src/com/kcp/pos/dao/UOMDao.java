@@ -6,6 +6,7 @@ package com.kcp.pos.dao;
 
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.modal.UOM;
+import com.kcp.pos.modal.WeighingType;
 import java.util.List;
 
 /**
@@ -17,7 +18,8 @@ public interface UOMDao {
     
     
     public List<UOM> findByAll() ;
-    public UOM findByName(String itemName) ;
+    public UOM findByName(String userName) ;
     
     public UOM findById(Integer id) ;
+    public List<UOM> findByCategory(Integer id);
 }

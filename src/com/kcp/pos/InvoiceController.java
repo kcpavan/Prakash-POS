@@ -5,14 +5,17 @@
 package com.kcp.pos;
 
 import com.kcp.pos.dao.UserDao;
+import com.kcp.pos.data.BillingPriceDo;
 import com.kcp.pos.data.InvoiceDetailsDo;
 import com.kcp.pos.data.ItemDetailsDo;
 import com.kcp.pos.data.ItemDo;
+import com.kcp.pos.modal.BillingPrice;
 import com.kcp.pos.modal.Invoice;
 import com.kcp.pos.modal.InvoiceDetails;
 import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.modal.Stocks;
+import com.kcp.pos.service.BillingPriceService;
 import com.kcp.pos.service.InvoiceService;
 import com.kcp.pos.service.ItemService;
 import com.kcp.pos.service.StocksService;
@@ -45,7 +48,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import java.io.FileInputStream;
+import javax.print.*;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -153,9 +163,171 @@ public class InvoiceController implements Initializable {
         this.invoiceNumber = invoiceNumber;
     }
 
+     @FXML
+    private void printPage(ActionEvent event){
+         
+        
+
+        if (invoiceNumber.getText() == null || invoiceNumber.getText().equalsIgnoreCase("")) {
+             System.out.println("please enter item");
+            return ;
+        } 
+        
+        
+        System.out.println("fillInvoiceDataTable() start");
+        int invoiceNum=Integer.parseInt(invoiceNumber.getText());
+
+        if (invoiceNumber.getText() == null || invoiceNumber.getText().equalsIgnoreCase("")) {
+            invoiceDetailsDoList = new ArrayList<InvoiceDetailsDo>();
+        } else {
+            invoiceDetailsDoList = invoiceService.getInvoiceDetailsDoById(Integer.parseInt(invoiceNumber.getText()));
+        }
+
+
+        System.out.println("invoice number:" + invoiceNumber.getText());
+        System.out.println("invoice items list:" + invoiceDetailsDoList.size());
+        
+        FileWriter writer;
+        String file="d:/temp/invoice_"+invoiceNumber.getText()+".csv";
+        try {
+            
+            
+            writer = new FileWriter(file);
+        
+ 
+	    writer.append("Name");
+	    writer.append(',');
+	    writer.append("price");
+            writer.append(',');
+            writer.append("quantity");
+            writer.append(',');
+            writer.append("total");
+            
+	    writer.append('\n');
+ 
+	    //generate whatever data you want
+ 
+	    
+        
+        for (InvoiceDetailsDo data : invoiceDetailsDoList) {
+            
+             writer.append(data.getItemName());
+	    writer.append(',');
+	    writer.append( Double.toString(data.getBillingPrice()));
+            writer.append(',');
+ 
+	    writer.append(Double.toString(data.getQuantity()));
+	    writer.append(',');
+	    writer.append(Double.toString(data.getTotal()));
+	    writer.append('\n');
+           
+           
+          
+            
+            
+            System.out.println("billing price:" + data.getBillingPrice());
+        }
+        Invoice invoice=invoiceService.getInvoiceById(invoiceNum);
+        writer.append(',');
+        writer.append(',');
+        writer.append(Double.toString(invoice.getTotalItems()));
+	    writer.append(',');
+	    writer.append( Double.toString(invoice.getTotalAmount()));
+            
+ 
+	    
+	    
+	    writer.append('\n');
+        
+        
+        writer.flush();
+	    writer.close();
+           } catch (IOException ex) {
+            Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        
+        
+        getInvoiceTotalAmount(invoiceDetailsDoList);
+        dataTableData.setAll(invoiceDetailsDoList);
+        
+        // TODO code application logic here
+        DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
+        PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet ();
+        /* locate a print service that can handle it */
+        PrintService [] pservices = PrintServiceLookup.lookupPrintServices (flavor, aset);
+
+        try {
+            int printer = getPrinter(pservices);
+            if(printer == -1) {
+                throw new Exception("No network printer found");
+            }
+            DocPrintJob pj = pservices[printer].createPrintJob();
+            FileInputStream fis = new FileInputStream (file);
+            Doc doc = new SimpleDoc (fis, flavor, null);
+           // pj.print (doc, aset);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace ();
+        } 
+    }
+
+    private int getPrinter(PrintService[] pservices) {
+        int printer = -1;
+        for(int i = 0; i<pservices.length; i++) {
+            if(pservices[i].getName().contains("\\\\")) {
+                System.out.println("network printer: " + pservices[i].toString());   
+                printer = i;
+                break;
+            }        
+        }
+        return printer;
+    }
+
+
+
+    
+     public Boolean validate() {
+         
+        
+        itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
+        String itemQty = itemQuantity.getText();
+
+        if (KCPUtils.isNullString(itemQty)) {
+            label.setText("Please select item quantity");
+            animateMessage();
+            fillInvoiceDataTable();
+
+            System.out.println("reenter item");
+            return true;
+        }
+
+        Object selectedItem = itemName.getSelectionModel().getSelectedItem();
+           
+        Items item = itemService.getItemByName(selectedItem.toString());
+        ItemDetails itemDetails = itemService.getItemDetailsByItemIdBillingType(item.getIdPk(), 1);
+        
+        StocksService stocksService;
+        stocksService = (StocksService) ApplicationMain.springContext.getBean("stocksService");
+
+        Stocks stocks=stocksService.getStocksByItemId(itemDetails.getIdPk());
+      
+        if( stocks==null || stocks.getUnitQuantity()==null || stocks.getUnitQuantity()-Double.parseDouble(itemQty)<0)
+        {
+            label.setText("Stock not available!!");
+            return true;
+        }
+       
+        return false;
+
+    }
+    
     @FXML
     private void handleButtonAction(ActionEvent event) {
 
+        validate();
+        
+        if(!validate())
+        {
         invoiceService = (InvoiceService) ApplicationMain.springContext.getBean("invoiceService");
         UserDao userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
 
@@ -184,6 +356,7 @@ public class InvoiceController implements Initializable {
 
         }
 
+        
         itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
         String itemQty = itemQuantity.getText();
 
@@ -208,26 +381,45 @@ public class InvoiceController implements Initializable {
 
 
         InvoiceDetails invoiceDetails = invoiceService.getInvoiceDetailsByInvoiceItemId(invoice.getIdPk(), item.getIdPk());
-
+        Double margin;
         if (invoiceDetails != null) {
 
             System.out.println("invoiceDetails.getIdPk():" + invoiceDetails.getIdPk());
 
             invoiceDetails.setQuantity(invoiceDetails.getQuantity() + Integer.parseInt(itemQty));
-
-            double itemTotalPrice = itemDetails.getRetailBillingPrice() * invoiceDetails.getQuantity();
+            
+            //double itemTotalPrice = itemDetails.getRetailBillingPrice() * invoiceDetails.getQuantity();
+            double itemTotalPrice = invoiceDetails.getBillingPrice().getBillingPrice()
+                    * invoiceDetails.getQuantity();
             invoiceDetails.setTotal(itemTotalPrice);
             invoiceDetails.setItemDetails(itemDetails);
+            //margin=itemDetails.getRetailBillingPrice()-itemDetails.getActualPrice();
+            margin=invoiceDetails.getBillingPrice().getBillingPrice()-itemDetails.getActualPrice();
+            
+            if(margin>0)
+            {
+                margin=margin*invoiceDetails.getQuantity();
+            }
+            invoiceDetails.setMargin(margin);
 
         } else {
             invoiceDetails = new InvoiceDetails();
             invoiceDetails.setItemDetails(itemDetails);
             invoiceDetails.setQuantity(Double.parseDouble(itemQty));
-            System.out.println("itemDetails.getRetailBillingPrice() :" + itemDetails.getRetailBillingPrice());
+            //System.out.println("itemDetails.getRetailBillingPrice() :" + itemDetails.getRetailBillingPrice());
             System.out.println("itemQty:" + itemQty);
-            double itemTotalPrice = itemDetails.getRetailBillingPrice() * Integer.parseInt(itemQty);
+            //double itemTotalPrice = itemDetails.getRetailBillingPrice() * Integer.parseInt(itemQty);
+            double itemTotalPrice = invoiceDetails.getBillingPrice().getBillingPrice() * Integer.parseInt(itemQty);
             invoiceDetails.setTotal(itemTotalPrice);
             invoiceDetails.setInvoice(invoice);
+            //margin=itemDetails.getRetailBillingPrice()-itemDetails.getActualPrice();
+            margin=invoiceDetails.getBillingPrice().getBillingPrice()-itemDetails.getActualPrice();
+            
+            if(margin>0)
+            {
+                margin=margin*invoiceDetails.getQuantity();
+            }
+            invoiceDetails.setMargin(margin);
         }
 
 
@@ -244,6 +436,7 @@ public class InvoiceController implements Initializable {
         Stocks stocks=stocksService.getStocksByItemId(invoiceDetails.getItemDetails().getIdPk());
         stocks.setUnitQuantity(stocks.getUnitQuantity()-invoiceDetails.getQuantity());
 
+        stocksService.saveStocks(stocks);
 
 
         label.setText("Item Saved");
@@ -251,6 +444,7 @@ public class InvoiceController implements Initializable {
         fillInvoiceDataTable();
         clearForm();
         System.out.println("saved");
+        }
     }
 
     @Override
@@ -295,7 +489,7 @@ public class InvoiceController implements Initializable {
                         data.setQuantity(t.getNewValue());
                         InvoiceDetails det = invoiceService.getInvoiceDetailsById(data.getInvoiceDetailsId());
                         det.setQuantity(data.getQuantity());
-                        det.setTotal(det.getQuantity() * det.getItemDetails().getRetailBillingPrice());
+                        det.setTotal(det.getQuantity() * det.getBillingPrice().getBillingPrice());
                         invoiceService.invoiceDetailsSave(det);
                         fillInvoiceDataTable();
                     }
@@ -358,12 +552,17 @@ public class InvoiceController implements Initializable {
                 ItemDetailsDo itemDetailsDo = itemService.getItemDetailsDoByItemId(item.getIdPk());
 
                 itemBarcode.setText(item.getBarcode());
-                System.out.println("MRP:" + item.getMrp());
-                itemMrp.setText(new Double(item.getMrp()).toString());
+                System.out.println("MRP:" + itemDetailsDo.getMrp());
+                itemMrp.setText(new Double(itemDetailsDo.getMrp()).toString());
                 itemWeight.setText(new Double(item.getWeight()).toString());
                 weightUnit.setText(item.getUom());
                 //weightUnit.setSelectionModel(item.getWeightUnit());
-                billingPrice.setText(new Double(itemDetailsDo.getBillingPrice()).toString());
+                BillingPriceService billingPriceService=new BillingPriceService();
+                List<BillingPrice> billingPriceDo=billingPriceService.getByItemDetailsId(itemDetailsDo.getIdPk());
+                billingPriceDo.get(0).getBillingPrice();
+                
+                //billingPrice.setText(new Double(itemDetailsDo.getBillingPrice()).toString());
+                billingPrice.setText(new Double(billingPriceDo.get(0).getBillingPrice()).toString());
                 System.out.println("tax:" + itemDetailsDo.getTax());
                 System.out.println("tax string:" + new Double(itemDetailsDo.getTax()).toString());
                 tax.setText(new Double(itemDetailsDo.getTax()).toString());
@@ -429,12 +628,8 @@ public class InvoiceController implements Initializable {
         }
 
 
-        System.out.println("invoice number:" + invoiceNumber.getText());
-        System.out.println("invoice items list:" + invoiceDetailsDoList.size());
-        for (InvoiceDetailsDo data : invoiceDetailsDoList) {
-
-            System.out.println("billing price:" + data.getBillingPrice());
-        }
+       
+       
         getInvoiceTotalAmount(invoiceDetailsDoList);
         dataTableData.setAll(invoiceDetailsDoList);
     }
@@ -552,6 +747,10 @@ public class InvoiceController implements Initializable {
         application.gotoInvoiceDetails();
     }
     
+    @FXML
+    public void openInvoiceDetailsMisc(ActionEvent e) {
+        application.gotoInvoiceDetailsMisc();
+    }
 
     @FXML
     public void openPurchase(ActionEvent e) {
@@ -652,5 +851,12 @@ class EditingCell extends TableCell<InvoiceDetailsDo, Double> {
         return getItem() == null ? "" : getItem().toString();
     }
     
+    
+   
+
+
+
+
+
     
 }

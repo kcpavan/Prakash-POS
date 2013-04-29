@@ -74,6 +74,10 @@ public class ItemService {
         return itemDao.findByAll();
     }
     
+      public List<Items> getAllItems(int id){
+        return itemDao.findByAll(id);
+    }
+     
     public Items getItemByName(String name)
     {
         return(itemDao.findByName(name));
@@ -139,10 +143,10 @@ public class ItemService {
     }
     
     
-    public Double getBillingPriceByItemId(Integer id)
-    {
-        return itemDetailsDao.findBillingPriceByItemId(id);
-    }
+//    public Double getBillingPriceByItemId(Integer id)
+//    {
+//        return itemDetailsDao.findBillingPriceByItemId(id);
+//    }
     
     public List<ItemDetailsDo> getItemsByCriteria(String criteria)
     {
@@ -159,5 +163,9 @@ public class ItemService {
         return itemDetailsDos;
     }
     
+    
+    public List<Items> getAllItemsByCategory(int id){
+        return itemDao.findByAll(id);
+    }
     
 }

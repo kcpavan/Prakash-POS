@@ -35,7 +35,8 @@ create table storedb.uom
 (id_pk integer not null auto_increment primary key,
 uom_desc varchar(50) not null);
 
-insert into storedb.uom(uom_desc) values('kg'),('gm'),('pkt'),('box'),('case'),('doz'),('sheet');
+insert into storedb.uom(id_pk,uom_desc) values(1,'kg'),(2,'gm'),(3,'pkt'),(4,'box'),(5,'case'),
+(6,'doz'),(7,'sheet'),(8,'bag');
 
 
 drop table if exists storedb.items;
@@ -78,8 +79,8 @@ mrp double not null,
 actual_price double not null,
 start_range integer  null,
 end_range integer  null,
-retail_billing_price double not null,
-wholesale_billing_price double not null,
+/*retail_billing_price double not null,
+wholesale_billing_price double not null,*/
 billing_type_id_fk int not null,
 hasfree boolean  null,
 tax double null,
@@ -249,6 +250,7 @@ invoice_id_fk integer not null,
 
 itemdetails_id_fk integer not null,
 quantity double not null,
+billingprice_id_fk integer not null,
 margin double not null,
 total double not null,
 CONSTRAINT fk_invoicedet_invoice_id
@@ -316,7 +318,7 @@ values(1,1,10,15.50,1,'2012-09-20 21:21:04'),
 
 
 insert into storedb.item_category
-(category_name) values('Rice'),('Spices');
+(id_pk,category_name) values(1,'Rice'),(2,'Spices');
 
 
 insert into storedb.billing_type
@@ -328,3 +330,74 @@ address,
 phone_number,
 modified_by,
 modified_date) values('Jaysree','abc xyz','12343','1','2012-09-20 21:21:04');
+
+drop table if exists storedb.billing_price;
+create table storedb.billing_price
+(id_pk integer primary key not null auto_increment,
+item_details_id_fk integer not null,
+start_range integer  null,
+end_range integer  null,
+billing_price double not null,
+modified_by int not null,
+modified_date timestamp,
+CONSTRAINT fk_billingprice_modified_user
+	FOREIGN KEY(`modified_by`) 
+	REFERENCES `users`(`id_pk`),
+CONSTRAINT fk_billingprice_itemdetails_id
+	FOREIGN KEY(`item_details_id_fk`) 
+	REFERENCES `item_details`(`id_pk`),
+CONSTRAINT un_billing_range UNIQUE (item_details_id_fk,start_range,end_range));
+
+
+
+drop table if exists storedb.bag_weight ;
+create table storedb.bag_weight
+(id_pk integer not null auto_increment primary key,
+bag_weight double not null);
+
+insert into storedb.bag_weight(bag_weight) values(25),(30),(50),(100);
+
+
+
+/*drop table if exists storedb.weighing_type;
+create table storedb.weighing_type
+(id_pk integer primary key not null auto_increment,
+type_desc varchar(250) not null) ;
+
+insert into storedb.weighing_type
+(type_desc) values('Bag'),('Loose'),('Box');
+
+select * from weighing_type;
+
+
+drop table if exists storedb.category_weighingtype_mapping;
+create table storedb.category_weighingtype_mapping
+(id_pk integer primary key not null auto_increment,
+category_id_fk int not null,
+weighing_id_fk int not null,
+CONSTRAINT fk_category_id_mapping
+	FOREIGN KEY(`category_id_fk`) 
+	REFERENCES `item_category`(`id_pk`),
+CONSTRAINT fk_weighing_id_mapping
+	FOREIGN KEY(`weighing_id_fk`) 
+	REFERENCES `weighing_type`(`id_pk`)) ;
+
+insert into storedb.category_weighingtype_mapping
+(category_id_fk ,
+weighing_id_fk) values(1,1),(1,1),(2,1),(2,1);*/
+
+drop table if exists storedb.category_uom_mapping;
+create table storedb.category_uom_mapping
+(id_pk integer primary key not null auto_increment,
+category_id_fk int not null,
+uom_id_fk int not null,
+CONSTRAINT fk_category_id_mapping
+	FOREIGN KEY(`category_id_fk`) 
+	REFERENCES `item_category`(`id_pk`),
+CONSTRAINT fk_uom_id_mapping
+	FOREIGN KEY(`uom_id_fk`) 
+	REFERENCES `uom`(`id_pk`)) ;
+
+insert into storedb.category_uom_mapping
+(category_id_fk ,
+uom_id_fk) values(1,1),(1,8),(2,1),(2,8);

@@ -21,15 +21,23 @@ import com.kcp.pos.service.ItemService;
 import com.kcp.pos.service.PurchaseService;
 import com.kcp.pos.service.StocksService;
 import com.kcp.pos.utils.KCPUtils;
+import eu.schudt.javafx.controls.calendar.DatePicker;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -52,6 +60,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -148,6 +157,10 @@ public class PurchaseDetailsController implements Initializable {
     private TableColumn<PurchaseDo, Double> cdAmountCol;
     @FXML
     private TableColumn<PurchaseDo, Double> totalAmountCol;
+    
+    @FXML
+    private GridPane datePane;
+    DatePicker birthdayDatePicker;
     
     private List<PurchaseDetailsDo> purchaseDetails = new ArrayList<PurchaseDetailsDo>();
     private List<ItemDo> itemList = new ArrayList<ItemDo>();
@@ -273,13 +286,60 @@ public class PurchaseDetailsController implements Initializable {
                 new PropertyValueFactory<PurchaseDetailsDo, Double>("tax"));
         netAmountCol.setCellValueFactory(
                 new PropertyValueFactory<PurchaseDetailsDo, Double>("netAmount"));
-
+        
+         birthdayDatePicker = new DatePicker(Locale.ENGLISH);
+  birthdayDatePicker.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+  birthdayDatePicker.getCalendarView().todayButtonTextProperty().set("Today");
+  birthdayDatePicker.getCalendarView().setShowWeeks(false);
+  birthdayDatePicker.getStylesheets().add("com/kcp/pos/style/DatePicker.css");
+DateFormat sdf = new SimpleDateFormat(
+            "yyyy-MM-dd");
+        
+              
+            birthdayDatePicker.setDateFormat(sdf);
+        
+  // Add DatePicker_backup to grid
+  datePane.add(birthdayDatePicker, 1, 5);
 
         
         fillDataTable();
     }
 
-    
+      @FXML
+    private void handleDateSubmitAction(ActionEvent event) throws ParseException {
+          System.out.println("actual date is:"+birthdayDatePicker.getSelectedDate().toString()
+                  );
+          
+          DateFormat dateFormat = new SimpleDateFormat(
+            "EEE MMM d HH:mm:ss Z yyyy");
+          DateFormat sdf = new SimpleDateFormat(
+            "yyyy-MM-dd");
+          Date selectedDate=null;
+        try {        
+            birthdayDatePicker.setDateFormat(sdf);
+            Date dt=dateFormat.parse(birthdayDatePicker.getSelectedDate().toString());
+            java.sql.Date sqlDate = new java.sql.Date(dt.getTime());
+            System.out.println("sqldate:"+sqlDate);
+//            selectedDate=new Date(new Long(sdf.format(dateFormat.parse(birthdayDatePicker.getSelectedDate().toString()))));
+            String strDate=sdf.format(dateFormat.parse(birthdayDatePicker.getSelectedDate().toString()));
+           // Timestamp t=dateFormat.parse(birthdayDatePicker.getSelectedDate().toString()).getTime();
+           // new Timestamp(dateFormat.parse(birthdayDatePicker.getSelectedDate().toString()).getTime());
+            Date start_date = sdf.parse(strDate + " 00:00:00");
+            System.out.println("start date:"+strDate);
+            
+            
+            
+           /* Timestamp timestamp=new Timestamp(new Long(sdf.format(dateFormat.parse(birthdayDatePicker.getSelectedDate().toString()))));
+            System.out.println("timestamp:"+timestamp);*/
+            System.out.println("selected date is:"+selectedDate);
+            List<PurchaseDo> purchaseDos=purchaseService.getPurchasebyDate(sqlDate);
+             dataTableData.setAll(purchaseDos);
+        } catch (ParseException ex) {
+            Logger.getLogger(PurchaseDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+       
+    }
 
     private void animateMessage() {
         FadeTransition ft = new FadeTransition(Duration.millis(1000), label);
@@ -442,6 +502,11 @@ public class PurchaseDetailsController implements Initializable {
      @FXML
     public void openInvoiceDetails(ActionEvent e) {
         application.gotoInvoiceDetails();
+    }
+     
+    @FXML
+    public void openInvoiceDetailsMisc(ActionEvent e) {
+        application.gotoInvoiceDetailsMisc();
     }
     
 }

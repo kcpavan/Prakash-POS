@@ -32,6 +32,8 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     <property name="entityManagerFactory" ref="myEmf" />
 </bean>
 
+
+
 <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 <!--
 <context:load-time-weaver weaver-class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver"/>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" fx:id="main_window" prefHeight="771.0" prefWidth="700.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.kcp.pos.InvoiceDetailsMiscController">
+  <children>
+    <SplitPane dividerPositions="0.9713914174252276" focusTraversable="true" orientation="VERTICAL" prefHeight="700.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="329.0" prefWidth="698.0">
+          <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="8.0" layoutX="297.0" layoutY="51.0" prefWidth="69.0" text="Invoice">
+              <font>
+                <Font size="16.0" fx:id="x2" />
+              </font>
+            </Label>
+            <AnchorPane layoutX="1.0" layoutY="350.0" minHeight="0.0" minWidth="0.0" prefHeight="411.0" prefWidth="698.0">
+              <children>
+                <TabPane fx:id="tabPane" prefHeight="541.0" prefWidth="679.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="119.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="-249.0">
+                  <tabs>
+                    <Tab fx:id="invoiceTab" text="Invoice">
+                      <content>
+                        <AnchorPane id="AnchorPane" prefHeight="510.0" prefWidth="679.0">
+                          <children>
+                            <TableView fx:id="dataTable" prefHeight="510.0" prefWidth="679.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <columns>
+                                <TableColumn prefWidth="75.0" text="Invoice No." fx:id="invoiceNumber" />
+                                <TableColumn prefWidth="75.0" text="Total Items" fx:id="totalQuantity" />
+                                <TableColumn prefWidth="75.0" text="Total Amount" fx:id="totalAmount" />
+                                <TableColumn prefWidth="75.0" text="Modified By" fx:id="modifiedBy" />
+                              </columns>
+                            </TableView>
+                          </children>
+                        </AnchorPane>
+                      </content>
+                    </Tab>
+                    <Tab fx:id="invoiceDetails_tab" text="Invoice Details">
+                      <content>
+                        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                          <children>
+                            <TableView id="dataTable" fx:id="detailsDataTable" editable="true" prefHeight="510.0" prefWidth="679.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <columns>
+                                <TableColumn prefWidth="75.0" text="Name" fx:id="itemNameCol" />
+                                <TableColumn prefWidth="75.0" text="BarCode" fx:id="itemBarcodeCol" />
+                                <TableColumn prefWidth="75.0" text="M.R.P" fx:id="itemMRPCol" />
+                                <TableColumn prefWidth="75.0" text="Billing Price" fx:id="itemBillingPriceCol" />
+                                <TableColumn prefWidth="75.0" text="Quantity" fx:id="itemQuantityCol" />
+                                <TableColumn prefWidth="75.0" text="Total" fx:id="itemTotalAmountCol" />
+                                <TableColumn prefWidth="75.0" text="Margin" fx:id="itemMarginCol" />
+                              </columns>
+                            </TableView>
+                          </children>
+                        </AnchorPane>
+                      </content>
+                    </Tab>
+                  </tabs>
+                </TabPane>
+              </children>
+            </AnchorPane>
+            <MenuBar layoutX="2.0" layoutY="2.0" prefWidth="698.0">
+              <menus>
+                <Menu mnemonicParsing="false" onAction="#openMain" text="Master">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Add Item" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Invoice">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Add" />
+                    <MenuItem mnemonicParsing="false" onAction="#openInvoiceDetails" text="Invoice Details" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Purchase">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#openPurchase" text="Add" />
+                    <MenuItem mnemonicParsing="false" onAction="#openPurchaseDetails" text="Details" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Stocks">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#openStocks" text="Details" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Misc">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#openInvoiceDetailsMisc" text="Action 1" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+          </children>
+        </AnchorPane>
+        <TextField prefWidth="200.0" />
+      </items>
+    </SplitPane>
+  </children>
+</AnchorPane>

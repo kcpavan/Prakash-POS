@@ -70,7 +70,7 @@
               </font>
             </Label>
             <Label fx:id="invoiceNumber" layoutX="366.0" layoutY="14.0" prefHeight="22.0" prefWidth="71.0" />
-            <Label fx:id="invoiceNumber" layoutX="335.0" layoutY="17.0" prefWidth="69.0" />
+            <Label fx:id="invoiceNumber" layoutX="319.0" layoutY="42.0" prefWidth="69.0" />
             <MenuBar layoutY="1.0" prefWidth="698.0">
               <menus>
                 <Menu mnemonicParsing="false" onAction="#openMain" text="Master">
@@ -92,7 +92,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Stocks">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Details" />
+                    <MenuItem mnemonicParsing="false" onAction="#openStocks" text="Details" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -123,7 +123,8 @@
                             </TableView>
                             <Label id="Total" fx:id="TotalLabel" font="$x2" layoutX="236.0" layoutY="266.0" prefHeight="26.0" prefWidth="69.00009999999747" text="Total" />
                             <Label id="Total" fx:id="TotalAmount" layoutX="380.0" layoutY="271.0" prefHeight="28.0" prefWidth="190.0" />
-                            <Button fx:id="SaveButton" layoutX="142.0" layoutY="271.0" mnemonicParsing="false" text="Save" />
+                            <Button fx:id="SaveButton" layoutX="142.0" layoutY="269.0" mnemonicParsing="false" text="Save" />
+                            <Button layoutX="40.0" layoutY="271.0" mnemonicParsing="false" onAction="#printPage" text="Print" />
                           </children>
                         </AnchorPane>
                       </content>

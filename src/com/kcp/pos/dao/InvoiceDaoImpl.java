@@ -34,7 +34,7 @@ public class InvoiceDaoImpl implements InvoiceDao{
         this.entityManager = entityManager;
     }
     
-    public InvoiceDetails findById(Integer id) {
+    public InvoiceDetails findDetailsById(Integer id) {
 		log.debug("getting Items instance with id: " + id);
 		try {
 			InvoiceDetails instance = entityManager.find(InvoiceDetails.class, id);
@@ -46,7 +46,18 @@ public class InvoiceDaoImpl implements InvoiceDao{
 		}
 	}
     
-   
+   public Invoice findById(Integer id) {
+		log.debug("getting Items instance with id: " + id);
+		try {
+                    Query instance = entityManager.createNamedQuery("Invoice.findById").setParameter("idPk", id);
+			
+			log.debug("get successful");
+			return (Invoice)instance.getSingleResult();
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
     
      public List<InvoiceDetails> findListById(Integer id) {
 		log.debug("getting Items instance with id: " + id);

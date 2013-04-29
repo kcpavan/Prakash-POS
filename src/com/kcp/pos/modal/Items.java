@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 @Table(name = "items", catalog = "storedb")
 @NamedQueries({
     @NamedQuery(name = "Items.findAll", query = "SELECT i FROM Items i"),
+    @NamedQuery(name = "Items.findAllById", query = "SELECT i FROM Items i where i.itemCategory.idPk=:id"),
     @NamedQuery(name = "Items.findByName", query = "SELECT i FROM Items i where i.itemName=:name"),
     @NamedQuery(name = "Items.findByNameCriteria", query = "SELECT i FROM Items i where i.itemName like :criteria")})
 public class Items implements java.io.Serializable {

@@ -19,11 +19,14 @@ import com.kcp.pos.service.ItemService;
 import com.kcp.pos.service.PurchaseService;
 import com.kcp.pos.service.StocksService;
 import com.kcp.pos.utils.KCPUtils;
+import eu.schudt.javafx.controls.calendar.DatePicker;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
@@ -43,6 +46,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -119,6 +124,13 @@ public class PurchaseController implements Initializable {
     private TableColumn<PurchaseDetailsDo, Double> taxCol;
     @FXML
     private TableColumn<PurchaseDetailsDo, Double> netAmountCol;
+    
+     @FXML
+     private GridPane datePane;
+     @FXML
+     private Button dateSubmit;
+     
+     private DatePicker birthdayDatePicker;
     private List<PurchaseDetailsDo> purchaseDetails = new ArrayList<PurchaseDetailsDo>();
     private List<ItemDo> itemList = new ArrayList<ItemDo>();
     private Map<String, ItemDo> itemMap = new HashMap<String, ItemDo>();
@@ -243,6 +255,7 @@ public class PurchaseController implements Initializable {
         userDao = (UserDao) ApplicationMain.springContext.getBean("userDaoImpl");
         stocks.setUsers(userDao.findById(1));
         stocks.setModifiedDate(new Date());
+        
         stocks.setUnitsPerCase(purchaseDetails.getUnitsPerCase());
         if (stocks.getUnitQuantity() == null) {
             stocks.setUnitQuantity(purchaseDetails.getUnitsQuantity());
@@ -281,6 +294,13 @@ public class PurchaseController implements Initializable {
         System.out.println("saved");
     }
 
+    @FXML
+    private void handleDateSubmitAction(ActionEvent event) {
+        System.out.println("selected date is:"+
+    birthdayDatePicker.getSelectedDate());
+        
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("initialize() start");
@@ -299,9 +319,10 @@ public class PurchaseController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> selected, String oldItem, String newItem) {
                 ItemDo item = itemMap.get(newItem);
-
+                ItemDetails details=itemService.getItemDetailsByItemId(item.getIdPk());
+                
                 barcode.setText(item.getBarcode());
-                mrp.setText(new Double(item.getMrp()).toString());
+                mrp.setText(Double.toString(details.getMrp()));
 
             }
         });
@@ -342,7 +363,14 @@ public class PurchaseController implements Initializable {
         netAmountCol.setCellValueFactory(
                 new PropertyValueFactory<PurchaseDetailsDo, Double>("netAmount"));
 
+        birthdayDatePicker = new DatePicker(Locale.ENGLISH);
+  birthdayDatePicker.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+  birthdayDatePicker.getCalendarView().todayButtonTextProperty().set("Today");
+  birthdayDatePicker.getCalendarView().setShowWeeks(false);
+  birthdayDatePicker.getStylesheets().add("ch/makery/address/view/DatePicker.css");
 
+  // Add DatePicker_backup to grid
+//  datePane.add(birthdayDatePicker, 1, 5);
 
         fillDataTable();
     }
@@ -388,12 +416,6 @@ public class PurchaseController implements Initializable {
         }
 
 
-
-
-
-
-
-
         dataTableData.setAll(purchaseDetailsList);
     }
     private ApplicationMain application;
@@ -413,6 +435,11 @@ public class PurchaseController implements Initializable {
         application.gotoInvoiceDetails();
     }
       
+    @FXML
+    public void openInvoiceDetailsMisc(ActionEvent e) {
+        application.gotoInvoiceDetailsMisc();
+    }
+    
     @FXML
     public void openPurchase(ActionEvent e) {
         application.gotoPurchase();

@@ -33,6 +33,7 @@
                                 <TableColumn prefWidth="75.0" text="Total Items" fx:id="totalQuantity" />
                                 <TableColumn prefWidth="75.0" text="Total Amount" fx:id="totalAmount" />
                                 <TableColumn prefWidth="75.0" text="Modified By" fx:id="modifiedBy" />
+                                <TableColumn prefWidth="75.0" text="modifiedDateCol" />
                               </columns>
                             </TableView>
                           </children>
@@ -61,17 +62,33 @@
                 </TabPane>
               </children>
             </AnchorPane>
-            <MenuBar layoutY="2.0" prefWidth="698.0">
+            <MenuBar layoutX="2.0" layoutY="2.0" prefWidth="698.0">
               <menus>
                 <Menu mnemonicParsing="false" onAction="#openMain" text="Master">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#openMain" text="Item Add" />
+                    <MenuItem mnemonicParsing="false" text="Add Item" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Invoice">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Invoice Details" />
+                    <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Add" />
                     <MenuItem mnemonicParsing="false" onAction="#openInvoiceDetails" text="Invoice Details" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Purchase">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#openPurchase" text="Add" />
+                    <MenuItem mnemonicParsing="false" onAction="#openPurchaseDetails" text="Details" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Stocks">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#openStocks" text="Details" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Misc">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#openInvoiceDetailsMisc" text="Details" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">

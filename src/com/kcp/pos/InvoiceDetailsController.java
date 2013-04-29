@@ -104,6 +104,9 @@ public class InvoiceDetailsController implements Initializable {
     private TableColumn<InvoiceDo, Double> totalAmount;
     @FXML
     private TableColumn<InvoiceDo, String> modifiedBy;
+    @FXML
+    private TableColumn<InvoiceDo, String> modifiedDateCol;
+    
    
     @Autowired
     private InvoiceService invoiceService;
@@ -212,6 +215,8 @@ public class InvoiceDetailsController implements Initializable {
                 new PropertyValueFactory<InvoiceDo, Double>("totalAmount"));
         modifiedBy.setCellValueFactory(
                 new PropertyValueFactory<InvoiceDo, String>("modifiedBy"));
+        modifiedDateCol.setCellValueFactory(
+                new PropertyValueFactory<InvoiceDo, String>("modifiedDate"));
         itemNameCol.setCellValueFactory(
                 new PropertyValueFactory<InvoiceDetailsDo, String>("itemName"));
         itemBarcodeCol.setCellValueFactory(
@@ -268,6 +273,10 @@ public class InvoiceDetailsController implements Initializable {
         application.gotoInvoiceDetails();
     }
     
+    @FXML
+    public void openInvoiceDetailsMisc(ActionEvent e) {
+        application.gotoInvoiceDetailsMisc();
+    }
 
     @FXML
     public void openPurchase(ActionEvent e) {

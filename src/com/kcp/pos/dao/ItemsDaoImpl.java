@@ -107,6 +107,18 @@ public class ItemsDaoImpl implements ItemDao {
 		}
 	}
         
+        public List<Items> findByAll(int id) {
+		//log.debug("getting Items instance with id: " + id);
+		try {
+			Query instance = entityManager.createNamedQuery("Items.findAllById")
+                                .setParameter("id", id);
+			log.debug("get successful");
+			return instance.getResultList();
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
         
          
           public List<Items> findListByCriteria(String criteria)

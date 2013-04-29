@@ -31,7 +31,7 @@ public class InvoiceDetails implements java.io.Serializable {
     private Invoice invoice;
    // private Items items;
     private ItemDetails itemDetails;
-    //private BillingPrice billingPrice;
+    private BillingPrice billingPrice;
     private Double quantity;
     private double total;
     private Double margin;
@@ -39,14 +39,17 @@ public class InvoiceDetails implements java.io.Serializable {
     public InvoiceDetails() {
     }
 
-    public InvoiceDetails(Integer idPk, Invoice invoice, ItemDetails itemDetails, Double quantity, double total, Double margin) {
+    public InvoiceDetails(Integer idPk, Invoice invoice, ItemDetails itemDetails, BillingPrice billingPrice, Double quantity, double total, Double margin) {
         this.idPk = idPk;
         this.invoice = invoice;
         this.itemDetails = itemDetails;
+        this.billingPrice = billingPrice;
         this.quantity = quantity;
         this.total = total;
         this.margin = margin;
     }
+
+   
 
    
 
@@ -130,6 +133,17 @@ public class InvoiceDetails implements java.io.Serializable {
     public void setMargin(Double margin) {
         this.margin = margin;
     }
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "billingprice_id_fk", nullable = false)
+    public BillingPrice getBillingPrice() {
+        return billingPrice;
+    }
+
+    public void setBillingPrice(BillingPrice billingPrice) {
+        this.billingPrice = billingPrice;
+    }
+    
     
     
 }

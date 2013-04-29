@@ -47,7 +47,7 @@ public class PurchaseDetailsDo {
         this.itemName.set(purchaseDetails.getItemDetails().getItem().getItemName());
         this.barcode.set(purchaseDetails.getItemDetails().getItem().getBarcode());
         this.purchase.set(purchaseDetails.getPurchase().getPurchaseNumber());
-        this.mrp.set(purchaseDetails.getMrp());
+        this.mrp.set(purchaseDetails.getItemDetails().getMrp());
         this.caseQuantity.set(purchaseDetails.getCaseQuantity());
         this.unitsPerCase.set(purchaseDetails.getUnitsPerCase());
         this.unitsQuantity.set(purchaseDetails.getUnitsQuantity());

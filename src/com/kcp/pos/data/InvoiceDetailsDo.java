@@ -38,8 +38,8 @@ public class InvoiceDetailsDo {
        this.barcode.set(invoiceDetails.getItemDetails().getItem().getBarcode());
        this.uom.set(invoiceDetails.getItemDetails().getUom().getUomDesc());
        
-       //this.mrp.set(invoiceDetails.getItems().getMrp());
-       this.billingPrice.set(invoiceDetails.getItemDetails().getRetailBillingPrice());
+       this.mrp.set(invoiceDetails.getItemDetails().getMrp());
+       this.billingPrice.set(invoiceDetails.getBillingPrice().getBillingPrice());
        this.quantity.set(invoiceDetails.getQuantity());
        this.total.set(invoiceDetails.getTotal());
        this.margin.set(invoiceDetails.getMargin());
@@ -49,8 +49,8 @@ public class InvoiceDetailsDo {
      {
        this.itemName.set(invoiceDetails.getItemDetails().getItem().getItemName());
        this.barcode.set(invoiceDetails.getItemDetails().getItem().getBarcode());
-//       this.mrp.set(invoiceDetails.getItems().getMrp());
-       this.billingPrice.set(invoiceDetails.getItemDetails().getRetailBillingPrice());
+       this.mrp.set(invoiceDetails.getItemDetails().getMrp());
+       this.billingPrice.set(invoiceDetails.getBillingPrice().getBillingPrice());
        this.quantity.set(invoiceDetails.getQuantity());
        this.total.set(invoiceDetails.getTotal());
        this.margin.set(invoiceDetails.getMargin());
@@ -176,6 +176,17 @@ public class InvoiceDetailsDo {
 
     public void setQuantity(SimpleDoubleProperty quantity) {
         this.quantity = quantity;
+    }
+
+    
+
+    public void setUom(SimpleStringProperty uom) {
+        this.uom = uom;
+    }
+
+   
+    public void setMargin(SimpleDoubleProperty margin) {
+        this.margin = margin;
     }
 
     

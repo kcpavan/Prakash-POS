@@ -57,12 +57,17 @@ public class ItemDetails implements Serializable{
     private double mrp;
     private double actualPrice;
     
-    private double retailBillingPrice;
-    private double wholesaleBillingPrice;
+    //private double retailBillingPrice;
+    //private double wholesaleBillingPrice;
     private double tax;
     private double margin;
     
     private BillingType billingType;
+//    private double startRange;
+//    private double endRange;
+//    private double billingPrice;
+    
+            
    // private UOM uom;
     //private double actualPrice;
     //private double sellingPrice;
@@ -72,9 +77,27 @@ public class ItemDetails implements Serializable{
     private Boolean enabled;
     private static final Logger LOG = Logger.getLogger(ItemDetails.class.getName());
 
-    public ItemDetails(Integer idPk, Users users, Items item, double weight, UOM uom, double mrp,
-            double actualPrice, double retailBillingPrice, double wholesaleBillingPrice, double tax,
-            double margin, BillingType billingType, Boolean hasfree, Date modifiedDate, Boolean enabled) {
+//    public ItemDetails(Integer idPk, Users users, Items item, double weight, UOM uom, double mrp,
+//            double actualPrice, double retailBillingPrice, double wholesaleBillingPrice, double tax,
+//            double margin, BillingType billingType, Boolean hasfree, Date modifiedDate, Boolean enabled) {
+//        this.idPk = idPk;
+//        this.users = users;
+//        this.item = item;
+//        this.weight = weight;
+//        this.uom = uom;
+//        this.mrp = mrp;
+//        this.actualPrice = actualPrice;
+//        this.retailBillingPrice = retailBillingPrice;
+//        this.wholesaleBillingPrice = wholesaleBillingPrice;
+//        this.tax = tax;
+//        this.margin = margin;
+//        this.billingType = billingType;
+//        this.hasfree = hasfree;
+//        this.modifiedDate = modifiedDate;
+//        this.enabled = enabled;
+//    }
+
+    public ItemDetails(Integer idPk, Users users, Items item, double weight, UOM uom, double mrp, double actualPrice, double tax, double margin, BillingType billingType, Boolean hasfree, Date modifiedDate, Boolean enabled) {
         this.idPk = idPk;
         this.users = users;
         this.item = item;
@@ -82,8 +105,6 @@ public class ItemDetails implements Serializable{
         this.uom = uom;
         this.mrp = mrp;
         this.actualPrice = actualPrice;
-        this.retailBillingPrice = retailBillingPrice;
-        this.wholesaleBillingPrice = wholesaleBillingPrice;
         this.tax = tax;
         this.margin = margin;
         this.billingType = billingType;
@@ -92,7 +113,10 @@ public class ItemDetails implements Serializable{
         this.enabled = enabled;
     }
 
+   
+
   
+    
    
     
      public ItemDetails(ItemDetails itemDetails)
@@ -102,8 +126,11 @@ public class ItemDetails implements Serializable{
         this.item = itemDetails.item;
         this.mrp = itemDetails.mrp;
         this.actualPrice = itemDetails.actualPrice;
-        this.retailBillingPrice = itemDetails.retailBillingPrice;
-        this.wholesaleBillingPrice = itemDetails.wholesaleBillingPrice;
+        //this.retailBillingPrice = itemDetails.retailBillingPrice;
+        //this.wholesaleBillingPrice = itemDetails.wholesaleBillingPrice;
+//        this.startRange=itemDetails.getStartRange();
+//        this.endRange=itemDetails.getEndRange();
+//        this.billingPrice=itemDetails.getBillingPrice();
         this.tax = itemDetails.tax;
         this.billingType = itemDetails.billingType;
         this.hasfree = itemDetails.hasfree;
@@ -159,6 +186,7 @@ public class ItemDetails implements Serializable{
         this.users = users;
     }
 
+    @Column(name = "mrp", nullable = false, length = 19)
     public double getMrp() {
         return mrp;
     }
@@ -219,23 +247,23 @@ public class ItemDetails implements Serializable{
         this.enabled = enabled;
     }
 
-    @Column(name = "retail_billing_price", nullable = false, length = 19)
-    public double getRetailBillingPrice() {
-        return retailBillingPrice;
-    }
-
-    public void setRetailBillingPrice(double retailBillingPrice) {
-        this.retailBillingPrice = retailBillingPrice;
-    }
-
-    @Column(name = "wholesale_billing_price", nullable = false, length = 19)
-    public double getWholesaleBillingPrice() {
-        return wholesaleBillingPrice;
-    }
-
-    public void setWholesaleBillingPrice(double wholesaleBillingPrice) {
-        this.wholesaleBillingPrice = wholesaleBillingPrice;
-    }
+//    @Column(name = "retail_billing_price", nullable = false, length = 19)
+//    public double getRetailBillingPrice() {
+//        return retailBillingPrice;
+//    }
+//
+//    public void setRetailBillingPrice(double retailBillingPrice) {
+//        this.retailBillingPrice = retailBillingPrice;
+//    }
+//
+//    @Column(name = "wholesale_billing_price", nullable = false, length = 19)
+//    public double getWholesaleBillingPrice() {
+//        return wholesaleBillingPrice;
+//    }
+//
+//    public void setWholesaleBillingPrice(double wholesaleBillingPrice) {
+//        this.wholesaleBillingPrice = wholesaleBillingPrice;
+//    }
     
    /* @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "uom_id_fk")
@@ -292,6 +320,35 @@ public class ItemDetails implements Serializable{
     public void setMargin(double margin) {
         this.margin = margin;
     }
+
+//    @Column(name = "start_range", nullable = false, precision = 22, scale = 0)
+//    public double getStartRange() {
+//        return startRange;
+//    }
+//
+//    public void setStartRange(double startRange) {
+//        this.startRange = startRange;
+//    }
+//
+//    @Column(name = "end_range", nullable = false, precision = 22, scale = 0)
+//    public double getEndRange() {
+//        return endRange;
+//    }
+//
+//    public void setEndRange(double endRange) {
+//        this.endRange = endRange;
+//    }
+//
+//     @Column(name = "billing_price", nullable = false, precision = 22, scale = 0)
+//    public double getBillingPrice() {
+//        return billingPrice;
+//    }
+//
+//    public void setBillingPrice(double billingPrice) {
+//        this.billingPrice = billingPrice;
+//    }
    
+    
+    
     
 }

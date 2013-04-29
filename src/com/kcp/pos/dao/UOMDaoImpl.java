@@ -6,6 +6,7 @@ package com.kcp.pos.dao;
 
 import com.kcp.pos.modal.Items;
 import com.kcp.pos.modal.UOM;
+import com.kcp.pos.modal.WeighingType;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,9 +28,9 @@ public class UOMDaoImpl implements UOMDao{
     
 	private static final Log log = LogFactory.getLog(UOMDaoImpl.class);
 
-	
+	@PersistenceContext
 	private EntityManager entityManager;
-        @PersistenceContext
+        
         public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
@@ -55,7 +56,9 @@ public class UOMDaoImpl implements UOMDao{
         {
             log.debug("getting UOM instance with name: " + name);
 		try {
-			Query instance = entityManager.createNamedQuery("UOM.findByName").setParameter("name", name);
+			Query instance = entityManager.createNamedQuery("UOM.findByName").
+                                setParameter("name", name)
+                                ;
 			log.debug("get successful");
 			return (UOM)instance.getSingleResult();
 		} catch (RuntimeException re) {
@@ -77,5 +80,20 @@ public class UOMDaoImpl implements UOMDao{
 		}
 	}
         
+        
+        public List<UOM> findByCategory(Integer id) {
+		log.debug("getting Items instance with id: " + id);
+		try {
+			Query instance = entityManager.createNamedQuery("CategoryUomMapping.findByCategory")
+                                .setParameter("id", id);
+                                
+			log.debug("get successful");
+			return instance.getResultList();
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
+
     
 }

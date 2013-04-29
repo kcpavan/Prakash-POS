@@ -22,7 +22,8 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "invoice", catalog = "storedb")
        @NamedQueries({
-    @NamedQuery(name = "Invoice.findAll", query = "SELECT i FROM Invoice i")
+    @NamedQuery(name = "Invoice.findAll", query = "SELECT i FROM Invoice i"),
+    @NamedQuery(name = "Invoice.findById", query = "SELECT i FROM Invoice i where idPk=:idPk")
         })
 
 

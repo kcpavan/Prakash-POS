@@ -10,7 +10,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="main_window" prefHeight="771.0" prefWidth="1037.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.kcp.pos.PurchaseDetailsController">
   <children>
-    <SplitPane dividerPositions="0.16124837451235371" focusTraversable="true" orientation="VERTICAL" prefHeight="771.0" prefWidth="1037.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="-1.0">
+    <SplitPane dividerPositions="0.3810143042912874" focusTraversable="true" orientation="VERTICAL" prefHeight="771.0" prefWidth="1037.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="-1.0">
       <items>
         <AnchorPane id="AnchorPane" prefHeight="349.0" prefWidth="1035.0">
           <children>
@@ -46,6 +46,11 @@
                         <MenuItem mnemonicParsing="false" onAction="#openStocks" text="Details" />
                       </items>
                     </Menu>
+                    <Menu mnemonicParsing="false" text="Misc">
+                      <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openPurchaseDetails" text="Action 1" />
+                      </items>
+                    </Menu>
                     <Menu mnemonicParsing="false" text="Help">
                       <items>
                         <MenuItem mnemonicParsing="false" text="About" />
@@ -53,19 +58,35 @@
                     </Menu>
                   </menus>
                 </MenuBar>
+                <HBox id="HBox" alignment="CENTER" layoutX="16.0" layoutY="98.0" prefHeight="28.0" prefWidth="234.0" spacing="5.0">
+                  <children>
+                    <GridPane fx:id="datePane" minHeight="24.0" prefHeight="41.0" prefWidth="148.0">
+                      <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      </columnConstraints>
+                      <rowConstraints>
+                        <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                      </rowConstraints>
+                    </GridPane>
+                    <Button fx:id="dateSubmit" mnemonicParsing="false" prefHeight="30.0" prefWidth="53.0" text="OK" />
+                  </children>
+                </HBox>
               </children>
             </AnchorPane>
           </children>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="382.0" prefWidth="1035.0">
           <children>
-            <TabPane fx:id="tabPane" prefHeight="439.0" prefWidth="1035.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TabPane fx:id="tabPane" prefHeight="473.0" prefWidth="1035.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <tabs>
                 <Tab fx:id="purchase_tab" text="Purchase">
                   <content>
                     <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="371.0" prefWidth="923.0">
                       <children>
-                        <TableView fx:id="dataTable" prefHeight="611.0" prefWidth="1035.0" AnchorPane.bottomAnchor="3.5" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-14.0" AnchorPane.topAnchor="-3.5">
+                        <TableView fx:id="dataTable" prefHeight="611.0" prefWidth="1035.0" AnchorPane.bottomAnchor="3.5" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-3.5">
                           <columns>
                             <TableColumn prefWidth="75.0" text="Purchase Id" fx:id="purchaseIdCol" />
                             <TableColumn minWidth="20.0" prefWidth="75.0" text="Purchased By" fx:id="purchasedByCol" />
@@ -82,7 +103,7 @@
                     </AnchorPane>
                   </content>
                 </Tab>
-                <Tab fx:id="PurchaseDetails_tab" text="Purchase Details">
+                <Tab fx:id="purchaseDetails_tab" text="Purchase Details">
                   <content>
                     <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                       <children>

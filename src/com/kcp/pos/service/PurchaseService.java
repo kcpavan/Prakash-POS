@@ -14,6 +14,7 @@ import com.kcp.pos.modal.InvoiceDetails;
 import com.kcp.pos.modal.Purchase;
 import com.kcp.pos.modal.PurchaseDetails;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,6 +86,15 @@ public class PurchaseService {
     {
         List<PurchaseDo> purchaseList = new ArrayList<PurchaseDo>();
        for (Purchase purchase: purchaseDao.findByAll()) {
+           purchaseList.add(new PurchaseDo(purchase)); 
+        }
+    return purchaseList;
+    }
+    
+    public List<PurchaseDo> getPurchasebyDate(java.sql.Date date)
+    {
+        List<PurchaseDo> purchaseList = new ArrayList<PurchaseDo>();
+       for (Purchase purchase: purchaseDao.findByDate(date)) {
            purchaseList.add(new PurchaseDo(purchase)); 
         }
     return purchaseList;

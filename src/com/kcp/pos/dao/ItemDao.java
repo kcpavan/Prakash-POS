@@ -15,6 +15,7 @@ import java.util.List;
     
     public void persist(Items transientInstance); 
     public List<Items> findByAll() ;
+    public List<Items> findByAll(int id) ;
     public Items findByName(String itemName) ;
     public Items findById(Integer id) ;
     public List<Items> findListByCriteria(String criteria);

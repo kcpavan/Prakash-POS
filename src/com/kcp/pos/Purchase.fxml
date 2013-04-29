@@ -10,12 +10,52 @@
 
 <AnchorPane id="AnchorPane" fx:id="main_window" prefHeight="771.0" prefWidth="1037.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.kcp.pos.PurchaseController">
   <children>
-    <SplitPane dividerPositions="0.5422626788036411" focusTraversable="true" orientation="VERTICAL" prefHeight="771.0" prefWidth="1037.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+    <SplitPane dividerPositions="0.5435630689206762" focusTraversable="true" orientation="VERTICAL" prefHeight="771.0" prefWidth="1037.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
       <items>
         <AnchorPane id="AnchorPane" prefHeight="349.0" prefWidth="1035.0">
           <children>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="414.0" prefWidth="1035.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <children>
+                <HBox id="HBox" alignment="CENTER" spacing="5.0">
+                  <children>
+                    <MenuBar maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="487.0">
+                      <menus>
+                        <Menu mnemonicParsing="false" onAction="#openMain" text="Master">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Add Item" />
+                          </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Invoice">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Add" />
+                            <MenuItem mnemonicParsing="false" onAction="#openInvoiceDetails" text="Invoice Details" />
+                          </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Purchase">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#openPurchase" text="Add" />
+                            <MenuItem mnemonicParsing="false" onAction="#openPurchaseDetails" text="Details" />
+                          </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Stocks">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#openStocks" text="Details" />
+                          </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Misc">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#openInvoiceDetailsMisc" text="Action 1" />
+                          </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Help">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="About" />
+                          </items>
+                        </Menu>
+                      </menus>
+                    </MenuBar>
+                  </children>
+                </HBox>
                 <GridPane alignment="CENTER" prefHeight="306.5" prefWidth="1035.0" AnchorPane.bottomAnchor="28.5" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="79.0">
                   <children>
                     <Label alignment="CENTER" contentDisplay="CENTER" text="Item Name" GridPane.columnIndex="0" GridPane.rowIndex="0">
@@ -83,39 +123,8 @@
                     <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
                   </rowConstraints>
                 </GridPane>
-                <Label alignment="CENTER" contentDisplay="CENTER" font="$x2" graphicTextGap="8.0" layoutX="250.0" layoutY="26.0" prefWidth="69.0" text="Purchase" />
+                <Label alignment="CENTER" contentDisplay="CENTER" font="$x2" graphicTextGap="8.0" layoutX="250.0" layoutY="57.0" prefWidth="69.0" text="Purchase" />
                 <Label id="PurchaseNumber" fx:id="purchaseNumber" layoutX="353.0" layoutY="30.0" prefHeight="22.0" prefWidth="77.0" />
-                <MenuBar layoutX="2.0" layoutY="2.0" prefWidth="698.0">
-                  <menus>
-                    <Menu mnemonicParsing="false" onAction="#openMain" text="Master">
-                      <items>
-                        <MenuItem mnemonicParsing="false" text="Add Item" />
-                      </items>
-                    </Menu>
-                    <Menu mnemonicParsing="false" text="Invoice">
-                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#OpenInvoice" text="Add" />
-                        <MenuItem mnemonicParsing="false" onAction="#openInvoiceDetails" text="Invoice Details" />
-                      </items>
-                    </Menu>
-                    <Menu mnemonicParsing="false" text="Purchase">
-                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#openPurchase" text="Add" />
-                        <MenuItem mnemonicParsing="false" onAction="#openPurchaseDetails" text="Details" />
-                      </items>
-                    </Menu>
-                    <Menu mnemonicParsing="false" text="Stocks">
-                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#openStocks" text="Details" />
-                      </items>
-                    </Menu>
-                    <Menu mnemonicParsing="false" text="Help">
-                      <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
-                      </items>
-                    </Menu>
-                  </menus>
-                </MenuBar>
               </children>
             </AnchorPane>
           </children>

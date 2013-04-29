@@ -17,6 +17,7 @@ import com.kcp.pos.modal.Stocks;
 import com.kcp.pos.service.InvoiceService;
 import com.kcp.pos.service.StocksService;
 import com.kcp.pos.utils.KCPUtils;
+import eu.schudt.javafx.controls.calendar.DatePicker;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
@@ -43,6 +45,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
@@ -73,6 +76,12 @@ public class StocksController implements Initializable{
     @FXML
     private AnchorPane anchorPane;
     
+     @FXML
+    private GridPane gridPane;
+     
+     private DatePicker birthdayDatePicker;
+
+    
     @FXML
     public TableView<StocksDo> dataTable;
     
@@ -91,6 +100,8 @@ public class StocksController implements Initializable{
     private TableColumn<StocksDo, Integer> unitsQuantityCol;
     @FXML
     private TableColumn<StocksDo, Double> freeUnitsCol;
+    
+    
     
     private List<StocksDo> stocksList = new ArrayList<StocksDo>();
     private List<Items> itemList = new ArrayList<Items>();
@@ -138,7 +149,7 @@ public class StocksController implements Initializable{
                 new PropertyValueFactory<StocksDo, Double>("unitsPerCase"));
         freeUnitsCol.setCellValueFactory(
                 new PropertyValueFactory<StocksDo, Double>("itemFreeUnits"));
-        HBox dateBox = new HBox(15);
+        /*HBox dateBox = new HBox(15);
         dateBox.setAlignment(Pos.CENTER);
         final TextField dateField = new TextField("Select date");
         dateField.setEditable(false);
@@ -161,7 +172,7 @@ public class StocksController implements Initializable{
                 //2012-11-11 23:49:38
                 new Date(date+" 00:00:00");
                  */
-                System.out.println("actual date is:"+newDate);
+               /* System.out.println("actual date is:"+newDate);
                 System.out.println("simple date is:"+new SimpleDateFormat("dd/MM/yyyy").
                         format(newDate));
                 SimpleDateFormat format;
@@ -179,20 +190,39 @@ public class StocksController implements Initializable{
                 stocksService.getStocksListByDate(
                         new Date
                         ((new SimpleDateFormat("dd/MM/yyyy")).
-                        format(newDate)));
+                        format(newDate)));*/
                 
-	}
-        });
+	//}
+       /* });
         
         dateBox.getChildren().addAll(dateField, simpleCalender);
         VBox vbox = new VBox(20);
         //Label label = new Label("JavaFX 2.0 Simple Calendar Demo");
         vbox.getChildren().addAll( dateBox);
-        anchorPane.getChildren().add(vbox);
+        anchorPane.getChildren().add(vbox);*/
+        
+       birthdayDatePicker = new DatePicker(Locale.ENGLISH);
+  birthdayDatePicker.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+  birthdayDatePicker.getCalendarView().todayButtonTextProperty().set("Today");
+  birthdayDatePicker.getCalendarView().setShowWeeks(false);
+   birthdayDatePicker.getStylesheets().add("com/kcp/pos/style/DatePicker.css");
+
+  // Add DatePicker_backup to grid
+  gridPane.add(birthdayDatePicker, 1, 5);
+
+
         fillDataTable();
     }
 
    
+    @FXML
+    private void handleButtonAction(ActionEvent event) {
+    
+        System.out.println("selected date is:"+ birthdayDatePicker.getSelectedDate());
+    }
+    
+    
+    
     private void animateMessage() {
         FadeTransition ft = new FadeTransition(Duration.millis(1000), label);
         ft.setFromValue(0.0);
@@ -232,6 +262,10 @@ public class StocksController implements Initializable{
         application.gotoInvoiceDetails();
     }
     
+    @FXML
+    public void openInvoiceDetailsMisc(ActionEvent e) {
+        application.gotoInvoiceDetailsMisc();
+    }
 
     @FXML
     public void openPurchase(ActionEvent e) {
@@ -253,5 +287,7 @@ public class StocksController implements Initializable{
     public void openStocks(ActionEvent e) {
         application.gotoStocks();
     }
+    
+    
     
 }

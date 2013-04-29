@@ -9,23 +9,30 @@ import com.kcp.pos.dao.ItemCategoryDao;
 import com.kcp.pos.dao.UserDao;
 import com.kcp.pos.dao.commonDao;
 import com.kcp.pos.dao.commonDaoImpl;
-import com.kcp.pos.data.InvoiceDetailsDo;
+import com.kcp.pos.data.BagWeightDo;
 import com.kcp.pos.data.ItemCategoryDo;
 import com.kcp.pos.data.ItemDetailsDo;
 import com.kcp.pos.data.ItemDo;
 import com.kcp.pos.data.UOMDo;
-import com.kcp.pos.modal.InvoiceDetails;
+import com.kcp.pos.modal.BillingPrice;
 import com.kcp.pos.modal.ItemDetails;
 import com.kcp.pos.modal.Items;
+import com.kcp.pos.modal.UOM;
+import com.kcp.pos.modal.WeighingType;
+import com.kcp.pos.service.BagWeightService;
+import com.kcp.pos.service.BillingPriceService;
 import com.kcp.pos.service.ItemCategoryService;
 import com.kcp.pos.service.ItemService;
 import com.kcp.pos.service.UOMService;
+import com.kcp.pos.service.WeighingTypeService;
 import com.kcp.pos.utils.KCPUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
@@ -42,6 +49,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -53,6 +61,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
 import javafx.util.Duration;
@@ -84,14 +93,42 @@ public class MainController implements Initializable {
      private TextField sellingPrice;*/
     @FXML
     private CheckBox hasGift = new CheckBox();
-    @FXML
-    private ChoiceBox uom = new ChoiceBox();
+    
     @FXML
     private ChoiceBox category = new ChoiceBox();
     @FXML
+    private ChoiceBox uom = new ChoiceBox();
+    @FXML
     private TextField retailPrice;
     @FXML
-    private TextField wholesalePrice;
+    private ComboBox bagWeight;
+    @FXML
+    private GridPane gridPane;
+    /*@FXML
+    private TextField wholesalePrice;*/
+    
+    @FXML
+    private TextField startRange1;
+    @FXML
+    private TextField endRange1;
+    @FXML
+    private TextField billingPrice1;
+    
+    @FXML
+    private TextField startRange2;
+    @FXML
+    private TextField endRange2;
+    @FXML
+    private TextField billingPrice2;
+    
+    @FXML
+    private TextField startRange3;
+    @FXML
+    private TextField endRange3;
+    @FXML
+    private TextField billingPrice3;
+    
+    
     @FXML
     private TextField tax;
     @FXML
@@ -116,8 +153,28 @@ public class MainController implements Initializable {
     private TableColumn<ItemDetailsDo, Double> itemActualPriceCol;
     @FXML
     private TableColumn<ItemDetailsDo, Double> itemRetailPriceCol;
+    
     @FXML
-    private TableColumn<ItemDetailsDo, Double> itemWholesalePriceCol;
+    private TableColumn<ItemDetailsDo, Double> startRange1Col;
+    @FXML
+    private TableColumn<ItemDetailsDo, Double> endRange1Col;
+    @FXML
+    private TableColumn<ItemDetailsDo, Double> billingPrice1Col;
+    @FXML
+    private TableColumn<ItemDetailsDo, Double> startRange2Col;
+    @FXML
+    private TableColumn<ItemDetailsDo, Double> endRange2Col;
+    @FXML
+    private TableColumn<ItemDetailsDo, Double> billingPrice2Col;
+    @FXML
+    private TableColumn<ItemDetailsDo, Double> startRange3Col;
+    @FXML
+    private TableColumn<ItemDetailsDo, Double> endRange3Col;
+    @FXML
+    private TableColumn<ItemDetailsDo, Double> billingPrice3Col;
+    
+    /*@FXML
+    private TableColumn<ItemDetailsDo, Double> itemWholesalePriceCol;*/
     @FXML
     private TableColumn<ItemDetailsDo, Double> taxCol;
     @FXML
@@ -132,9 +189,25 @@ public class MainController implements Initializable {
     List<ItemDetailsDo> itemDetailsList = new ArrayList<ItemDetailsDo>();
     @Autowired
     private ItemService itemService;
+    @Autowired
+    private UOMService uOMService;
+    
+    private Map<String,Integer> categoryMap=new HashMap<String,Integer>();
+    
+    @Autowired
+    private BagWeightService bagWeightService;
     
     @FXML
     private Button button;
+    
+    
+    private Map<Double, BagWeightDo> bagWeightMap = new HashMap<Double, BagWeightDo>();
+    
+    @Autowired
+    private WeighingTypeService weighingTypeService;
+    
+    @Autowired
+    private BillingPriceService billingPriceService;
     
     public ItemService getItemService() {
         return itemService;
@@ -214,35 +287,35 @@ public class MainController implements Initializable {
             aPrice = Double.parseDouble(actualPrice.getText());
         }
 
-        if (KCPUtils.isNullString(retailPrice.getText())) {
-            label.setText("Please enter retailPrice");
-            animateMessage();
-            fillDataTable();
-            System.out.println("reenter item");
-            return true;
-        } else {
-            rPrice = Double.parseDouble(retailPrice.getText());
-        }
+//        if (KCPUtils.isNullString(retailPrice.getText())) {
+//            label.setText("Please enter retailPrice");
+//            animateMessage();
+//            fillDataTable();
+//            System.out.println("reenter item");
+//            return true;
+//        } else {
+//            rPrice = Double.parseDouble(retailPrice.getText());
+//        }
 
-        if (KCPUtils.isNullString(wholesalePrice.getText())) {
+       /* if (KCPUtils.isNullString(wholesalePrice.getText())) {
             label.setText("Please enter retailPrice");
             animateMessage();
             fillDataTable();
-            System.out.println("reenter item");
+            System.out.println("reenter bagWeighDo");
             return true;
         } else {
             wPrice = Double.parseDouble(wholesalePrice.getText());
-        }
+        }*/
 
-        if (rPrice < aPrice) {
-            label.setText("Retail price cannot be less than actual price");
-            return true;
-        }
-
-        if (wPrice < aPrice) {
-            label.setText("Wholesale price cannot be less than actual price");
-            return true;
-        }
+//        if (rPrice < aPrice) {
+//            label.setText("Retail price cannot be less than actual price");
+//            return true;
+//        }
+//
+//        if (wPrice < aPrice) {
+//            label.setText("Wholesale price cannot be less than actual price");
+//            return true;
+//        }
 
         return false;
 
@@ -273,7 +346,7 @@ public class MainController implements Initializable {
 
             ItemDetails itemDetails = new ItemDetails();
 
-            UOMService uOMService = (UOMService) ApplicationMain.springContext.getBean("UOMService");
+            uOMService = (UOMService) ApplicationMain.springContext.getBean("UOMService");
 
             itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
             itemDetails.setMrp(Double.valueOf(itemMrp.getText()));
@@ -334,28 +407,106 @@ public class MainController implements Initializable {
             itemDetails.setUom(uOMService.getUOMByName((String) uom.getSelectionModel().getSelectedItem()));
             for (UOMDo uOMDo : uOMService.getAllUOM()) {
                 System.out.println("size:" + uOMService.getAllUOM().size());
-                uom.getItems().add(uOMDo.getUomDesc());
+                uom.getItems().add(uOMDo.getUomUserName());
             }
 
-            itemDetails.setRetailBillingPrice(Double.valueOf(retailPrice.getText()));
-            itemDetails.setWholesaleBillingPrice(Double.valueOf(wholesalePrice.getText()));
-            itemDetails.setMargin(itemDetails.getWholesaleBillingPrice() - itemDetails.getActualPrice());
+           // itemDetails.setRetailBillingPrice(Double.valueOf(retailPrice.getText()));
+          //  itemDetails.setWholesaleBillingPrice(Double.valueOf(wholesalePrice.getText()));
+           // itemDetails.setMargin(itemDetails.getWholesaleBillingPrice() - itemDetails.getActualPrice());
+            
+            
+            
+            
+            
             itemDetails.setModifiedDate(new Date());
             itemDetails.setUsers(userDao.findById(1));
+            
+            
             itemDetails.setEnabled(Boolean.TRUE);
+            
+            
             itemService.itemSave(item);
 
             itemDetails.setItem(item);
 
 
             itemService.itemDetailsSave(itemDetails);
+            
+            
+            
+            List<BillingPrice> billingPriceList=new ArrayList<BillingPrice>();
+            BillingPrice billingPriceObj1=new BillingPrice();
+            if(startRange1!=null&&!KCPUtils.isNullString(startRange1.getText()))
+            {
+                billingPriceObj1.setStartRange(
+                        Double.parseDouble(startRange1.getText()));
+            
+            if(startRange1!=null)
+                billingPriceObj1.setEndRange(Double.parseDouble(endRange1.getText()));
+            if(startRange1!=null)
+                billingPriceObj1.setBillingPrice(Double.parseDouble(billingPrice1.getText()));
+            
+                
+            }
+            billingPriceObj1.setItemDetails(itemDetails);
+                billingPriceList.add(billingPriceObj1);
+            
+            BillingPrice billingPriceObj2=new BillingPrice();
+            if(startRange1!=null&&!KCPUtils.isNullString(startRange1.getText()))
+            {
+            billingPriceObj2.setStartRange(Double.parseDouble(startRange2.getText()));
+            if(startRange1!=null)
+            billingPriceObj2.setEndRange(Double.parseDouble(endRange2.getText()));
+            if(startRange1!=null)
+            billingPriceObj2.setBillingPrice(Double.parseDouble(billingPrice2.getText()));
+            
+            
+
+            }
+                            billingPriceObj2.setItemDetails(itemDetails);
+            billingPriceList.add(billingPriceObj2);
+            
+            BillingPrice billingPriceObj3=new BillingPrice();
+            if(startRange1!=null&&!KCPUtils.isNullString(startRange1.getText()))
+            {
+            billingPriceObj3.setStartRange(Double.parseDouble(startRange3.getText()));
+            billingPriceObj3.setEndRange(Double.parseDouble(endRange3.getText()));
+            billingPriceObj3.setBillingPrice(Double.parseDouble(billingPrice3.getText()));
+            
+            }
+            billingPriceObj1.setStartRange(1.0);
+            billingPriceObj1.setEndRange(2.0);
+            billingPriceObj1.setBillingPrice(3.0);
+            billingPriceObj1.setModifiedDate(new Date());
+            billingPriceObj1.setModifiedUser(userDao.findById(1));
+            billingPriceObj1.setItemDetails(itemDetails);
+            billingPriceObj2.setStartRange(3.0);
+            billingPriceObj2.setEndRange(4.0);
+            billingPriceObj2.setBillingPrice(5.0);
+            billingPriceObj2.setModifiedDate(new Date());
+            billingPriceObj2.setItemDetails(itemDetails);
+            billingPriceObj2.setModifiedUser(userDao.findById(1));
+            billingPriceObj3.setStartRange(5.0);
+            billingPriceObj3.setEndRange(6.0);
+            billingPriceObj3.setBillingPrice(6.0);
+            billingPriceObj3.setItemDetails(itemDetails);
+            billingPriceObj3.setModifiedDate(new Date());
+            billingPriceObj3.setModifiedUser(userDao.findById(1));
+            billingPriceList.add(billingPriceObj1);
+            billingPriceList.add(billingPriceObj2);
+            billingPriceList.add(billingPriceObj3);
+            
+            billingPriceService = (BillingPriceService) ApplicationMain.springContext.getBean("billingPriceService");
+           
+            billingPriceService.billingPriceSave(billingPriceList);
+            
             label.setText("Item Saved");
             animateMessage();
             itemDetailsList = new ArrayList<ItemDetailsDo>();
 
             for (Items data : itemService.getAllItems()) {
 
-                // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
+                // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(bagWeighDo.getIdPk())) {
                 System.out.println("itemId:" + data.getIdPk());
                 itemDetailsList.add(itemService.getItemDetailsDoByItemId(data.getIdPk()));
             }
@@ -370,6 +521,7 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         dataTable.setEditable(true);
+        bagWeight.setVisible(false);
         Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryActual =
                 new Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>>() {
                     public TableCell call(TableColumn p) {
@@ -408,28 +560,28 @@ public class MainController implements Initializable {
                     }
                 };
 
-        itemRetailPriceCol.setCellFactory(cellFactoryRetail);
-        itemRetailPriceCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
-                        ItemDetailsDo record = (ItemDetailsDo) t.getTableView().getItems().get(t.getTablePosition().getRow());
-
-                        ItemDetailsDo data = itemService.getItemDetailsDoByItemId(record.getItemId());
-                        data.setRetailPrice(t.getNewValue());
-
-                        ItemDetails det = itemService.getItemDetailsByItemId(data.getItemId());
-
-
-                        ItemDetails itemDetails = new ItemDetails(det);
-
-                        itemDetails.setRetailBillingPrice(data.getRetailPrice());
-                        itemDetails.setEnabled(true);
-
-                        itemService.itemDetailsSave(itemDetails);
-                        fillDataTable();
-                    }
-                });
+//        itemRetailPriceCol.setCellFactory(cellFactoryRetail);
+//        itemRetailPriceCol.setOnEditCommit(
+//                new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
+//                    @Override
+//                    public void handle(TableColumn.CellEditEvent<ItemDetailsDo, Double> t) {
+//                        ItemDetailsDo record = (ItemDetailsDo) t.getTableView().getItems().get(t.getTablePosition().getRow());
+//
+//                        ItemDetailsDo data = itemService.getItemDetailsDoByItemId(record.getItemId());
+//                        data.setRetailPrice(t.getNewValue());
+//
+//                        ItemDetails det = itemService.getItemDetailsByItemId(data.getItemId());
+//
+//
+//                        ItemDetails itemDetails = new ItemDetails(det);
+//
+//                        //itemDetails.setRetailBillingPrice(data.getRetailPrice());
+//                        itemDetails.setEnabled(true);
+//
+//                        itemService.itemDetailsSave(itemDetails);
+//                        fillDataTable();
+//                    }
+//                });
 
 
         Callback<TableColumn<ItemDetailsDo, Double>, TableCell<ItemDetailsDo, Double>> cellFactoryMrp =
@@ -472,7 +624,7 @@ public class MainController implements Initializable {
                     }
                 };
 
-        itemWholesalePriceCol.setCellFactory(cellFactoryWholeSale);
+       /* itemWholesalePriceCol.setCellFactory(cellFactoryWholeSale);
         itemWholesalePriceCol.setOnEditCommit(
                 new EventHandler<TableColumn.CellEditEvent<ItemDetailsDo, Double>>() {
                     @Override
@@ -493,7 +645,7 @@ public class MainController implements Initializable {
                         itemService.itemDetailsSave(itemDetails);
                         fillDataTable();
                     }
-                });
+                });*/
 
 
 
@@ -586,21 +738,119 @@ public class MainController implements Initializable {
         List<ItemCategoryDo> itemCategoryList = itemCategoryService.getAllItems();
 
 
-
+        
         for (ItemCategoryDo item : itemCategoryList) {
 
+            categoryMap.put(item.getItemName(),item.getIdPk());
             category.getItems().add(item.getItemName());
         }
 
+        
+        weighingTypeService = (WeighingTypeService) ApplicationMain.springContext.getBean("weighingTypeService");
+
+        category.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> selected, String oldItem, String newItem) {
+                System.out.println("new item:" + newItem+":");
 
 
-        UOMService uOMService =
-                (UOMService) ApplicationMain.springContext.getBean("UOMService");
-
-        for (UOMDo uOMDo : uOMService.getAllUOM()) {
-            System.out.println("size:" + uOMService.getAllUOM().size());
-            uom.getItems().add(uOMDo.getUomDesc());
+              
+                if(newItem !=null )
+                {
+                uOMService=(UOMService) ApplicationMain.springContext.getBean("UOMService");
+                
+                
+               List<UOM> uoms= uOMService.
+                       getByCategory(categoryMap.get(
+                        newItem.toString()));
+                
+                  for (UOM uom  : uoms) {
+                      System.out.println("uom:"+uom.getUomDesc()); 
+                      
+           
+            MainController.this.uom.getItems().add(uom.getUomDesc());
         }
+                
+//                List<WeighingType> weighingTypes= weighingTypeService.
+//                        getByCategory(categoryMap.get(
+//                        newItem.toString()));
+
+                
+                
+//        for (WeighingType weighingType  : weighingTypes) {
+//           
+//            uom.getItems().add(weighingType.getTypeDesc());
+//        }
+                
+       
+                
+            }
+            }
+        });
+        
+       
+
+        bagWeight.getItems().removeAll("Item 1", "Item 2", "Item 3", " ");
+        uom.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> selected, String oldItem, String newItem) {
+                System.out.println("new item:" + newItem+":");
+              
+                if(newItem !=null)
+                {
+                    //gridPane.getChildren().remove(bagWeight);
+                    //bagWeight=new ComboBox();
+                    bagWeight.getItems().removeAll(bagWeight.getItems());
+                
+                
+                if(newItem.toString().equalsIgnoreCase("Bag"))
+                {
+                    
+                    bagWeightService = (BagWeightService) ApplicationMain.springContext.getBean("bagWeightService");
+                    List<BagWeightDo> bagWeightList = bagWeightService.getAll();
+
+        for (BagWeightDo bagWeighDo : bagWeightList) {
+            bagWeightMap.put(bagWeighDo.getBagWeight(), bagWeighDo);
+            bagWeight.getItems().add(bagWeighDo.getBagWeight());
+            System.out.println("weight:");
+        } 
+                }
+                else if(newItem.toString().equalsIgnoreCase("kg"))
+                {
+                    List<Items> items=itemService.getAllItems(categoryMap.get(category.getSelectionModel().getSelectedItem()));
+                    
+                    for (Items item : items) {
+                        bagWeight.getItems().add(item.getItemName());
+                        System.out.println("weight:");
+        } 
+                    //get all items by category
+                }
+//                List<WeighingType> weighingTypes= weighingTypeService.
+//                        getByCategory(categoryMap.get(
+//                        newItem.toString()));
+
+//        for (WeighingType weighingType  : weighingTypes) {
+//           
+//            uom.getItems().add(weighingType.getTypeDesc());
+//        }
+              
+          
+       
+                
+            }
+            }
+        });
+
+
+        
+
+//        UOMService uOMService =
+//                (UOMService) ApplicationMain.springContext.getBean("UOMService");
+//
+//        for (UOMDo uOMDo : uOMService.getAllUOM()) {
+//            System.out.println("size:" + uOMService.getAllUOM().size());
+//            uom.getItems().add(uOMDo.getUomUserName());
+//        }
 
 
 
@@ -615,8 +865,17 @@ public class MainController implements Initializable {
         itemWeightCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("weight"));
         itemWeightUnitCol.setCellValueFactory(new PropertyValueFactory<ItemDo, String>("weightUnit"));
         itemActualPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("actualPrice"));
-        itemRetailPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("retailBillingPrice"));
-        itemWholesalePriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("wholesaleBillingPrice"));
+        //itemRetailPriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("retailBillingPrice"));
+        //itemWholesalePriceCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("wholesaleBillingPrice"));
+        startRange1Col.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("startRange1"));
+        endRange1Col.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("endRange1"));
+        billingPrice1Col.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("billingPrice1"));
+        startRange2Col.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("startRange2"));
+        endRange2Col.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("endRange2"));
+        billingPrice2Col.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("billingPrice2"));
+        startRange3Col.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("startRange3"));
+        endRange3Col.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("endRange3"));
+        billingPrice3Col.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("billingPrice3"));
         taxCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, Double>("tax"));
         itemHasGiftCol.setCellValueFactory(new PropertyValueFactory<ItemDetailsDo, String>("hasFree"));
         itemService = (ItemService) ApplicationMain.springContext.getBean("itemService");
@@ -626,10 +885,35 @@ public class MainController implements Initializable {
         itemDetailsList = new ArrayList<ItemDetailsDo>();
 
         for (Items item : itemService.getAllItems()) {
-            // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
+            // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(bagWeighDo.getIdPk())) {
             System.out.println("itemId:" + item.getIdPk());
             itemDetailsList.add(itemService.getItemDetailsDoByItemId(item.getIdPk()));
         }
+        
+        
+       
+      
+
+        category.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> selected, String oldItem, String newItem) {
+                System.out.println("new category:" + newItem+":");
+
+
+                
+                if(newItem !=null)
+                {
+                    System.out.println("new item found!!");
+                    if(newItem.equalsIgnoreCase("Rice"))
+                    {
+                       bagWeight.setVisible(true); 
+                       fillDataTable();
+                    }
+                BagWeightDo bagWeighDo = bagWeightMap.get(newItem.toString());
+            }
+            }
+        });
+        
         fillDataTable();
 
 
@@ -642,7 +926,7 @@ public class MainController implements Initializable {
         itemWeight.clear();
         actualPrice.clear();
         retailPrice.clear();
-        wholesalePrice.clear();
+        //wholesalePrice.clear();
         
         tax.clear();
         outputLabel.setText("");
@@ -668,10 +952,10 @@ public class MainController implements Initializable {
      }
      List<ItemDetailsDo> itemDetailsDoList = new ArrayList<ItemDetailsDo>();
      List<Items> items = itemService.getAllItems();
-     for (Items item : itemService.getAllItems()) {
-     // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(item.getIdPk())) {
-     System.out.println("itemId:"+item.getIdPk());
-     itemDetailsDoList.add(itemService.getItemDetailsByItemId(item.getIdPk()));
+     for (Items bagWeighDo : itemService.getAllItems()) {
+     // for (ItemDetailsDo itemsDetails : itemService.getItemDetailsByItemId(bagWeighDo.getIdPk())) {
+     System.out.println("itemId:"+bagWeighDo.getIdPk());
+     itemDetailsDoList.add(itemService.getItemDetailsByItemId(bagWeighDo.getIdPk()));
                 
             
 
@@ -793,12 +1077,76 @@ public class MainController implements Initializable {
         }
     }
     
-    @FXML
+    /*@FXML
     public void gotoWholesale(KeyEvent e) {
         if (e.getCode() == KeyCode.ENTER) {
             wholesalePrice.requestFocus();
         }
+    }*/
+    
+    @FXML
+    public void gotoStartRange1(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            startRange1.requestFocus();
+        }
     }
+    
+    @FXML
+    public void gotoEndRange1(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            endRange1.requestFocus();
+        }
+    }
+    
+    @FXML
+    public void gotoBillingPrice1(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            billingPrice1.requestFocus();
+        }
+    }
+    
+   @FXML
+    public void gotoStartRange2(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            startRange2.requestFocus();
+        }
+    }
+    
+    @FXML
+    public void gotoEndRange2(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            endRange2.requestFocus();
+        }
+    }
+    
+    @FXML
+    public void gotoBillingPrice2(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            billingPrice1.requestFocus();
+        }
+    }
+    
+    @FXML
+    public void gotoStartRange3(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            startRange3.requestFocus();
+        }
+    }
+    
+    @FXML
+    public void gotoEndRange3(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            startRange3.requestFocus();
+        }
+    }
+    
+    @FXML
+    public void gotoBillingPrice3(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER) {
+            billingPrice3.requestFocus();
+        }
+    }
+    
     
     @FXML
     public void gotoTax(KeyEvent e) {
@@ -829,7 +1177,11 @@ public class MainController implements Initializable {
         application.gotoInvoiceDetails();
     }
     
-
+    @FXML
+    public void openInvoiceDetailsMisc(ActionEvent e) {
+        application.gotoInvoiceDetailsMisc();
+    }
+    
     @FXML
     public void openPurchase(ActionEvent e) {
         application.gotoPurchase();
@@ -889,10 +1241,10 @@ public class MainController implements Initializable {
  }
 
  @Override
- public void updateItem(Double item, boolean empty) {
- super.updateItem(item, empty);
+ public void updateItem(Double bagWeighDo, boolean empty) {
+ super.updateItem(bagWeighDo, empty);
 
- System.out.println("UpdateItem:" + item);
+ System.out.println("UpdateItem:" + bagWeighDo);
 
  if (empty) {
  setText(null);

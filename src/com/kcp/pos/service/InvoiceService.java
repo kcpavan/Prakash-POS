@@ -80,6 +80,10 @@ public class InvoiceService {
     }
      
      public InvoiceDetails getInvoiceDetailsById(Integer invoiceId){
+        return invoiceDao.findDetailsById(invoiceId);
+    }
+     
+     public Invoice getInvoiceById(Integer invoiceId){
         return invoiceDao.findById(invoiceId);
     }
    
